@@ -2,12 +2,11 @@ from datetime import timedelta
 from django.views import View
 from django.http import HttpResponse
 from django.utils import timezone
+from django.conf import settings
 from apps.identity_provider.models import UserActivationCode
 
 
 class EmailConfirmationView(View):
-
-    ACTIVATION_CODE_EXPIRATION_HOURS = 12
 
     def get(self, request, *args, **kwargs):
         activation_code = request.GET.get('activation_code')
@@ -18,7 +17,7 @@ class EmailConfirmationView(View):
             # TODO: replace with HTMP error page
             return HttpResponse('Resource not found: most likely activation code already used.', status=404)
 
-        code_expired = timedelta(hours=self.ACTIVATION_CODE_EXPIRATION_HOURS) < (timezone.now() - user_activation_code.creation_date)
+        code_expired = timedelta(hours=settings.ACTIVATION_CODE_EXPIRATION_HOURS) < (timezone.now() - user_activation_code.creation_date)
 
         if user_activation_code.deactivated or code_expired:
             # TODO: replace with HTMP error page
