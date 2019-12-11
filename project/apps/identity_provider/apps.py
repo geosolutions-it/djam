@@ -3,6 +3,7 @@ from django.apps import AppConfig
 
 class IdentityProviderConfig(AppConfig):
     name = 'apps.identity_provider'
+    verbose_name = "Identity Provider"
 
     def ready(self):
         from . import settings as defaults

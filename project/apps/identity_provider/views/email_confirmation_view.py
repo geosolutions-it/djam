@@ -17,7 +17,7 @@ class EmailConfirmationView(View):
             # TODO: replace with HTMP error page
             return HttpResponse('Resource not found: most likely activation code already used.', status=404)
 
-        code_expired = timedelta(hours=settings.ACTIVATION_CODE_EXPIRATION_HOURS) < (timezone.now() - user_activation_code.creation_date)
+        code_expired = timedelta(hours=settings.IP_ACTIVATION_CODE_EXPIRATION_HOURS) < (timezone.now() - user_activation_code.creation_date)
 
         if user_activation_code.deactivated or code_expired:
             # TODO: replace with HTMP error page
