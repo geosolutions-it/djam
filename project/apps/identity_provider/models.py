@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
 
+import uuid
+
 from django.db import models
 from django.core.mail import send_mail
 from django.contrib.auth.models import PermissionsMixin
@@ -37,6 +39,7 @@ class User(AbstractBaseUser, PermissionsMixin):
          },
     )
     email_confirmed = models.BooleanField(default=False)
+    uuid = models.UUIDField(default=uuid.uuid4, unique=True)
     is_staff = models.BooleanField(
         _('staff status'),
         default=False,
@@ -86,12 +89,8 @@ class UserActivationCode(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     activation_code = models.CharField(max_length=50, default=random_string)
     creation_date = models.DateTimeField(default=timezone.now)
-    deactivated = models.BooleanField(default=False)
 
     def regenerate_code(self):
-        if self.deactivated:
-            raise Exception('Wrong resource state: User activation code was already used.')
-
         self.activation_code = random_string()
         self.creation_date = timezone.now()
 
