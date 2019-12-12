@@ -1,0 +1,2 @@
+- python manage.py creatersakey
+- python manage.py rundramatiq

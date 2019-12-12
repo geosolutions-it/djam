@@ -7,12 +7,11 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.utils import timezone
-
-from apps.identity_provider.model_managers import UserManager
-from apps.identity_provider.utils import random_string
-
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+
+from .model_managers import UserManager
+from .utils import random_string
 
 
 class User(AbstractBaseUser, PermissionsMixin):

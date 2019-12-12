@@ -1,5 +1,5 @@
 import os
-from conf.common.base import BASE_DIR
+from conf.base.base import BASE_DIR
 
 TEMPLATES = [
     {

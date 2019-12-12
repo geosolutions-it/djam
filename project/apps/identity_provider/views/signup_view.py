@@ -4,6 +4,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 
 from apps.identity_provider.forms import SignUpForm
+from apps.identity_provider.tasks import email_user
 
 
 class SignupView(View):
@@ -24,7 +25,7 @@ class SignupView(View):
                 'domain': get_current_site(request).domain,
                 'activation_code': user.useractivationcode.activation_code,
             })
-            user.email_user(subject, message)
+            email_user.send(user.email, subject, message)
 
             return redirect('activation_msg_sent')
         else:
