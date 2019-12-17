@@ -3,14 +3,6 @@ example client redirect URL:
 http://localhost:8000/openid/authorize?response_type=code&client_id=641011&redirect_uri=http%3A%2F%2Flocalhost%3A8100%2Flogin_handler&scope=openid%20profile%20email&state=af0ifjsldkj
 """
 
-import dramatiq
-
-import requests
-
-
-@dramatiq.actor(max_retries=3)
-def count_words(url):
-    response = requests.get(url)
-    count = len(response.text.split(" "))
-    print(f"There are {count} words at {url!r}.")
-
+"""
+docker run --name "geoserver" -v /var/run/docker.sock:/var/run/docker.sock -v /home/biegan/PycharmProjects/geoserver/geoserver_data/data:/geoserver_data/data -p 8080:8080 geonode/geoserver  
+"""

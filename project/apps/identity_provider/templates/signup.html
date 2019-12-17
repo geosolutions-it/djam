@@ -1,9 +1,48 @@
-{% block content %}
-  <h2>Sign up</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Sign up</button>
-  </form>
-    <div>{{ errors }}</div>
-{% endblock %}
+{% load static %}
+<head>
+    <link rel="shortcut icon" href="{% static "identity_provider/img/favicon.ico" %}" type="image/x-icon">
+    <link rel="icon" href="{% static "identity_provider/img/favicon.ico" %}" type="image/x-icon">
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'identity_provider/signup.css' %}">
+</head>
+
+<body>
+    <div id='content' class='content'>
+        <div class='flex-basis-75 flex-column-container '>
+            <div class="form-wrapper">
+                <div class='logo'></div>
+                <form role="form" method="post" action="{% url 'register' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <h3 class="form-header">Welcome to Mapstand</h3>
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control input-lg" name="username" id="id_username" required placeholder="Enter username" {% if form.username.value %} value="{{ form.username.value }}" {% endif %}>
+                        {{ form.username.errors }}
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="text" class="form-control input-lg" name="email" id="id_email" required placeholder="Enter username"  {% if form.username.value %} value="{{ form.email.value }}" {% endif %}>
+                        {{ form.email.errors }}
+                    </div>
+                    <div class="form-group">
+                        <label for="Password">Password</label>
+                        <input type="password" class="form-control input-lg" name="password1" id="id_password1" required placeholder="Enter password">
+                        {{ form.password1.errors }}
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Password confirmation</label>
+                        <input type="password" class="form-control input-lg" name="password2" id="id_password2" required placeholder="Repeat password">
+                        {{ form.password2.errors }}
+                    </div>
+                    <button type="submit" class="btn btn-lg btn-primary pull-right" id="btn_submit">Sign In</button>
+                </form>
+            </div>
+        </div>
+        <div class='flex-basis-25 login-picture'></div>
+    </div>
+</body>

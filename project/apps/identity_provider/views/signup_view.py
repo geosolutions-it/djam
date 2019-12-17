@@ -26,6 +26,6 @@ class SignupView(View):
             # send activation message
             send_activation_email.send(user.email, activation_url)
 
-            return redirect('activation_msg_sent')
+            return redirect(reverse('activation_msg_sent'))
         else:
-            return render(request, 'signup.html', {'form': SignUpForm(), 'errors': form.errors})
+            return render(request, 'signup.html', {'form': form, 'errors': form.errors})
