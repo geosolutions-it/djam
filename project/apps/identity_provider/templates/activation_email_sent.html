@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Email confirmation required</title>
-</head>
-<body>
-Please confirm your email address to complete registration.
-</body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block message %}
+    <h3 class="message-header">Please confirm your email address <br> to complete registration.</h3>
+{%  endblock %}
