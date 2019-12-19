@@ -35,13 +35,14 @@ Create environment configuration for Djam. Make sure DJAM_PROJECT_ENVIRONMENT is
 ```
 export DJAM_PROJECT_ENVIRONMENT=dev
 
-export DJAM_DB_NAME=...
-export DJAM_DB_USER=...
-export DJAM_DB_PASSWORD=...
-export DJAM_DB_HOST=...
-export DJAM_DB_PORT=...
+export DJAM_DB_NAME=...        (default=djam)
+export DJAM_DB_USER=...        (default=djam)
+export DJAM_DB_PASSWORD=...    (default=djam)
+export DJAM_DB_HOST=...        (default=localhost)
+export DJAM_DB_PORT=...        (default=5432)
 
-export DJAM_RABBITMQ_HOST=...
+export DJAM_RABBITMQ_HOST=...  (default=localhost)
+export DJAM_RABBITMQ_PORT=...  (default=5672)
 ```
 
 Create virtualenv in djam directory
