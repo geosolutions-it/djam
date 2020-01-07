@@ -12,3 +12,6 @@ OPENID_URL_PREFIX = 'openid'
 
 IP_ACTIVATION_CODE_EXPIRATION_HOURS = 12
 IP_ENABLE_OAUTH2_MANAGEMENT_URLPATTERNS = True
+
+
+OIDC_EXTRA_SCOPE_CLAIMS = 'project.apps.identity_provider.oidc_provider_settings.CustomScopeClaims'
