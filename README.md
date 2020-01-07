@@ -107,3 +107,7 @@ Dockerfile in preparation
 ## Versioning
 
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/geosolutions-it/djam/tags). 
+
+## Geoserver authn integration
+
+To be able to use Djam based authentication from Geoserver a recent build of geonode-oauth2 extension is required, because [this commit](https://github.com/geoserver/geoserver/commit/6e6ef47ce2bee359a705ce25c58fd8088f90417f) is required.
