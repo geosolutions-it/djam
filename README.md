@@ -96,6 +96,11 @@ and in OPENID CONNECT PROVIDER add row to Clients table.
 You can also check User registration form at `http://localhost:8000/register`. REMEMBER: to register the User
 you first need update `djam/project/conf/dev/email.py` configuration file with SMTP server credentials.   
 
+## Side notes
+
+* To properly read data from Token Info endpoint the client has to have `token_introspection` and their ID present in the available scopes (/admin -> Clients model -> Scopes) 
+* OpenId Provider defines additional scope `user_id` for accessing User's database ID. This feature usage should be as limited as possible, for now it is present for Allauth simple integration.
+
 ## Running the tests
 
 No tests are yet preapared
