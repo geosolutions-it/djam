@@ -107,7 +107,26 @@ No tests are yet preapared
 
 ## Deployment
 
-Dockerfile in preparation
+The easiest deployment strategy is to create a docker container using Dockerfile from the main project directory. Docker container sets up uWSGI server (which connects with `http-socket = :8000`) along with `python manage.py rundramatiq` command.
+
+Remember to properly set configuration, especially DJAM_DB_HOST and DJAM_RABBITMQ_HOST when running the dockerized aplication.
+
+* Build docker image: `docker build . -t djam`
+* Start docker container: `docker run -e DJAM_DB_HOST=192.168.x.x -e DJAM_RABBITMQ_HOST=192.168.x.x -p 8000:8000 djam`
+
+The container sets up a uWSGI server along with dramatiq
+On the start of the docker container `python manage.py collectstatic` and `python manage.py migrate` commands are performed.
+
+Static files have to be served separately using e.g. Nginx. The static files are located in `/djam/project/static` container directory.
+
+##### Side note
+
+When setting up Postgresql, make sure proper permissions are set to access the database from docker.
+You have to check pg_hba.conf and postgresql.conf files.
+
+For Postgres on the host machine:
+* pg_hba.conf -> add a row for docker0 address from `ip a`
+* postgresql.conf -> uncomment line and allow all, or just specific listen_addresses `listen_addresses = '*'`
 
 ## Versioning
 
