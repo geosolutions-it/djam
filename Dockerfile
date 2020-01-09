@@ -15,6 +15,5 @@ RUN apk add --no-cache pcre
 
 WORKDIR /djam/project
 
-RUN python manage.py migrate
-RUN python manage.py collectstatic --no-input
-CMD uwsgi --ini djam.ini & python manage.py rundramatiq
+RUN  chmod +x ./docker-entrypoint.sh
+ENTRYPOINT ["sh", "docker-entrypoint.sh"]
