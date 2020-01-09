@@ -1,0 +1,24 @@
+{% load static %}
+<head>
+    <link rel="shortcut icon" href="{% static "identity_provider/img/favicon.ico" %}" type="image/x-icon">
+    <link rel="icon" href="{% static "identity_provider/img/favicon.ico" %}" type="image/x-icon">
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'identity_provider/css/base.css' %}">
+
+    {% block header_scripts %}{% endblock header_scripts %}
+</head>
+
+<body>
+    <div id='content' class='content'>
+        <div class='flex-basis-60 flex-column-container'>
+            <div class="message-wrapper">
+                <div class='logo'></div>
+                {% block message %}{% endblock message %}
+            </div>
+        </div>
+        <div class='flex-basis-40 login-picture'></div>
+    </div>
+</body>

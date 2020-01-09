@@ -1,0 +1,45 @@
+version: '3'
+services:
+
+    broker:
+      container_name: rabbitmq
+      image: 'rabbitmq:3-management'
+
+    nginx:
+        container_name: nginx
+        build:
+          context: ./deployment/nginx/
+        restart: always
+        ports:
+        - "8080:80"
+        # - "80:80"
+        volumes:
+          - djam_static:/djam_static
+        # - ./log:/var/log/nginx
+        depends_on:
+          - server
+
+    server:
+        container_name: djam
+        build:
+          context: ./
+        restart: always
+        # command: uwsgi  --emperor uwsgi.ini
+        # command: uwsgi --ini uwsgi.ini
+        # ports:
+        # - "8002:8000"
+        volumes:
+          - djam_static:/djam/project/static
+        environment:
+          - DJAM_PROJECT_ENVIRONMENT=dev
+          - DJAM_DB_NAME=iam
+          - DJAM_DB_USER=biegan
+          - DJAM_DB_PASSWORD=rev
+          - DJAM_DB_HOST=192.168.2.76
+          - DJAM_DB_PORT=5433
+          - DJAM_RABBITMQ_HOST=broker
+        depends_on:
+          - broker
+
+volumes:
+    djam_static:

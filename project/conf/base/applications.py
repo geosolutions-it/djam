@@ -8,8 +8,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'oauth2_provider',
+    'oidc_provider',
     'corsheaders',
     'rest_framework',
+    "django_dramatiq",
     'apps.identity_provider.apps.IdentityProviderConfig',
 ]

@@ -1,0 +1,89 @@
+
+body {
+  font-size: 1em;
+  font-weight: 400;
+  line-height: 1.5;
+  background: #a7db8f;
+  padding: 20px;
+  font-family: Play,Arial,Verdana,sans-serif;
+  min-width: 320px;
+}
+
+.content {
+  width: 100%;
+  min-width: 800px;
+  height: 100%;
+  min-height: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1536px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,.3);
+  display: flex;
+  justify-content: center;
+  background-color: #609845;
+  box-sizing: border-box;
+
+  color: white;
+}
+
+.flex-basis-60 {
+  flex-basis: 60%;
+}
+
+.flex-basis-40 {
+  flex-basis: 40%;
+}
+
+.flex-column-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-picture {
+  background: url(/static/identity_provider/img/background.jpg);
+  border-radius: 0 10px 10px 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.message-wrapper {
+  padding: 20px;
+  color: black;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo {
+  background: url(/static/identity_provider/img/logo-inverted.png);
+  margin-right: 6px;
+  width: 400px;
+  height: 100px;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.message-header {
+  text-align: center;
+  color: #609845;
+  font-weight: bolder;
+  margin-top: 40px;
+}
+
+@media all and (max-device-width: 768px) {
+
+    .flex-basis-60 {
+        flex-basis: 100%;
+    }
+
+    .flex-basis-40 {
+      display: none;
+    }
+
+}

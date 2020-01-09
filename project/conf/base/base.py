@@ -20,16 +20,16 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("IAM_SECRET_KEY", 'n_8+y!3-qh!*a#sjyk0=^k8u)r770l%g=91q$%u=@*f*1+sma!')
+SECRET_KEY = os.getenv("DJAM_SECRET_KEY", 'n_8+y!3-qh!*a#sjyk0=^k8u)r770l%g=91q$%u=@*f*1+sma!')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 ALLOWED_HOSTS = []
 
-AUTH_USER_MODEL = 'identity_provider.User'
-
 ROOT_URLCONF = 'urls'
 
 WSGI_APPLICATION = 'wsgi.application'
 
-OAUTH2_PROVIDER_APPLICATION_MODEL = 'oauth2_provider.Application'
+AUTH_USER_MODEL = 'identity_provider.User'
+
+SESSION_COOKIE_NAME = 'djam_sessionid'
