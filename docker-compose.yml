@@ -32,12 +32,14 @@ services:
           - djam_static:/djam/project/static
         environment:
           - DJAM_PROJECT_ENVIRONMENT=dev
-          - DJAM_DB_NAME=iam
-          - DJAM_DB_USER=biegan
-          - DJAM_DB_PASSWORD=rev
-          - DJAM_DB_HOST=192.168.2.76
-          - DJAM_DB_PORT=5433
           - DJAM_RABBITMQ_HOST=broker
+          - DJAM_DB_HOST=${DJAM_DB_HOST}
+          - DJAM_DB_PORT=${DJAM_DB_PORT}
+          - DJAM_DB_NAME=${DJAM_DB_NAME}
+          - DJAM_DB_USER=${DJAM_DB_USER}
+          - DJAM_DB_PASSWORD=${DJAM_DB_PASSWORD}
+          - DJAM_EMAIL_HOST_USER=${DJAM_EMAIL_HOST_USER}
+          - DJAM_EMAIL_HOST_PASSWORD=${DJAM_EMAIL_HOST_PASSWORD}
         depends_on:
           - broker
 
