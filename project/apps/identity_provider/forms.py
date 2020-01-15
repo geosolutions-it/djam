@@ -2,6 +2,7 @@ import logging
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ObjectDoesNotExist
 
 logger = logging.getLogger(__name__)
 
@@ -35,9 +36,9 @@ class ResendActivationEmailForm(forms.Form):
     def clean_email(self):
         data = self.cleaned_data.get('email')
 
-        user = get_user_model().objects.filter(email=data).first()
-
-        if user is None:
+        try:
+            get_user_model().objects.get(email=data)
+        except ObjectDoesNotExist:
             logger.error(f'ResendActivationEmailForm: Validation error - no user found with "{data}" email')
             raise forms.ValidationError('No user found with registered email.')
 

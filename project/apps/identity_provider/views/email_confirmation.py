@@ -7,6 +7,7 @@ from django.conf import settings
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ObjectDoesNotExist
 
 from apps.identity_provider.models import UserActivationCode
 from apps.identity_provider.tasks import send_activation_email, send_staff_notification_email
@@ -27,9 +28,9 @@ class EmailConfirmationView(View):
     def get(self, request, user_uuid, *args, **kwargs):
         activation_code = request.GET.get('activation_code')
 
-        user = get_user_model().objects.filter(uuid=user_uuid).first()
-
-        if user is None:
+        try:
+            user = get_user_model().objects.get(uuid=user_uuid)
+        except ObjectDoesNotExist:
             logger.error(f'Email Confirmation View: No registered user found with user_uuid: {user_uuid}')
             return self.render_error(request, 'Whoops.. Something went wrong.')
 

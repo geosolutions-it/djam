@@ -8,6 +8,7 @@ from django.urls import reverse
 from django.http import request
 from django.contrib.auth import get_user_model
 from django.contrib.sites.shortcuts import get_current_site
+from django.core.exceptions import ObjectDoesNotExist
 
 from apps.identity_provider import models
 
@@ -21,10 +22,9 @@ def random_string(length=25):
 
 def generate_activation_link(username: str, request: request):
 
-    UserModel = get_user_model()
-
-    user = UserModel.objects.filter(username=username).first()
-    if user is None:
+    try:
+        user = get_user_model().objects.get(username=username)
+    except ObjectDoesNotExist:
         logger.error(f'Activation link generator: No user found with username "{username}"')
         return
 
