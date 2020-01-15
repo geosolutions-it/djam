@@ -18,7 +18,7 @@
         </div>
         <div class="form-group">
             <label for="email">Email</label>
-            <input type="text" class="form-control input-lg" name="email" id="id_email" required placeholder="Enter username"  {% if form.username.value %} value="{{ form.email.value }}" {% endif %}>
+            <input type="text" class="form-control input-lg" name="email" id="id_email" required placeholder="Enter email"  {% if form.email.value %} value="{{ form.email.value }}" {% endif %}>
             {{ form.email.errors }}
         </div>
         <div class="form-group">
