@@ -10,7 +10,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 
-from apps.identity_provider import models
+from apps.user_management import models
 
 logger = logging.getLogger(__name__)
 

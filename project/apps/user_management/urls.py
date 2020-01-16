@@ -1,6 +1,6 @@
 from django.urls import path, include
-from .views.signup import SignupView
-from .views.email_confirmation import EmailConfirmationView, EmailConfirmationSentView, ResendVerificationEmailView
+from apps.user_management.views.signup import SignupView
+from apps.user_management.views.email_confirmation import EmailConfirmationView, EmailConfirmationSentView, ResendVerificationEmailView
 
 
 urlpatterns = [

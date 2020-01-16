@@ -12,8 +12,8 @@ from django.utils import timezone
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from .model_managers import UserManager
-from .utils import random_string
+from apps.user_management.model_managers import UserManager
+from apps.user_management.utils import random_string
 
 
 class User(AbstractBaseUser, PermissionsMixin):

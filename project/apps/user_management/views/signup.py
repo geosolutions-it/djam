@@ -5,9 +5,9 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.conf import settings
 
-from apps.identity_provider.forms import SignUpForm
-from apps.identity_provider.tasks import send_activation_email, send_staff_notification_email
-from apps.identity_provider.utils import generate_activation_link
+from apps.user_management.forms import SignUpForm
+from apps.user_management.tasks import send_activation_email, send_staff_notification_email
+from apps.user_management.utils import generate_activation_link
 
 logger = logging.getLogger(__name__)
 

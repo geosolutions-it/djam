@@ -9,10 +9,10 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 
-from apps.identity_provider.models import UserActivationCode
-from apps.identity_provider.tasks import send_activation_email, send_staff_notification_email
-from apps.identity_provider.utils import generate_activation_link
-from apps.identity_provider.forms import ResendActivationEmailForm
+from apps.user_management.models import UserActivationCode
+from apps.user_management.tasks import send_activation_email, send_staff_notification_email
+from apps.user_management.utils import generate_activation_link
+from apps.user_management.forms import ResendActivationEmailForm
 
 logger = logging.getLogger(__name__)
 

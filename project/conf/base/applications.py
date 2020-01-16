@@ -1,4 +1,3 @@
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -11,6 +10,8 @@ INSTALLED_APPS = [
     'oidc_provider',
     'corsheaders',
     'rest_framework',
-    "django_dramatiq",
+    'django_dramatiq',
     'apps.identity_provider.apps.IdentityProviderConfig',
+    'apps.user_management.apps.UserManagementConfig',
+
 ]

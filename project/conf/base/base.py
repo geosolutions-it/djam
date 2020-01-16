@@ -30,6 +30,6 @@ ROOT_URLCONF = 'urls'
 
 WSGI_APPLICATION = 'wsgi.application'
 
-AUTH_USER_MODEL = 'identity_provider.User'
+AUTH_USER_MODEL = 'user_management.User'
 
 SESSION_COOKIE_NAME = 'djam_sessionid'

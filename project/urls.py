@@ -5,6 +5,6 @@ from django.conf import settings
 
 urlpatterns = [
     path(r'admin/', admin.site.urls),
-    path('', include('apps.identity_provider.urls_user_management')),
-    path(f'{settings.OPENID_URL_PREFIX}/', include('apps.identity_provider.urls_openid')),
+    path('', include('apps.user_management.urls')),
+    path(f'{settings.OPENID_URL_PREFIX}/', include('apps.identity_provider.urls')),
 ]

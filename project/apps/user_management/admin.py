@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 
-from .forms import IPUserCreationForm, IPUserChangeForm
+from apps.user_management.forms import IPUserCreationForm, IPUserChangeForm
 
 
 @admin.register(get_user_model())
