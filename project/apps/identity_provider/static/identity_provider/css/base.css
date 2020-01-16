@@ -76,6 +76,12 @@ body {
   margin-top: 40px;
 }
 
+.message-error {
+  text-align: center;
+  color: red;
+  margin-top: 40px;
+}
+
 @media all and (max-device-width: 768px) {
 
     .flex-basis-60 {

@@ -1,6 +1,10 @@
+import logging
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ObjectDoesNotExist
+
+logger = logging.getLogger(__name__)
 
 
 class SignUpForm(UserCreationForm):
@@ -24,3 +28,18 @@ class IPUserChangeForm(UserChangeForm):
     class Meta:
         model = get_user_model()
         fields = ('username', 'email')
+
+
+class ResendActivationEmailForm(forms.Form):
+    email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
+
+    def clean_email(self):
+        data = self.cleaned_data.get('email')
+
+        try:
+            get_user_model().objects.get(email=data)
+        except ObjectDoesNotExist:
+            logger.error(f'ResendActivationEmailForm: Validation error - no user found with "{data}" email')
+            raise forms.ValidationError('No user found with registered email.')
+
+        return data
