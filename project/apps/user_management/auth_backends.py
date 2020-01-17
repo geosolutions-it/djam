@@ -1,5 +1,4 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
 
 
 class AuthenticationEmailBackend:
@@ -20,7 +19,9 @@ class AuthenticationEmailBackend:
         return None
 
     def get_user(self, user_id):
+        UserModel = get_user_model()
+
         try:
-            return User.objects.get(pk=user_id)
-        except User.DoesNotExist:
+            return UserModel.objects.get(pk=user_id)
+        except UserModel.DoesNotExist:
             return None
