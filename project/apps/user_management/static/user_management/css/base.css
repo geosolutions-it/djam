@@ -43,7 +43,7 @@ body {
 }
 
 .login-picture {
-  background: url(/static/identity_provider/img/background.jpg);
+  background: url(/static/user_management/img/background.jpg);
   border-radius: 0 10px 10px 0;
   background-repeat: no-repeat;
   background-size: cover;
@@ -61,7 +61,7 @@ body {
 }
 
 .logo {
-  background: url(/static/identity_provider/img/logo-inverted.png);
+  background: url(/static/user_management/img/logo-inverted.png);
   margin-right: 6px;
   width: 400px;
   height: 100px;
