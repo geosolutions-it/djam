@@ -1,13 +1,15 @@
 import logging
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordResetForm
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
+
+from .tasks import send_multi_alternatives_mail
 
 logger = logging.getLogger(__name__)
 
 
-class SignUpForm(UserCreationForm):
+class UMUserCreationForm(UserCreationForm):
     username = forms.CharField(max_length=50, required=True)
     email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
 
@@ -16,14 +18,14 @@ class SignUpForm(UserCreationForm):
         fields = ('username', 'email', 'password1', 'password2', )
 
 
-class IPUserCreationForm(UserCreationForm):
+class UMAdminUserCreationForm(UserCreationForm):
 
     class Meta:
         model = get_user_model()
         fields = ('username', 'email')
 
 
-class IPUserChangeForm(UserChangeForm):
+class UMAdminUserChangeForm(UserChangeForm):
 
     class Meta:
         model = get_user_model()
@@ -43,3 +45,26 @@ class ResendActivationEmailForm(forms.Form):
             raise forms.ValidationError('No user found with registered email.')
 
         return data
+
+
+class UMPasswordResetForm(PasswordResetForm):
+
+    def send_mail(self, subject_template_name, email_template_name,
+                  context, from_email, to_email, html_email_template_name=None):
+        """
+        Function sending password reset email using Dramatiq
+        """
+        # User object is not serializable - has to be replaced for passing arguments to Dramatiq
+        user = context.pop('user')
+        context['username'] = user.get_username()
+
+        send_multi_alternatives_mail.send(
+            subject_template_name,
+            email_template_name,
+            context,
+            from_email,
+            to_email,
+            html_email_template_name=None
+        )
+
+        return

@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.conf import settings
 
-from apps.user_management.forms import SignUpForm
+from apps.user_management.forms import UMUserCreationForm
 from apps.user_management.tasks import send_activation_email, send_staff_notification_email
 from apps.user_management.utils import generate_activation_link
 
@@ -15,11 +15,11 @@ logger = logging.getLogger(__name__)
 class SignupView(View):
 
     def get(self, request):
-        form = SignUpForm()
+        form = UMUserCreationForm()
         return render(request, 'signup.html', {'form': form})
 
     def post(self, request):
-        form = SignUpForm(request.POST)
+        form = UMUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
 

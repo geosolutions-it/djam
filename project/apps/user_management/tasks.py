@@ -1,5 +1,5 @@
 import dramatiq
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, EmailMultiAlternatives
 from django.template.loader import render_to_string
 
 from django.contrib.auth import get_user_model
@@ -7,6 +7,8 @@ from django.contrib.auth import get_user_model
 
 @dramatiq.actor(max_retries=3)
 def send_activation_email(email, activation_url, sender='support@djam.com', subject="Activate Your Account"):
+    # Email subject *must not* contain newlines
+    subject = ''.join(subject.splitlines())
 
     msg_html = render_to_string(
         'activation_email.html',
@@ -25,9 +27,38 @@ def send_activation_email(email, activation_url, sender='support@djam.com', subj
 
 @dramatiq.actor(max_retries=3)
 def send_staff_notification_email(msg, sender='support@djam.com', subject="Djam administration notification"):
+    # Email subject *must not* contain newlines
+    subject = ''.join(subject.splitlines())
 
     UserModel = get_user_model()
     staff_members = UserModel.objects.all().filter(is_staff=True)
 
     msg = EmailMessage(subject=subject, body=msg, from_email=sender, to=[staff_member.email for staff_member in staff_members])
     return msg.send()
+
+
+@dramatiq.actor(max_retries=3)
+def send_multi_alternatives_mail(
+        subject_template_name: str,
+        email_template_name: str,
+        context: dict,
+        from_email: str,
+        to_email: str,
+        html_email_template_name=None
+):
+    """
+    Function sending EmailMultiAlternatives
+    """
+
+    subject = render_to_string(subject_template_name, context)
+    # Email subject *must not* contain newlines
+    subject = ''.join(subject.splitlines())
+    body = render_to_string(email_template_name, context)
+
+    email_message = EmailMultiAlternatives(subject, body, from_email, [to_email])
+
+    if html_email_template_name is not None:
+        html_email = render_to_string(html_email_template_name, context)
+        email_message.attach_alternative(html_email, 'text/html')
+
+    email_message.send()
