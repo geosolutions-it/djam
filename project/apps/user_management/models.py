@@ -16,6 +16,28 @@ from apps.user_management.model_managers import UserManager
 from apps.user_management.utils import random_string
 
 
+class CaseInsensitiveFieldMixin:
+    """
+    Field mixin that uses case-insensitive lookup alternatives if they exist.
+    Note: Lookups that do not have case-insensitive versions (e.g. “in”) will not be case-insensitive.
+    """
+    LOOKUP_CONVERSIONS = {
+        'exact': 'iexact',
+        'contains': 'icontains',
+        'startswith': 'istartswith',
+        'endswith': 'iendswith',
+        'regex': 'iregex',
+    }
+
+    def get_lookup(self, lookup_name):
+        converted = self.LOOKUP_CONVERSIONS.get(lookup_name, lookup_name)
+        return super().get_lookup(converted)
+
+
+class CaseInsensitiveEmailField(CaseInsensitiveFieldMixin, models.EmailField):
+    pass
+
+
 class User(AbstractBaseUser, PermissionsMixin):
     username_validator = UnicodeUsernameValidator()
 
@@ -31,7 +53,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=150, blank=True)
-    email = models.EmailField(
+    email = CaseInsensitiveEmailField(
         _('email address'),
         unique=True,
         error_messages={
