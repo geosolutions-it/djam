@@ -13,5 +13,5 @@ INSTALLED_APPS = [
     'django_dramatiq',
     'apps.identity_provider.apps.IdentityProviderConfig',
     'apps.user_management.apps.UserManagementConfig',
-
+    'apps.privilege_manager.apps.PrivilegeManagerConfig',
 ]
