@@ -1,8 +1,10 @@
 import re
-from oidc_provider.views import AuthorizeView
+import json
 
-from oidc_provider.views import TokenIntrospectionView
-from oidc_provider.lib.endpoints.introspection import TokenIntrospectionEndpoint
+from django.db.models import ObjectDoesNotExist
+from oidc_provider.views import AuthorizeView, TokenView
+
+from apps.identity_provider.models import Session
 
 
 class StatelessAuthorizeView(AuthorizeView):
@@ -25,27 +27,54 @@ class StatelessAuthorizeView(AuthorizeView):
         return response
 
 
-class GeoserverTokenIntrospectionView(TokenIntrospectionView):
+class AuthorizeViewWithSessionKey(AuthorizeView):
     """
-    Token introspection providing access_token info shaped according to Geonode for Geoserver integration.
+    Authorize view storing OpenID code in session data
+    """
 
-    Usage of this endpoint should be as limited as possible.
-    """
+    def get(self, request, *args, **kwargs):
+        response = super().get(request, *args, **kwargs)
+        self.update_session_with_code(response)
+
+        return response
 
     def post(self, request, *args, **kwargs):
-        introspection = TokenIntrospectionEndpoint(request)
+        response = super().post(request, *args, **kwargs)
+        self.update_session_with_code(response)
 
-        try:
-            introspection.validate_params()
-            dic = {
-                'client_id': introspection.params['client_id'],
-                'username': introspection.id_token['nickname'],
-                'issued_to': introspection.id_token['nickname'],
-                'email': introspection.id_token['email'],
-                'access_token': introspection.token.access_token,
-                'access_type': 'online',
-                'active': True,
-            }
-            return TokenIntrospectionEndpoint.response(dic)
-        except Exception:
-            return TokenIntrospectionEndpoint.response({'active': False})
+        return response
+
+    def update_session_with_code(self, response):
+        """
+        Function updating user djam session with Code value
+        """
+        if response.status_code == 302 and response._headers.get('location', None):
+            re_code = re.search('code=(\w+)&*?', response._headers.get('location', '')[1])
+
+            if re_code is not None:
+                code = re_code.groups()[0]
+                session = Session.objects.get(session_key=self.request.session.session_key)
+                session.oidp_code = code
+                session.save()
+
+
+class TokenViewWithSessionKey(TokenView):
+    """
+    Token view with response extended with Session Token
+    """
+    def post(self, request, *args, **kwargs):
+        code = request.POST.get('code', None)
+        response = super().post(request, *args, **kwargs)
+
+        # if response is correct, attach Session Token
+        if response.status_code == 200 and code is not None:
+            try:
+                session = Session.objects.get(oidp_code=code)
+            except ObjectDoesNotExist:
+                return response
+
+            data = json.loads(response.content)
+            data['session_token'] = str(session.uuid)
+            response.content = json.dumps(data)
+
+        return response
