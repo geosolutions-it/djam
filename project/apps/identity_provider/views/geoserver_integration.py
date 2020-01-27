@@ -53,7 +53,7 @@ class GeoserverAuthKeyIntrospection(views.APIView):
             return Response({'username': None, 'groups': None}, status=status.HTTP_401_UNAUTHORIZED)
 
         user = get_user_model().objects.get(id=user_id)
-        user_groups = Group.objects.filter(Q(id=user.id))
+        user_groups = Group.objects.filter(Q(users__id=user.id))
 
         user_groups_names = [user_group.name for user_group in user_groups]
 
