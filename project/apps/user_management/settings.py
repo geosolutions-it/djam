@@ -1,3 +1,5 @@
+from django.urls import reverse
+
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     # enable email based login

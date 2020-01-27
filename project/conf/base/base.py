@@ -33,3 +33,4 @@ WSGI_APPLICATION = 'wsgi.application'
 AUTH_USER_MODEL = 'user_management.User'
 
 SESSION_COOKIE_NAME = 'djam_sessionid'
+LOGIN_REDIRECT_URL = '/user/account/'

@@ -1,15 +1,13 @@
 import logging
-
 from django import forms
-
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.sites.shortcuts import get_current_site
-
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordResetForm
+from django.forms import ModelForm
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 
 from .tasks import send_multi_alternatives_mail
 
@@ -23,18 +21,16 @@ class UMUserCreationForm(UserCreationForm):
 
     class Meta:
         model = get_user_model()
-        fields = ('username', 'email', 'password1', 'password2', )
+        fields = ('username', 'email', 'password1', 'password2',)
 
 
 class UMAdminUserCreationForm(UserCreationForm):
-
     class Meta:
         model = get_user_model()
         fields = ('username', 'email')
 
 
 class UMAdminUserChangeForm(UserChangeForm):
-
     class Meta:
         model = get_user_model()
         fields = ('username', 'email')
@@ -53,6 +49,16 @@ class ResendActivationEmailForm(forms.Form):
             raise forms.ValidationError('No user found with registered email.')
 
         return data
+
+
+class UserAccountForm(ModelForm):
+    last_name = forms.CharField(max_length=30, required=False)
+    first_name = forms.CharField(max_length=150, required=False)
+    email = forms.EmailField(required=False)
+
+    class Meta:
+        model = get_user_model()
+        fields = ('first_name', 'last_name', 'email')
 
 
 class UMPasswordResetForm(PasswordResetForm):
