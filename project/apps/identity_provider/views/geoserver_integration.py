@@ -60,7 +60,7 @@ class GeoserverAuthKeyIntrospection(views.APIView):
         return Response(
             {
                 'username': user.username,
-                'groups': user_groups_names,
+                # 'groups': user_groups_names,
             }
         )
 

@@ -10,6 +10,7 @@ INSTALLED_APPS = [
     'oidc_provider',
     'corsheaders',
     'rest_framework',
+    'rest_framework_api_key',
     'django_dramatiq',
     'apps.identity_provider.apps.IdentityProviderConfig',
     'apps.user_management.apps.UserManagementConfig',

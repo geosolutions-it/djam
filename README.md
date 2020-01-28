@@ -100,6 +100,8 @@ you first need update `djam/project/conf/dev/email.py` configuration file with S
 
 * To properly read data from Token Info endpoint the client has to have `token_introspection` and their ID present in the available scopes (/admin -> Clients model -> Scopes) 
 * OpenId Provider defines additional scope `user_id` for accessing User's database ID. This feature usage should be as limited as possible, for now it is present for Allauth simple integration.
+* To integrate certain Geoserver flows: `/roles`, `/users`, and `adminRole` endpoint access is required. These endpoints are protected with API key, which should be passed as Authorization header in a format: `apiKey {key}`.
+Generating API key can be done in the admin page -> `API KEY PERMISSIONS` -> `API keys` -> `Add` 
 
 ## Running the tests
 
