@@ -3,7 +3,7 @@ import logging
 from django.contrib.auth import get_user_model
 from rest_framework import views
 from rest_framework.response import Response
-from project.api_key import HasGeoserverFormatApiKey
+from api_key import HasGeoserverFormatApiKey
 
 
 logger = logging.getLogger(__name__)

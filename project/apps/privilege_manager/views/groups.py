@@ -3,7 +3,7 @@ import logging
 from rest_framework import viewsets, views
 from rest_framework.response import Response
 
-from project.api_key import HasGeoserverFormatApiKey
+from api_key import HasGeoserverFormatApiKey
 from apps.privilege_manager.models import Group
 from apps.privilege_manager.serializers import GroupSerializer
 
