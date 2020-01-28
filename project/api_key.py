@@ -27,4 +27,4 @@ class HasGeoserverFormatApiKey(HasAPIKey):
     """
     Api key validator with Authorization header parser looking for 'Authoriaztion: apiKey xxx(...)xxx'
     """
-    key_parser = ConfigurableKeyParser('apiKey ')
+    key_parser = ConfigurableKeyParser('ApiKey ')
