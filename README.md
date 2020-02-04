@@ -121,7 +121,7 @@ On the start of the docker container `python manage.py collectstatic` and `pytho
 
 Static files have to be served separately using e.g. Nginx. The static files are located in `/djam/project/static` container directory.
 
-##### Side note
+##### Postgres with Docker deployment
 
 When setting up Postgresql, make sure proper permissions are set to access the database from docker.
 You have to check pg_hba.conf and postgresql.conf files.
@@ -134,6 +134,50 @@ For Postgres on the host machine:
 
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/geosolutions-it/djam/tags). 
 
-## Geoserver authn integration
+## Geoserver integration
 
+##### Openid authentication
 To be able to use Djam based authentication from Geoserver a recent build of geonode-oauth2 extension is required, because [this commit](https://github.com/geoserver/geoserver/commit/6e6ef47ce2bee359a705ce25c58fd8088f90417f) is required.
+
+##### Auth-key authentication and authorization
+Geoserver integration is possible also by AuthKey ([see documentation](https://docs.geoserver.org/stable/en/user/community/authkey/index.html)).
+AuthKey is returned in the OpenID Code response along with ID and Access tokens, labelled as `session_token`.
+Geoserver configuration for this authentication and authorization method:
+* Login to Geoserver with admin privileges
+* `Security` -> `Settings`: make sure Active role service is `default` (to prevent doubled checks for privileges in different Roles services)
+* `Security` -> `Users, Groups, Roles`: `Add new` Role Service with the following parameters:
+    * `AuthKEY REST` - Role service from REST endpoint
+    * name: `djam_roleservice`
+    * Base Server URL: `http://your-djam-domain`
+    * Roles REST Endpoint: `/api/privilege/geoserver/roles`
+    * Admin Role REST Endpoint: `/api/privilege/geoserver/adminRole`
+    * Users REST Endpoint: `/api/privilege/geoserver/users` [note: this endpoint won't be used in this integration]
+    * Roles JSON Path: `$.groups`
+    * Admin Role JSON Path: `$.adminRole`
+    * Users JSON Path: `$.users[?(@.username=='${username}')].groups`
+    * REST Rules Cache Concurrency Level: `4`
+    * REST Rules Cache Maximum Size (# keys): `10000`
+    * REST Rules Cache Expiration Time (ms): `30000`
+* `Security` -> `Users, Groups, Roles`: `Add new` User Group Service with the following parameters:
+    * `AuthKEY WebService Body Response` - UserGroup Service from WebService Response Body
+    * name: `djam_groupservice`
+    * Password encryption: `Empty`
+    * Password policy: `default`
+    * Web Service Response Roles Search Regular Expression: `^.*?"groups"\s*:\s*\["([^"]+)"\].*$`
+    * Optional static comma-separated list of available Groups from the Web Service response: leave this empty
+    * Role Service to use (empty value means: use the current Active Role Service): `djam_roleservice`
+* `Security` -> `Authentication`: `Add new` Authentication Filter with the following parameters:
+    * `AuthKey` - Authenticates by looking up for an authentication key sent as URL parameter
+    * name: `djam_filter`
+    * name of URL parameter: `authkey`
+    * Authentication key to user mapper: `Web Service`
+    * Web Service URL, with key placeholder: `http://your-djam-domain/openid/authkey/introspect/?authkey={key}&format=json`
+    * Web Service Response User Search Regular Expression: `^.*?\"username\"\s*:\s*\"([^\"]+)\".*$`
+    * User/Group Service: `djam_groupservice`
+* `Security` -> `Authentication` -> `Filter Chains`:
+    * `web` -> `Chain filters`: move `djam_filter` for "available" to "selected" column, ABOVE `anonymous` filter and press Close
+    * `default` -> `Chain filters`: move `djam_filter` for "available" to "selected" column, ABOVE `anonymous` filter and press Close
+    * **Remember** to press `Save` at the bottom of the `Authentication` page, otherwise the settings won't be applied!
+
+From now on you can authenticate your requests to Geoserver by attaching `authkey` parameter to a querystring, e.g. 
+`http://your-domain/geoserver/geonode/wms?service=WMS&...&authkey=84fb7e8d-9642-4ec7-b8e3-a6447ad1c709`.
