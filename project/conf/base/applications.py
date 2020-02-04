@@ -15,4 +15,5 @@ INSTALLED_APPS = [
     'apps.identity_provider.apps.IdentityProviderConfig',
     'apps.user_management.apps.UserManagementConfig',
     'apps.privilege_manager.apps.PrivilegeManagerConfig',
+    'apps.stripe_djam.apps.StripeDjamConfig',
 ]
