@@ -1,7 +1,7 @@
-<!--Mjml activation email template, used to generate django activation_email.html template-->
+<!--Mjml activation email template, used to generate django user_management/activation_email.html template-->
 <!--Mjml forces Django 2.2.8, hence activation_email html template generation has to be done by npm or manually:-->
 <!--https://mjml.io/try-it-live/SkHQAok0r-->
-<!--Generated email html template should be stored in identity_provider/templates/activation_email.html.-->
+<!--Generated email html template should be stored in user_management/templates/user_management/activation_email.html.-->
 
 <!--Django template expects following urls in variables:-->
 <!--   - activation_url (link pointing at activation page)-->

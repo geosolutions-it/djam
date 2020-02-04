@@ -11,7 +11,7 @@ def send_activation_email(email, activation_url, sender='support@djam.com', subj
     subject = ''.join(subject.splitlines())
 
     msg_html = render_to_string(
-        'activation_email.html',
+        'user_management/activation_email.html',
         {
             'activation_url': activation_url,
             # TODO: change this once any server is deployed
