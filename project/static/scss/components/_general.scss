@@ -1,0 +1,216 @@
+img {
+  max-width: 100%;
+}
+
+.modal {
+  font-family: Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  display: none;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+  left: 0;
+}
+
+.modal-content {
+  box-sizing: border-box !important;
+  /* box-shadow: 0px 0px 6px -2px #000000; */
+  border-radius: 6px;
+  position: relative;
+  background-color: #ffffff;
+  padding: 10px;
+  width: 100%;
+  max-width: 580px;
+  margin: auto !important;
+  overflow: visible;
+  background-color: #fefefe;
+  /* border: 1px solid #888; */
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  -webkit-animation-name: animatetop;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animatetop;
+  animation-duration: 0.4s;
+  /* border-radius: 10px; */
+  height: 600px;
+  max-width: 551px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.modal-header {
+  min-height: 50px;
+  padding: 0;
+  vertical-align: middle;
+
+  h5 h6 {
+    font-family: Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+}
+
+.modal-title {
+  padding-left: 10px;
+  font-size: 1.7rem;
+  text-align: center;
+  color: #33475b;
+}
+
+.modal-title-green {
+  color: $green;
+}
+
+.modal-open {
+  padding: 0 !important;
+}
+
+.close {
+  top: -0.5rem;
+  position: relative;
+}
+
+.btn {
+  &-primary {
+    @include border-radius(5px);
+    margin: 10px 0;
+    padding: 0.7rem 1.2rem;
+    background: $green;
+    border: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: $white;
+    font-size: 90%;
+    font-weight: 700;
+    font-family: Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-shadow: none;
+    cursor: pointer;
+
+    &:hover,
+    &:active,
+    &:focus {
+      cursor: pointer;
+      // box-shadow: 0 0 0 0.2rem $yellow-translucent !important;
+      background-color: $green !important;
+    }
+  }
+}
+
+.text-primary {
+  color: $green !important;
+}
+
+a {
+  color: $black;
+  font-weight: 600;
+
+  &:hover,
+  &:active,
+  &:focus {
+    text-decoration: underline $green;
+  }
+
+  &.btn {
+    &:hover,
+    &:active,
+    &:focus {
+      color: $white !important;
+    }
+  }
+}
+
+ul.social-buttons li a {
+  background-color: black;
+  color: $white !important;
+
+  &:hover,
+  &:active,
+  &:focus {
+    background-color: $green;
+    color: $white !important;
+  }
+}
+
+.blog ul.social-buttons li a {
+  background-color: transparent;
+  color: $green !important;
+
+  &:hover,
+  &:active,
+  &:focus {
+    background-color: $green;
+    color: $white !important;
+  }
+}
+
+div.mce_inline_error {
+  @include border-radius(2px);
+
+  padding: 6px 10px 4px;
+  background: #c00;
+  color: $white;
+}
+
+.service-heading {
+  text-transform: uppercase;
+}
+
+.hide {
+  display: none;
+}
+
+.carousel-inner {
+  height: 450px;
+}
+
+@media (max-width: 990px) {
+  .carousel-inner {
+    height: 350px;
+  }
+}
+
+@media (max-width: 550px) {
+  .carousel-inner {
+    height: 450px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1300px;
+  }
+}
+
+.richtext-image {
+  width: 100%;
+  max-width: 1000px;
+  height: auto;
+}
+
+.blog-post-title {
+  color: $black !important;
+
+  &:hover,
+  &:active,
+  &:focus {
+    color: $green !important;
+  }
+}
+
+@media (max-width: $mobile-max-width) {
+  .modal-title {
+    font-size: 18px;
+    padding-bottom: 10px;
+    color: #33475b;
+    text-align: center;
+    line-height: normal;
+  }
+
+  .modal-content {
+    height: 85vh;
+  }
+  .modal-body {
+    padding: 0.3rem;
+  }
+}
