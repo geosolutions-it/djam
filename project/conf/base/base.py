@@ -34,3 +34,5 @@ AUTH_USER_MODEL = 'user_management.User'
 
 SESSION_COOKIE_NAME = 'djam_sessionid'
 LOGIN_REDIRECT_URL = '/user/account/'
+
+HOME_VIEW=os.getenv('DJAM_HOME_VIEW','login')
