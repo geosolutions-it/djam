@@ -55,12 +55,14 @@ class GeoserverAuthKeyIntrospection(views.APIView):
         user = get_user_model().objects.get(id=user_id)
         user_groups = Group.objects.filter(Q(users__id=user.id))
 
-        user_groups_names = [user_group.name for user_group in user_groups]
+        # Geoserver expects User Groups' names in the form of a string with comma separated values.
+        # In order to keep the compatibility with default Geoserver regex, the string is enclosed in a list.
+        user_groups_names = [''.join([user_group.name + ',' if i+1 != len(user_groups) else user_group.name for i, user_group in enumerate(user_groups)])]
 
         return Response(
             {
                 'username': user.username,
-                # 'groups': user_groups_names,
+                'groups': user_groups_names,
             }
         )
 
