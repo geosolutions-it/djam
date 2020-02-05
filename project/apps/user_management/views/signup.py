@@ -16,7 +16,7 @@ class SignupView(View):
 
     def get(self, request):
         form = UMUserCreationForm()
-        return render(request, 'signup.html', {'form': form})
+        return render(request, 'user_management/signup.html', {'form': form})
 
     def post(self, request):
         form = UMUserCreationForm(request.POST)
@@ -38,7 +38,7 @@ class SignupView(View):
                 user.delete()
                 return render(
                     request,
-                    'simple_message.html',
+                    'user_management/simple_message.html',
                     context={'error': f'Could not generate activation URL.<br> Please try registering <a href="{request.get_full_path()}">again</a>!'}
                 )
 
@@ -48,4 +48,4 @@ class SignupView(View):
 
             return redirect(reverse('activation_msg_sent'))
         else:
-            return render(request, 'signup.html', {'form': form, 'errors': form.errors})
+            return render(request, 'user_management/signup.html', {'form': form, 'errors': form.errors})

@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 class EmailConfirmationSentView(View):
 
     def get(self, request):
-        return render(request, 'simple_message.html', context={'message': 'Please confirm your email address <br> to complete registration.'})
+        return render(request, 'user_management/simple_message.html', context={'message': 'Please confirm your email address <br> to complete registration.'})
 
 
 class EmailConfirmationView(View):
@@ -72,14 +72,14 @@ class EmailConfirmationView(View):
 
         return render(
             request,
-            'simple_message.html',
+            'user_management/simple_message.html',
             context={'message': 'Congrats!<br>You have successfully<br>activated your account :)'},
         )
 
     def render_error(self, request, error):
         return render(
             request,
-            'simple_message.html',
+            'user_management/simple_message.html',
             context={'error': error}
         )
 
@@ -88,7 +88,7 @@ class ResendVerificationEmailView(View):
 
     def get(self, request):
         form = ResendActivationEmailForm()
-        return render(request, 'signup_resend_activation_email.html', context={'form': form})
+        return render(request, 'user_management/signup_resend_activation_email.html', context={'form': form})
 
     def post(self, request, *args, **kwargs):
         form = ResendActivationEmailForm(request.POST)
@@ -101,7 +101,7 @@ class ResendVerificationEmailView(View):
             if user is None:
                 logger.error(f'Resend Email Verification View: No registered user found with email: {user_email}')
 
-                return render(request, 'signup_resend_activation_email.html', {'form': form})
+                return render(request, 'user_management/signup_resend_activation_email.html', {'form': form})
 
             if user.email_confirmed:
                 logging.info(f'Resend Email Verification View: The user has already confirmed the email "{user.email}"')
@@ -119,11 +119,11 @@ class ResendVerificationEmailView(View):
             return redirect(reverse('activation_msg_sent'))
 
         else:
-            return render(request, 'signup_resend_activation_email.html', {'form': form})
+            return render(request, 'user_management/signup_resend_activation_email.html', {'form': form})
 
     def render_error(self, request, error):
         return render(
             request,
-            'simple_message.html',
+            'user_management/simple_message.html',
             context={'error': error}
         )
