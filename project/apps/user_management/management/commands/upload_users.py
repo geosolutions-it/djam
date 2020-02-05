@@ -18,5 +18,13 @@ class Command(BaseCommand):
                     User.objects.filter(username=user.get('username')).exists():
                 continue
             else:
-                User.objects.create(email=user.get('email'), username=user.get('username'), is_active=True,
-                                    email_confirmed=True)
+                User.objects.create(
+                    email=user.get('email'),
+                    username=user.get('username'),
+                    is_active=True,
+                    email_confirmed=True,
+                    password=user.get('password'),
+                    first_name=user.get('first_name'),
+                    last_name=user.get('last_name'),
+                )
+
