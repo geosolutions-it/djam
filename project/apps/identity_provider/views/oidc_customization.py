@@ -1,10 +1,12 @@
 import re
 import json
 
+from django.shortcuts import render
 from django.db.models import ObjectDoesNotExist
 from oidc_provider.views import AuthorizeView, TokenView
 
 from apps.identity_provider.models import Session
+from apps.privilege_manager.utils import has_login_permission
 
 
 class StatelessAuthorizeView(AuthorizeView):
@@ -33,12 +35,42 @@ class AuthorizeViewWithSessionKey(AuthorizeView):
     """
 
     def get(self, request, *args, **kwargs):
+
+        # limit login access to a Client application to only privileged users
+        client_id = request.GET.get('client_id', None)
+
+        if client_id is not None and not request.user.is_anonymous:
+
+            has_permission, message = has_login_permission(request.user, client_id)
+
+            if not has_permission:
+                return render(
+                    request,
+                    'user_management/simple_message.html',
+                    context={'error': message},
+                )
+
         response = super().get(request, *args, **kwargs)
         self.update_session_with_code(response)
 
         return response
 
     def post(self, request, *args, **kwargs):
+
+        # limit login access to a Client application to only privileged users
+        client_id = request.POST.get('client_id', None)
+
+        if client_id is not None and not request.user.is_anonymous:
+
+            has_permission, message = has_login_permission(request.user, client_id)
+
+            if not has_permission:
+                return render(
+                    request,
+                    'user_management/simple_message.html',
+                    context={'error': message},
+                )
+
         response = super().post(request, *args, **kwargs)
         self.update_session_with_code(response)
 
