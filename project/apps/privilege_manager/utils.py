@@ -1,3 +1,4 @@
+from django.db.models import ObjectDoesNotExist
 from apps.privilege_manager.models import Group, OpenIdLoginPrevention
 
 
@@ -12,7 +13,12 @@ def has_login_permission(user, oidc_client_id):
     :return: tuple(bool, string) -> flag determining whether the user has login permission and error message, in case they don't
     """
 
-    preventions = OpenIdLoginPrevention.objects.get(oidc_client__client_id=oidc_client_id)
+    try:
+        preventions = OpenIdLoginPrevention.objects.get(oidc_client__client_id=oidc_client_id)
+    except ObjectDoesNotExist:
+        # if the Client has no preventions registered, allow login
+        return True, None
+
     all_permission_groups = Group.objects.all()
 
     groups_allowed = all_permission_groups.difference(preventions.groups.all())
