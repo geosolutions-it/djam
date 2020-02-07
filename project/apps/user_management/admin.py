@@ -10,8 +10,26 @@ class IPUserAdmin(UserAdmin):
     add_form = UMAdminUserCreationForm
     form = UMAdminUserChangeForm
     model = get_user_model()
-    list_display = ['email', 'username', ]
+    list_display = ['id', 'email', 'first_name', 'last_name', ]
 
-    fieldsets = UserAdmin.fieldsets + (
-            ('Email confirmation', {'fields': ('email_confirmed',)}),
+    fieldsets = (
+        (
+            None, {'fields': ('email', 'password', 'email_confirmed')}
+        ),
+        (
+            'Personal info', {'fields': ('first_name', 'last_name')}
+        ),
+        (
+            'Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser')}
+        ),
+        (
+            'Important dates', {'fields': ('last_login', 'date_joined')}
+        ),
+    )
+
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('email', 'password1', 'password2', ),
+        }),
     )

@@ -90,6 +90,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     def clean(self):
         super().clean()
         self.email = self.__class__.objects.normalize_email(self.email)
+        # Assign unique user email to username field - for django integrity, since Djam is not to use usernames
+        self.username = self.email
 
     def get_full_name(self):
         """
