@@ -1,6 +1,6 @@
 """
 example client redirect URL:
-http://localhost:8000/openid/authorize?response_type=code&client_id=489616&redirect_uri=http%3A%2F%2Flocalhost%3A8100%2Flogin_handler&scope=openid%20profile%20email%20user_id&state=af0ifjsldkj
+http://localhost:8001/openid/authorize?response_type=code&client_id=441068&redirect_uri=http%3A%2F%2Flocalhost%3A8100%2Flogin_handler&scope=openid%20profile%20email%20user_id&state=af0ifjsldkj
 """
 
 """
