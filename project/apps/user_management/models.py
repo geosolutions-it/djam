@@ -58,7 +58,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         unique=True,
         error_messages={
             'unique': _("A user with that email already exists."),
-         },
+        },
     )
     email_confirmed = models.BooleanField(default=False)
     uuid = models.UUIDField(default=uuid.uuid4, unique=True)
@@ -76,6 +76,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         ),
     )
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
+    legacy_user_id = models.IntegerField(null=True, blank=False)
 
     objects = UserManager()
 

@@ -19,6 +19,7 @@ class Command(BaseCommand):
                 continue
             else:
                 User.objects.create(
+                    legacy_user_id = user.get('pk'),
                     email=user.get('email'),
                     username=user.get('username'),
                     is_active=True,
