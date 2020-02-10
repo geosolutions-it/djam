@@ -52,10 +52,10 @@ urlpatterns = [
     # ---- end of: django.contrib.auth.urls.views ----
 
     path(r'user/register/', SignupView.as_view(), name='register'),
-    re_path(r'user/account/edit/(?P<username>\w+)/', AccountEditView.as_view(), name='user_account_edit'),
+    re_path(r'user/account/edit/(?P<id>\w+)/', AccountEditView.as_view(), name='user_account_edit'),
 
     path(r'user/account/', AccountPageView.as_view(), name="user_account"),
-    re_path(r'user/account/(?P<username>\w+)/', AccountPageView.as_view(), name='user_account'),
+    re_path(r'user/account/(?P<id>\w+)/', AccountPageView.as_view(), name='user_account'),
 
     path(r'user/activation_msg_sent/', EmailConfirmationSentView.as_view(), name='activation_msg_sent'),
     path(r'user/<uuid:user_uuid>/email_confirmation/', EmailConfirmationView.as_view(), name='email_confirmation'),

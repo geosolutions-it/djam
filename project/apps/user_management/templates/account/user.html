@@ -3,10 +3,6 @@
 {% block message %}
     <div class="account-detail">
         <div class="account-detail-group">
-            <label>Username</label>
-            <div id="id_username">{{ object.username }}</div>
-        </div>
-        <div class="account-detail-group">
             <label>First name</label>
             <div id="id_first_name">{{ object.first_name }}</div>
         </div>
@@ -19,7 +15,7 @@
             <div id="id_email">{{ object.email }}</div>
         </div>
 
-        <a href="{% url 'user_account_edit' username=object.username %}">Edit profile</a>
+        <a href="{% url 'user_account_edit' id=object.id %}">Edit profile</a>
         <a href="{% url 'password_change' %}">Change password</a>
     </div>
 {% endblock %}
