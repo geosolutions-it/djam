@@ -13,7 +13,7 @@ urlpatterns = [
     # include oidc_provider url
     path('', include('oidc_provider.urls', namespace='oidc_provider')),
 
-    path('authorize/stateless/', StatelessAuthorizeView.as_view()),
-    path('introspect/geoserver/', GeoserverTokenIntrospectionView.as_view()),
-    path('authkey/introspect/', GeoserverAuthKeyIntrospection.as_view())
+    path('authorize/stateless/', StatelessAuthorizeView.as_view(), name='stateless_authorize'),
+    path('introspect/geoserver/', GeoserverTokenIntrospectionView.as_view(), name='geoserver_token_introspect'),
+    path('authkey/introspect/', GeoserverAuthKeyIntrospection.as_view(), name='authkey_introspect')
 ]
