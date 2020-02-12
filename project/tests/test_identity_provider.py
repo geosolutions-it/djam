@@ -74,13 +74,13 @@ class TestOpenIdCustomization(IdentityProviderBaseTestCase):
 
     def test_stateless_authorize_response(self):
         user = UserFactory()
-        client = Client()
+        web_client = Client()
 
         # force web client's login
-        client.force_login(user)
+        web_client.force_login(user)
 
         # OIDC authorize
-        authorize_response = self.oidc_authorize(client, view_name='stateless_authorize')
+        authorize_response = self.oidc_authorize(web_client, view_name='stateless_authorize')
 
         self.assertEqual(authorize_response.status_code, 302, "OIDC /authorize didn't return 302 redirection response.")
         self.assertIn('code=', authorize_response['Location'], "OIDC /authorize didn't return a code")
@@ -88,13 +88,13 @@ class TestOpenIdCustomization(IdentityProviderBaseTestCase):
 
     def test_authorize_djam_session_update(self):
         user = UserFactory()
-        client = Client()
+        web_client = Client()
 
         # force web client's login
-        client.force_login(user)
+        web_client.force_login(user)
 
         # OIDC authorize
-        authorize_response = self.oidc_authorize(client)
+        authorize_response = self.oidc_authorize(web_client)
 
         self.assertEqual(authorize_response.status_code, 302, "OIDC /authorize didn't return 302 redirection response.")
         self.assertIn('code=', authorize_response['Location'], "OIDC /authorize didn't return a code")
@@ -106,20 +106,20 @@ class TestOpenIdCustomization(IdentityProviderBaseTestCase):
 
     def test_token_with_session_key(self):
         user = UserFactory()
-        client = Client()
+        web_client = Client()
 
         # force web client's login
-        client.force_login(user)
+        web_client.force_login(user)
 
         # OIDC authorize
-        authorize_response = self.oidc_authorize(client)
+        authorize_response = self.oidc_authorize(web_client)
 
         self.assertEqual(authorize_response.status_code, 302, "OIDC /authorize didn't return 302 redirection response.")
         self.assertIn('code=', authorize_response['Location'], "OIDC /authorize didn't return a code")
 
         # OIDC token exchange
         oidc_code = re.search(r"code=(\w+)&?.*$", authorize_response['Location']).groups()[0]
-        token_response = self.oidc_token(client, oidc_code)
+        token_response = self.oidc_token(web_client, oidc_code)
 
         self.assertEqual(token_response.status_code, 200, "OIDC /token: response status code is not 200")
         self.assertIn('access_token', token_response.json(), "OIDC /token: access_token not in JSON response")
@@ -157,13 +157,13 @@ class TestAuthKey(IdentityProviderBaseTestCase):
         return token_response.json().get('session_token')
 
     def test_validate_valid_session_key(self):
-        client = Client()
+        web_client = Client()
         user = UserFactory()
 
         # OIDC login
-        session_token = self.openid_login(client, user)
+        session_token = self.openid_login(web_client, user)
         # Introspect AuthKey
-        authkey_response = self.authkey_introspect(client, session_token)
+        authkey_response = self.authkey_introspect(web_client, session_token)
 
         self.assertEqual(authkey_response.status_code, 200, "/authkey/introspect: response status code is not 200")
         self.assertIn('username', authkey_response.json(), "/authkey/introspect: username not in JSON response")
@@ -172,10 +172,10 @@ class TestAuthKey(IdentityProviderBaseTestCase):
         self.assertEqual(['free'], authkey_response.json().get('groups'), "/authkey/introspect: 'free' not in user's groups")
 
     def test_validate_invalid_session_key(self):
-        client = Client()
+        web_client = Client()
 
         # Introspect AuthKey
-        authkey_response = self.authkey_introspect(client, 'some-random-auth-key')
+        authkey_response = self.authkey_introspect(web_client, 'some-random-auth-key')
 
         self.assertEqual(authkey_response.status_code, 404, "/authkey/introspect with invalid session_token: response status code is not 404")
         self.assertIn('username', authkey_response.json(), "/authkey/introspect with invalid session_token: username not in JSON response")
@@ -184,7 +184,7 @@ class TestAuthKey(IdentityProviderBaseTestCase):
         self.assertIsNone(authkey_response.json().get('groups'), "/authkey/introspect with invalid session_token: groups is not None")
 
     def test_validate_valid_session_key_user_with_multiple_groups(self):
-        client = Client()
+        web_client = Client()
         user = UserFactory()
 
         # assign user to multiple groups
@@ -192,9 +192,9 @@ class TestAuthKey(IdentityProviderBaseTestCase):
         Group.objects.get(name='enterprise').users.add(user)
 
         # OIDC login
-        session_token = self.openid_login(client, user)
+        session_token = self.openid_login(web_client, user)
         # Introspect AuthKey
-        authkey_response = self.authkey_introspect(client, session_token)
+        authkey_response = self.authkey_introspect(web_client, session_token)
 
         self.assertEqual(authkey_response.status_code, 200, "/authkey/introspect: response status code is not 200")
         self.assertIn('username', authkey_response.json(), "/authkey/introspect: username not in JSON response")

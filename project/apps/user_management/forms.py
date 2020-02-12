@@ -152,5 +152,5 @@ class UMAuthenticationForm(AuthenticationForm):
                     f'Please confirm your email before continuation.'
                     f'Do you want to <a href="{reverse("resend_verification_email")}">re-send activation email</a>?'
                 ),
-                code='inactive',
+                code='email_not_confirmed',
             )
