@@ -9,26 +9,6 @@ from apps.identity_provider.models import Session
 from apps.privilege_manager.utils import has_login_permission
 
 
-class StatelessAuthorizeView(AuthorizeView):
-    """
-    Authorize view which prevents sending empty state parameter.
-
-    View prepared for integration with Geoserver, which does not send or check state, yet fails on response validation with empty state.
-    """
-
-    def get(self, *args, **kwargs):
-
-        response = super().get(*args, **kwargs)
-
-        if response.has_header('location'):
-            # check if state param is empty
-            if re.search('&state=$', response._headers['location'][1]) or re.search('&state=&', response._headers['location'][1]):
-                # remove empty state from redirect url
-                response._headers['location'] = ('Location', response._headers['location'][1].replace('&state=', ''))
-
-        return response
-
-
 class AuthorizeViewWithSessionKey(AuthorizeView):
     """
     Authorize view storing OpenID code in session data
@@ -86,8 +66,28 @@ class AuthorizeViewWithSessionKey(AuthorizeView):
             if re_code is not None:
                 code = re_code.groups()[0]
                 session = Session.objects.get(session_key=self.request.session.session_key)
-                session.oidp_code = code
+                session.oidc_code = code
                 session.save()
+
+
+class StatelessAuthorizeView(AuthorizeViewWithSessionKey):
+    """
+    Authorize view which prevents sending empty state parameter.
+
+    View prepared for integration with Geoserver, which does not send or check state, yet fails on response validation with empty state.
+    """
+
+    def get(self, *args, **kwargs):
+
+        response = super().get(*args, **kwargs)
+
+        if response.has_header('location'):
+            # check if state param is empty
+            if re.search('&state=$', response._headers['location'][1]) or re.search('&state=&', response._headers['location'][1]):
+                # remove empty state from redirect url
+                response._headers['location'] = ('Location', response._headers['location'][1].replace('&state=', ''))
+
+        return response
 
 
 class TokenViewWithSessionKey(TokenView):
@@ -101,7 +101,7 @@ class TokenViewWithSessionKey(TokenView):
         # if response is correct, attach Session Token
         if response.status_code == 200 and code is not None:
             try:
-                session = Session.objects.get(oidp_code=code)
+                session = Session.objects.get(oidc_code=code)
             except ObjectDoesNotExist:
                 return response
 
