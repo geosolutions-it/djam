@@ -7,11 +7,11 @@ import os
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.getenv("DJAM_DB_NAME", "djam"),
-        'USER': os.getenv("DJAM_DB_USER", 'djam'),
-        'PASSWORD': os.getenv("DJAM_DB_PASSWORD", 'djam'),
-        'HOST': os.getenv("DJAM_DB_HOST", 'localhost'),
-        'PORT': os.getenv("DJAM_DB_PORT", '5432'),
+        'NAME': os.getenv("DJAM_DB_NAME"),
+        'USER': os.getenv("DJAM_DB_USER"),
+        'PASSWORD': os.getenv("DJAM_DB_PASSWORD"),
+        'HOST': os.getenv("DJAM_DB_HOST"),
+        'PORT': os.getenv("DJAM_DB_PORT"),
         'CONN_TOUT': 900,
     }
 }

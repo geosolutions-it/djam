@@ -34,15 +34,21 @@ Create environment configuration for Djam. Make sure DJAM_PROJECT_ENVIRONMENT is
 
 ```
 export DJAM_PROJECT_ENVIRONMENT=dev
+export DJAM_SECRET_KEY=my-super-secret-key
 
-export DJAM_DB_NAME=...        (default=djam)
-export DJAM_DB_USER=...        (default=djam)
-export DJAM_DB_PASSWORD=...    (default=djam)
-export DJAM_DB_HOST=...        (default=localhost)
-export DJAM_DB_PORT=...        (default=5432)
+export DJAM_DB_NAME=...
+export DJAM_DB_USER=...
+export DJAM_DB_PASSWORD=...
+export DJAM_DB_HOST=...
+export DJAM_DB_PORT=...
 
 export DJAM_RABBITMQ_HOST=...  (default=localhost)
 export DJAM_RABBITMQ_PORT=...  (default=5672)
+
+export DJAM_EMAIL_HOST=...
+export DJAM_EMAIL_PORT=...
+export DJAM_EMAIL_HOST_USER=...
+export DJAM_EMAIL_HOST_PASSWORD=...
 ```
 
 Create virtualenv in djam directory
@@ -57,6 +63,11 @@ Activate virtualenv, install requirements and navigate to project source dir
 source venv/bin/activate
 pip install -r requirements.txt
 cd project
+```
+
+Optionally run project checks, to see if everything is as expected. If any errors occur correct them before continuation.
+```
+python manage.py check
 ```
 
 Migrate your app
