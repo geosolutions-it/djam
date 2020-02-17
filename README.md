@@ -180,7 +180,7 @@ Geoserver configuration for this authentication and authorization method:
 * `Security` -> `Authentication`: `Add new` Authentication Filter with the following parameters:
     * `AuthKey` - Authenticates by looking up for an authentication key sent as URL parameter
     * name: `djam_filter`
-    * name of URL parameter: `authkey`
+    * name of URL parameter: `apikey`
     * Authentication key to user mapper: `Web Service`
     * Web Service URL, with key placeholder: `http://your-djam-domain/openid/authkey/introspect/?authkey={key}&format=json`
     * Web Service Response User Search Regular Expression: `^.*?\"username\"\s*:\s*\"([^\"]+)\".*$`
@@ -190,5 +190,5 @@ Geoserver configuration for this authentication and authorization method:
     * `default` -> `Chain filters`: move `djam_filter` for "available" to "selected" column, ABOVE `anonymous` filter and press Close
     * **Remember** to press `Save` at the bottom of the `Authentication` page, otherwise the settings won't be applied!
 
-From now on you can authenticate your requests to Geoserver by attaching `authkey` parameter to a querystring, e.g. 
-`http://your-domain/geoserver/geonode/wms?service=WMS&...&authkey=84fb7e8d-9642-4ec7-b8e3-a6447ad1c709`.
+From now on you can authenticate your requests to Geoserver by attaching `apikey` parameter to a querystring, e.g. 
+`http://your-domain/geoserver/geonode/wms?service=WMS&...&apikey=84fb7e8d-9642-4ec7-b8e3-a6447ad1c709`.
