@@ -8,7 +8,7 @@ from oidc_provider import models as oidc_models
 from apps.identity_provider import models
 from apps.privilege_manager.models import Group
 
-from tests.factories.identity_provider_factory import OIDCConfidentialClientFactory
+from tests.factories.identity_provider_factory import OIDCConfidentialClientFactory, ApiKeyFactory
 from tests.factories.user_management_factory import UserFactory
 
 
@@ -204,3 +204,77 @@ class TestAuthKey(IdentityProviderBaseTestCase):
         self.assertIn('free', authkey_response.json().get('groups')[0], "/authkey/introspect: 'free' not in user's groups")
         self.assertIn('pro', authkey_response.json().get('groups')[0], "/authkey/introspect: 'pro' not in user's groups")
         self.assertIn('enterprise', authkey_response.json().get('groups')[0], "/authkey/introspect: 'enterprise' not in user's groups")
+
+    def test_validate_valid_api_key(self):
+        web_client = Client()
+        user = UserFactory()
+        api_key = ApiKeyFactory(user=user)
+
+        # Introspect API key
+        apikey_response = self.authkey_introspect(web_client, api_key.key)
+
+        self.assertEqual(apikey_response.status_code, 200, "/authkey/introspect API key: response status code is not 200")
+        self.assertIn('username', apikey_response.json(), "/authkey/introspect API key: username not in JSON response")
+        self.assertIn('groups', apikey_response.json(), "/authkey/introspect API key: groups not in JSON response")
+        self.assertEqual(apikey_response.json().get('username'), user.email, "/authkey/introspect API key: returned username is not equal user's email")
+        self.assertIn('free', apikey_response.json().get('groups')[0], "/authkey/introspect API key: 'free' not in user's groups")
+
+    def test_validate_revoked_api_key(self):
+        web_client = Client()
+        user = UserFactory()
+        api_key = ApiKeyFactory(user=user, revoked=True)
+
+        # Introspect API key
+        apikey_response = self.authkey_introspect(web_client, api_key.key)
+
+        self.assertEqual(apikey_response.status_code, 404, "/authkey/introspect revoked API key: response status code is not 200")
+        self.assertIn('username', apikey_response.json(), "/authkey/introspect revoked API key: username not in JSON response")
+        self.assertIn('groups', apikey_response.json(), "/authkey/introspect revoked API key: groups not in JSON response")
+        self.assertIsNone(apikey_response.json().get('username'), "/authkey/introspect revoked API key: username in JSON response is not None")
+        self.assertIsNone(apikey_response.json().get('groups'), "/authkey/introspect revoked API key: groups in JSON response is not None")
+
+    def test_validate_valid_api_key_with_existing_session_key(self):
+        web_client = Client()
+        user = UserFactory()
+        api_key = ApiKeyFactory(user=user)
+
+        # OIDC login
+        self.openid_login(web_client, user)
+        # Introspect API key
+        apikey_response = self.authkey_introspect(web_client, api_key.key)
+
+        self.assertEqual(apikey_response.status_code, 200, "/authkey/introspect API key with existing SessionKey: response status code is not 200")
+        self.assertIn('username', apikey_response.json(), "/authkey/introspect API key with existing SessionKey: username not in JSON response")
+        self.assertIn('groups', apikey_response.json(), "/authkey/introspect API key with existing SessionKey: groups not in JSON response")
+        self.assertEqual(apikey_response.json().get('username'), user.email, "/authkey/introspect API key with existing SessionKey: returned username is not equal user's email")
+        self.assertIn('free', apikey_response.json().get('groups')[0], "/authkey/introspect API key with existing SessionKey: 'free' not in user's groups")
+
+    def test_validate_valid_session_key_with_existing_api_key(self):
+        web_client = Client()
+        user = UserFactory()
+        api_key = ApiKeyFactory(user=user)
+
+        # OIDC login
+        session_token = self.openid_login(web_client, user)
+        # Introspect AuthKey
+        authkey_response = self.authkey_introspect(web_client, session_token)
+
+        self.assertEqual(authkey_response.status_code, 200, "/authkey/introspect Session key with existing API Key: response status code is not 200")
+        self.assertIn('username', authkey_response.json(), "/authkey/introspect Session key with existing API Key: username not in JSON response")
+        self.assertIn('groups', authkey_response.json(), "/authkey/introspect Session key with existing API Key: groups not in JSON response")
+        self.assertEqual(authkey_response.json().get('username'), user.email, "/authkey/introspect Session key with existing API Key: returned username is not equal user's email")
+        self.assertEqual(['free'], authkey_response.json().get('groups'), "/authkey/introspect Session key with existing API Key: 'free' not in user's groups")
+
+    def test_validate_invalid_session_key_with_existing_api_key(self):
+        web_client = Client()
+        user = UserFactory()
+        api_key = ApiKeyFactory(user=user)
+
+        # Introspect AuthKey
+        authkey_response = self.authkey_introspect(web_client, 'some-random-auth-key')
+
+        self.assertEqual(authkey_response.status_code, 404, "/authkey/introspect revoked API key: response status code is not 200")
+        self.assertIn('username', authkey_response.json(), "/authkey/introspect revoked API key: username not in JSON response")
+        self.assertIn('groups', authkey_response.json(), "/authkey/introspect revoked API key: groups not in JSON response")
+        self.assertIsNone(authkey_response.json().get('username'), "/authkey/introspect revoked API key: username in JSON response is not None")
+        self.assertIsNone(authkey_response.json().get('groups'), "/authkey/introspect revoked API key: groups in JSON response is not None")

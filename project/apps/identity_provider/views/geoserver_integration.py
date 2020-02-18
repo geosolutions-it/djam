@@ -1,14 +1,19 @@
+import logging
+
 from rest_framework import views, permissions, status
 from rest_framework.response import Response
 
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.core.exceptions import ValidationError
 from django.db.models import Q
 
 from oidc_provider.views import TokenIntrospectionView
 from oidc_provider.lib.endpoints.introspection import TokenIntrospectionEndpoint
-from apps.identity_provider.models import Session
+from apps.identity_provider.models import Session, ApiKey
 from apps.privilege_manager.models import Group
+
+
+logger = logging.getLogger(__name__)
 
 
 class GeoserverTokenIntrospectionView(TokenIntrospectionView):
@@ -37,27 +42,45 @@ class GeoserverTokenIntrospectionView(TokenIntrospectionView):
             return TokenIntrospectionEndpoint.response({'active': False})
 
 
-class GeoserverAuthKeyIntrospection(views.APIView):
+class GeoserverAuthKeyAndApiKeyIntrospection(views.APIView):
+    """
+    Geoserver integration endpoint, enabling two methods of authorizing requests to Geoserver,
+    with in the same format:
+        1. AuthKey (session key) - tied to User's login session within Djam
+        2. ApiKey (static API key) - tied to User
+
+    AuthKey is relatively short lasting, so exposing an endpoint validating it is rather save.
+
+    ApiKey is static for a long period of time, and has all user's privileges in Geoserver,
+    so it's validation should be restricted to only known entities ASAP.
+    """
+
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, format=None):
-        session_uuid = request.GET.get('authkey')
+        api_key = request.GET.get('authkey')
 
         try:
-            session = Session.objects.get(uuid=session_uuid)
-        except (ObjectDoesNotExist, ValidationError):
-            return Response({'username': None, 'groups': None}, status=status.HTTP_404_NOT_FOUND)
+            return self.introspect_session_key(api_key)
+        except Exception as e:
+            logger.debug(f'AuthKey and ApiKey introspection: AuthKey introspection failed with - {e}')
+
+        try:
+            return self.introspect_api_key(api_key)
+        except Exception as e:
+            logger.debug(f'AuthKey and ApiKey introspection: ApiKey introspection failed with - {e}')
+
+        return Response({'username': None, 'groups': None}, status=status.HTTP_404_NOT_FOUND)
+
+    def introspect_session_key(self, api_key):
+        session = Session.objects.get(uuid=api_key)
 
         user_id = session.get_decoded().get("_auth_user_id", None)
         if user_id is None:
             return Response({'username': None, 'groups': None}, status=status.HTTP_401_UNAUTHORIZED)
 
         user = get_user_model().objects.get(id=user_id)
-        user_groups = Group.objects.filter(Q(users__id=user.id))
-
-        # Geoserver expects User Groups' names in the form of a string with comma separated values.
-        # In order to keep the compatibility with default Geoserver regex, the string is enclosed in a list.
-        user_groups_names = [''.join([user_group.name + ',' if i+1 != len(user_groups) else user_group.name for i, user_group in enumerate(user_groups)])]
+        user_groups_names = self.user_groups_geoserver_format(user.id)
 
         return Response(
             {
@@ -66,5 +89,26 @@ class GeoserverAuthKeyIntrospection(views.APIView):
             }
         )
 
+    def introspect_api_key(self, api_key):
+        api_key = ApiKey.objects.get(key=api_key)
 
+        if api_key.revoked:
+            raise ValidationError(f'API key {api_key.key} is revoked.')
 
+        user = api_key.user
+        user_groups_names = self.user_groups_geoserver_format(user.id)
+
+        return Response(
+            {
+                'username': user.username,
+                'groups': user_groups_names,
+            }
+        )
+
+    def user_groups_geoserver_format(self, user_id):
+        user_groups = Group.objects.filter(Q(users__id=user_id))
+
+        # Geoserver expects User Groups' names in the form of a string with comma separated values.
+        # In order to keep the compatibility with default Geoserver regex, the string is enclosed in a list.
+        user_groups_names = [''.join([user_group.name + ',' if i+1 != len(user_groups) else user_group.name for i, user_group in enumerate(user_groups)])]
+        return user_groups_names
