@@ -1,4 +1,3 @@
-from django.urls import reverse
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
@@ -10,3 +9,7 @@ AUTHENTICATION_BACKENDS = (
 IP_USER_REGISTRATION_NOTIFICATION = False
 # send an email to staff members when a new user confirms their email
 IP_USER_EMAIL_CONFIRMATION_NOTIFICATION = False
+
+# Registration flow modifiers
+REGISTRATION_EMAIL_CONFIRMATION = True
+REGISTRATION_MODERATION = False
