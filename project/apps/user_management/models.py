@@ -1,24 +1,31 @@
 from __future__ import unicode_literals
 
 import uuid
+import logging
 
 from django.db import models
+from django.conf import settings
 from django.core.mail import send_mail
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.utils import timezone
-from django.db.models.signals import post_save
+from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 
-from apps.user_management.model_managers import UserManager
 from apps.user_management.utils import random_string
+from apps.user_management.model_managers import UserManager
+from apps.user_management.tasks import send_user_notification_email
+
+
+logger = logging.getLogger(__name__)
 
 
 class CaseInsensitiveFieldMixin:
     """
-    Field mixin that uses case-insensitive lookup alternatives if they exist.
+    Field mixin that uses case-insensitive lookup alternatives if they exist, but stores the original value.
     Note: Lookups that do not have case-insensitive versions (e.g. “in”) will not be case-insensitive.
     """
     LOOKUP_CONVERSIONS = {
@@ -69,7 +76,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     is_active = models.BooleanField(
         _('active'),
-        default=True,
+        default=False,
         help_text=_(
             'Designates whether this user should be treated as active. '
             'Unselect this instead of deleting accounts.'
@@ -125,3 +132,27 @@ class UserActivationCode(models.Model):
 def create_activation_code(sender, instance, created, **kwargs):
     if created:
         UserActivationCode.objects.create(user=instance)
+
+
+@receiver(pre_save, sender=User)
+def registration_moderation_send_activation_email(sender, instance, **kwargs):
+    if not settings.REGISTRATION_MODERATION:
+        return
+
+    try:
+        db_user = User.objects.get(id=instance.id)
+    except ObjectDoesNotExist:
+        # user is not yet stored in the db
+        return
+
+    if instance.is_active and not db_user.is_active:
+        # if user has just been activated by app's staff member, notify them
+        notification_task = send_user_notification_email.send(
+            'Your account was activated by our staff. From now on you can login to our application :)',
+            [db_user.email],
+            subject="Your account is active!",
+        )
+        logger.info(
+            f'Registration with moderation: Account activation notification email queued to be sent to "{db_user.email}". '
+            f'Dramatiq message_id: {notification_task.message_id}'
+        )

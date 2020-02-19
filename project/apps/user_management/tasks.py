@@ -1,3 +1,4 @@
+import typing
 import dramatiq
 from django.core.mail import EmailMessage, EmailMultiAlternatives
 from django.template.loader import render_to_string
@@ -22,6 +23,15 @@ def send_activation_email(email, activation_url, sender='support@djam.com', subj
 
     msg = EmailMessage(subject=subject, body=msg_html, from_email=sender, to=[email])
     msg.content_subtype = "html"
+    return msg.send()
+
+
+@dramatiq.actor(max_retries=3)
+def send_user_notification_email(msg: str, receivers: typing.List, sender='support@djam.com', subject="Djam notification"):
+    # Email subject *must not* contain newlines
+    subject = ''.join(subject.splitlines())
+
+    msg = EmailMessage(subject=subject, body=msg, from_email=sender, to=receivers)
     return msg.send()
 
 

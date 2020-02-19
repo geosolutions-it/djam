@@ -10,6 +10,7 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
+from django.conf import settings
 
 from .tasks import send_multi_alternatives_mail
 
@@ -145,13 +146,15 @@ class UMAuthenticationForm(AuthenticationForm):
                 code='inactive',
             )
 
-        if not user.email_confirmed:
-            raise forms.ValidationError(
-                # Error message cannot be added to self.error_messages, as usage of reverse() function at a class definition level causes
-                # in this case form import error.
-                _(
-                    f'Please confirm your email before continuation.'
-                    f'Do you want to <a href="{reverse("resend_verification_email")}">re-send activation email</a>?'
-                ),
-                code='email_not_confirmed',
-            )
+        if settings.REGISTRATION_EMAIL_CONFIRMATION:
+            # if REGISTRATION_EMAIL_CONFIRMATION flow is active, login only users who confirmed their email
+            if not user.email_confirmed:
+                raise forms.ValidationError(
+                    # Error message cannot be added to self.error_messages, as usage of reverse() function at a class definition level causes
+                    # in this case form import error.
+                    _(
+                        f'Please confirm your email before continuation.'
+                        f'Do you want to <a href="{reverse("resend_verification_email")}">re-send activation email</a>?'
+                    ),
+                    code='email_not_confirmed',
+                )

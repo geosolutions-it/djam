@@ -8,6 +8,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.sites.shortcuts import get_current_site
 
 from apps.user_management.models import UserActivationCode
 from apps.user_management.tasks import send_activation_email, send_staff_notification_email
@@ -58,23 +59,37 @@ class EmailConfirmationView(View):
 
         user_activation_code.delete()
 
-        # TODO: add the User to default Permission Group
+        if settings.REGISTRATION_MODERATION:
+            # send activation request to staff members to activate user's account
+            request_schema = 'https://' if request.is_secure() else 'http://'
 
-        # notify staff users
-        if settings.IP_USER_EMAIL_CONFIRMATION_NOTIFICATION:
             notification_task = send_staff_notification_email.send(
-                f'User with username: "{user.username}" and email: "{user.email}" has verified the email.'
+                f'User with email: "{user.email}" has requested an account activation. '
+                f'You can enable access by setting the user as active on the admin section: '
+                f'{request_schema + get_current_site(request).domain}/admin/user_management/user/{user.id}'
             )
             logger.info(
-                f'Djam USER_EMAIL_CONFIRMATION_NOTIFICATION staff members notification email queued to be sent. '
+                f'Djam REGISTRATION_MODERATION email notification to staff members queued to be sent.'
                 f'Dramatiq message_id: {notification_task.message_id}'
             )
 
-        return render(
-            request,
-            'user_management/simple_message.html',
-            context={'message': 'Congrats!<br>You have successfully<br>activated your account :)'},
-        )
+            return render(
+                request,
+                'user_management/simple_message.html',
+                context={
+                    'message': "You have successfully confirmed you email address.<br>"
+                               "We'll notify you as soon as your request is approved by our staff :)"
+                },
+            )
+        else:
+            return render(
+                request,
+                'user_management/simple_message.html',
+                context={
+                    'message': f'Congrats!<br>You have successfully<br>activated your account :)<br>'
+                    f'From now on you can <a href={reverse("login")}>log in</a>.'
+                },
+            )
 
     def render_error(self, request, error):
         return render(
