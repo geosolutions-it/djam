@@ -1,4 +1,5 @@
 import re
+from unittest import skip
 
 from django.test import TestCase, Client
 from django.core.management import call_command
@@ -55,6 +56,18 @@ class IdentityProviderBaseTestCase(TestCase):
                 'client_secret': self.oidc_client.client_secret,
             },
         )
+
+    def access_token_intorspect(self, web_client: Client, access_token: str):
+        """
+        Method performing AuthKey introspection.
+
+        :return: Djam HttpResponse
+        """
+        headers = {
+            'Authorization': f'Bearer {access_token}',
+        }
+
+        return web_client.post(reverse('geoserver_token_introspect'), **headers)
 
     def authkey_introspect(self, web_client: Client, session_token: str):
         """
@@ -127,6 +140,35 @@ class TestOpenIdCustomization(IdentityProviderBaseTestCase):
         self.assertIn('session_token', token_response.json(), "OIDC /token: session_token not in JSON response")
         self.assertIsNotNone(token_response.json().get('session_token'), "OIDC /token: session_token in JSON response is None")
         self.assertIn('expires_in', token_response.json(), "OIDC /token: expires_in not in JSON response")
+
+    # @skip("This test should be run only on server with unsecured HTTP")
+    def test_require_https_for_geoserver_token_introspection(self):
+        user = UserFactory()
+        web_client = Client()
+
+        # force web client's login
+        web_client.force_login(user)
+
+        # OIDC authorize
+        authorize_response = self.oidc_authorize(web_client)
+
+        self.assertEqual(authorize_response.status_code, 302, "OIDC /authorize didn't return 302 redirection response.")
+        self.assertIn('code=', authorize_response['Location'], "OIDC /authorize didn't return a code")
+
+        # OIDC token exchange
+        oidc_code = re.search(r"code=(\w+)&?.*$", authorize_response['Location']).groups()[0]
+        token_response = self.oidc_token(web_client, oidc_code)
+
+        self.assertEqual(token_response.status_code, 200, "OIDC /token: response status code is not 200")
+        self.assertIn('access_token', token_response.json(), "OIDC /token: access_token not in JSON response")
+
+        self.access_token_intorspect(web_client, token_response.json().get('access_token'))
+
+        # Introspect access token
+        with self.settings(REQUIRE_SECURE_HTTP_FOR_GEOSERVER_INTROSPECTION=True):
+            access_token_response = self.access_token_intorspect(web_client, token_response.json().get('access_token'))
+
+        self.assertEqual(access_token_response.status_code, 400, "OIDC token introspection with HTTPS required: response status code is not 400")
 
 
 class TestAuthKey(IdentityProviderBaseTestCase):
@@ -278,3 +320,85 @@ class TestAuthKey(IdentityProviderBaseTestCase):
         self.assertIn('groups', authkey_response.json(), "/authkey/introspect revoked API key: groups not in JSON response")
         self.assertIsNone(authkey_response.json().get('username'), "/authkey/introspect revoked API key: username in JSON response is not None")
         self.assertIsNone(authkey_response.json().get('groups'), "/authkey/introspect revoked API key: groups in JSON response is not None")
+
+    # @skip("This test should be run only on server with unsecured HTTP")
+    def test_require_https_for_geoserver_authkey_introspection(self):
+        web_client = Client()
+        user = UserFactory()
+
+        # OIDC login
+        session_token = self.openid_login(web_client, user)
+        # Introspect AuthKey
+        with self.settings(REQUIRE_SECURE_HTTP_FOR_GEOSERVER_INTROSPECTION=True):
+            authkey_response = self.authkey_introspect(web_client, session_token)
+
+        self.assertEqual(authkey_response.status_code, 400, "/authkey/introspect with HTTPS required: response status code is not 400")
+        self.assertIn('username', authkey_response.json(), "/authkey/introspect: username not in JSON response")
+        self.assertIn('groups', authkey_response.json(), "/authkey/introspect: groups not in JSON response")
+        self.assertIsNone(authkey_response.json().get('username'), "/authkey/introspect: returned username is not None")
+        self.assertIsNone(authkey_response.json().get('groups'), "/authkey/introspect: returned groups is not None")
+
+
+class TestUserCredentialsValidation(TestCase):
+
+    def validate_user_credentials(self, web_client, username, password):
+        """
+        Method validating user's credentials
+        """
+        return web_client.get(
+            reverse('user_credentials_introspection'),
+            {
+                'u': username,
+                'p': password,
+            },
+        )
+
+    def test_user_credentials_validation_with_correct_credentials(self):
+        web_client = Client()
+
+        user_psw = 'some_password'
+        user = UserFactory()
+        user.set_password(user_psw)
+        user.save()
+
+        user_credentials_response = self.validate_user_credentials(web_client, user.username, user_psw)
+
+        self.assertEqual(user_credentials_response.status_code, 200, "User credentials response: response status code is not 200")
+        self.assertIn('username', user_credentials_response.json(), "User credentials response: username not in JSON response")
+        self.assertEqual(user_credentials_response.json().get('username'), user.username, "User credentials response: username is wrong")
+        self.assertIn('groups', user_credentials_response.json(), "User credentials response: groups not in JSON response")
+        self.assertIsNotNone(user_credentials_response.json().get('username'), "User credentials response: returned username is None")
+        self.assertIsNotNone(user_credentials_response.json().get('groups'), "User credentials response: returned groups is None")
+
+    def test_user_credentials_validation_with_wrong_credentials(self):
+        web_client = Client()
+
+        user_psw = 'some_password'
+        user = UserFactory()
+        user.set_password(user_psw)
+        user.save()
+
+        user_credentials_response = self.validate_user_credentials(web_client, user.username, 'some-wrong-password')
+
+        self.assertEqual(user_credentials_response.status_code, 200, "User credentials response: response status code is not 200")
+        self.assertIn('username', user_credentials_response.json(), "User credentials response: username not in JSON response")
+        self.assertIn('groups', user_credentials_response.json(), "User credentials response: groups not in JSON response")
+        self.assertIsNone(user_credentials_response.json().get('username'), "User credentials response: returned username is not None")
+        self.assertIsNone(user_credentials_response.json().get('groups'), "User credentials response: returned groups is not None")
+
+    def test_require_https_for_user_credentials_validation(self):
+        web_client = Client()
+
+        user_psw = 'some_password'
+        user = UserFactory()
+        user.set_password(user_psw)
+        user.save()
+
+        with self.settings(REQUIRE_SECURE_HTTP_FOR_GEOSERVER_INTROSPECTION=True):
+            user_credentials_response = self.validate_user_credentials(web_client, user.username, user_psw)
+
+        self.assertEqual(user_credentials_response.status_code, 400, "User credentials response: response status code is not 400")
+        self.assertIn('username', user_credentials_response.json(), "User credentials response: username not in JSON response")
+        self.assertIn('groups', user_credentials_response.json(), "User credentials response: groups not in JSON response")
+        self.assertIsNone(user_credentials_response.json().get('username'), "User credentials response: returned username is not None")
+        self.assertIsNone(user_credentials_response.json().get('groups'), "User credentials response: returned groups is not None")
