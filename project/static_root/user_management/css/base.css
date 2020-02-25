@@ -2,15 +2,16 @@
 html, body {margin: 0; height: 100%; overflow: hidden}
 
 
-.flex-container {
-  display: flex; 
-  border: blue 1px solid;
+body {
+  font-size: 1em;
+  font-weight: 400;
+  line-height: 1.5;
+  background: #a7db8f;
+  padding: 20px;
+  font-family: Play,Arial,Verdana,sans-serif;
+  min-width: 320px;
 }
 
-
-
-
-/* 
 .content {
   width: 100%;
   min-width: 800px;
@@ -95,4 +96,4 @@ html, body {margin: 0; height: 100%; overflow: hidden}
       display: none;
     }
 
-} */
+}

@@ -1,0 +1,29 @@
+section#team {
+    padding: 80px 0;
+
+    .team-member {
+        $img-size: 200px;
+
+        img {
+            @include border-radius(150px);
+            width: $img-size;
+            height: $img-size;
+        }
+    }
+}
+
+
+@media (max-width: $mobile-max-width) {
+    section#team {
+        padding: 2.5rem 0;
+        
+        .team-member {
+            $img-size: 150px;
+
+            img {
+                width: $img-size;
+                height: $img-size;
+            }
+        }
+    }
+}

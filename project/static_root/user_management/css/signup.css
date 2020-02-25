@@ -1,16 +1,16 @@
-/* turn scroll off */
-html, body {margin: 0; height: 100%; overflow: hidden}
 
-
-.flex-container {
-  display: flex; 
-  border: blue 1px solid;
+body {
+  /*margin: 0;*/
+  font-size: 1em;
+  /*height: 100%;*/
+  font-weight: 400;
+  line-height: 1.5;
+  background: #a7db8f;
+  padding: 20px;
+  font-family: Play,Arial,Verdana,sans-serif;
+  min-width: 320px;
 }
 
-
-
-
-/* 
 .content {
   width: 100%;
   min-width: 800px;
@@ -19,6 +19,8 @@ html, body {margin: 0; height: 100%; overflow: hidden}
   margin-left: auto;
   margin-right: auto;
   max-width: 1536px;
+  /*max-height: 1024px;*/
+  /*height: 100%;*/
   border-radius: 10px;
   box-shadow: 0 2px 8px 0 rgba(0,0,0,.3);
   display: flex;
@@ -51,17 +53,6 @@ html, body {margin: 0; height: 100%; overflow: hidden}
   background-size: cover;
 }
 
-.message-wrapper {
-  padding: 20px;
-  color: black;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px 0 rgba(0,0,0,.3);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 .logo {
   background: url(/static/user_management/img/logo-inverted.png);
   margin-right: 6px;
@@ -71,22 +62,7 @@ html, body {margin: 0; height: 100%; overflow: hidden}
   background-size: cover;
 }
 
-.message-header {
-  text-align: center;
-  color: #609845;
-  font-weight: bolder;
-  margin-top: 40px;
-}
-
-.message-error {
-  text-align: center;
-  color: red;
-  margin-top: 40px;
-}
-
-
 @media all and (max-device-width: 768px) {
-
     .flex-basis-60 {
         flex-basis: 100%;
     }
@@ -95,4 +71,4 @@ html, body {margin: 0; height: 100%; overflow: hidden}
       display: none;
     }
 
-} */
+}
