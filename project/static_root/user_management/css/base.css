@@ -1,17 +1,297 @@
 /* turn scroll off */
-html, body {margin: 0; height: 100%; overflow: hidden}
+html, body {margin: 0; height: 100%; width: 100%; overflow: hidden}
 
 
-body {
-  font-size: 1em;
-  font-weight: 400;
-  line-height: 1.5;
-  background: #a7db8f;
-  padding: 20px;
-  font-family: Play,Arial,Verdana,sans-serif;
-  min-width: 320px;
+.flex-container {
+  display: flex; 
 }
 
+.flex-left-half {
+  width:50vw; 
+  height: 100vh; 
+  background-color: #668B4E; 
+  background-position: center bottom;  
+  /* background-image: url(../img/test_background.png);  */
+  background-repeat: no-repeat; 
+  background-size: auto;"
+}
+
+.flex-right-half {
+  width:50vw; 
+  height: 100vh; 
+}
+
+.logo-image {
+  position:absolute; 
+  width:250px; 
+  margin: 20px
+}
+
+.main-title {
+  color: white;
+  height: 50vh; 
+  padding-left: 60px;
+  position: relative;
+}
+
+.main-title-text{
+  position: absolute;
+  bottom: 0;
+  font-size: 3em;
+}
+
+.sub-title {
+  position: relative;
+  color: white;
+  height: 6vh; 
+  padding-left: 60px;
+}
+
+.sub-title-text {
+  font-size: 1.5em;
+}
+
+.main-image-section {
+position: relative;
+
+height: 40vh;
+/* align-items: center; */
+}
+
+.main-image {
+
+  left: 20%;
+
+  opacity: 0.1;
+  position: absolute;
+  bottom: 0;
+
+  width: 30vw;
+  height: auto;
+}
+
+.right-title {
+  width: 100%;
+  text-align: center;
+  height: 20vh;
+  position: relative;
+}
+
+.right-title-text {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align:center;
+  color: #535353;
+}
+
+.sign-in-section {
+  height: 80vh;
+  position: relative;
+}
+
+.sign-in-avatar-box {
+  position: relative;
+  width: 100%;
+  height: 20vh;
+  text-align: center;
+
+}
+
+.sign-in-avatar{
+  margin: 40px;
+  margin-top: 7vh;
+  
+}
+
+.sign-in-form {
+  /* border: orange 2px solid; */
+
+  width: 70%;
+  margin-left: 15%;
+  margin-right: 15%;
+  /* margin-top: 10%; */
+  height: 50vh;
+  position: absolute;
+  text-align: center;
+}
+
+.sign-in-form #email, #password{
+  width: 90%;
+  height: 50px;
+  font-size: 1.5em;
+  padding: 10px;
+  margin: 20px;
+}
+
+
+*::-webkit-input-placeholder {
+  color: #a5a5a5;
+}
+*:-moz-placeholder {
+  /* FF 4-18 */
+  color: #a5a5a5;
+  opacity: 1;
+}
+*::-moz-placeholder {
+  /* FF 19+ */
+  color: #a5a5a5;
+  opacity: 1;
+}
+*:-ms-input-placeholder {
+  /* IE 10+ */
+  color: #a5a5a5;
+}
+*::-ms-input-placeholder {
+  /* Microsoft Edge */
+  color: #a5a5a5;
+}
+*::placeholder {
+  /* modern browser */
+  color: #a5a5a5;
+}
+
+
+
+
+.underform-section {
+  /* border: orange 2px solid; */
+
+  width: 100%;
+  display: flex;
+  padding-left: 30px;
+  padding-right: 30px;
+
+}
+
+.underform-half-remember-me {
+  width: 50%;
+  text-align: left;
+}
+
+.underform-half-remember-me input{
+  width: 13px;
+  height: 13px;
+  padding: 0;
+  margin-left: 3px;
+  vertical-align: bottom;
+  position: relative;
+  top: -3px;
+  *overflow: hidden;
+}
+
+input[type="checkbox"]{
+  width: 16px;
+  height: 16px;
+}
+
+.underform-half-remember-me label {
+  font-size: 1.1em;
+  font-weight: 600;
+  color: #8f8f8f;
+  display: block;
+
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+   user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Opera and Firefox */
+}
+
+
+.underform-half-forgot-password {
+  width: 50%;
+  text-align: right;
+}
+
+.underform-half-forgot-password a {
+  font-size: 1.1em;
+  font-weight: 600;
+  color: #747474;
+}
+
+.underform-half-forgot-password a:hover {
+  text-decoration: none;
+  color: #3a8ea8;
+}
+
+
+
+.submit-button-section {
+  /* border: red 2px solid; */
+  position: relative;
+  width: 100%;
+}
+
+.submit-button{
+  /* border: red 2px solid; */
+  width: 90%;
+  height: 50px;
+
+  color: white;
+  font-size: 1.2em;
+  font-weight: 600;
+  background-color: #3a8ea8;
+  opacity: 0.9;
+
+}
+
+.submit-button:hover {
+  opacity: 1.0;
+}
+
+.no-account-section {
+  padding: 20px;
+  font-size: 1.2em;
+}
+
+.no-account-section p{
+  color: grey;
+  font-weight: 400;
+}
+
+.no-account-section a{
+  color: grey;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.no-account-section a:hover{
+  color: #3a8ea8;
+
+}
+
+
+@media only screen and (min-width: 600px){
+.flex-container {
+  background-color: red;
+}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 
 .content {
   width: 100%;
   min-width: 800px;
@@ -96,4 +376,4 @@ body {
       display: none;
     }
 
-}
+} */

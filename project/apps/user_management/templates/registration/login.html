@@ -9,9 +9,11 @@
     <link rel="shortcut icon" href="{% static "user_management/img/favicon.ico" %}" type="image/x-icon">
     <link rel="icon" href="{% static "user_management/img/favicon.ico" %}" type="image/x-icon">
 
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="{% static 'user_management/css/login.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'user_management/css/base.css' %}">
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -23,21 +25,73 @@
     <body class="mapstand" data-ms2-container="mapstand">
         <section id="loginform" class="outer-wrapper">
             <div class="flex-container">
-                    <div class="flex-half-page"style="width:50vw; height: 100vh; border: red 1px solid; background-color: #668B4E; background-position: center bottom;  background-image: url(../../static/user_management/img/test_background.png);   background-repeat: no-repeat;
-                      background-size: auto;">
-<img src="{% static "user_management/img/logo-white-text-on-green.png" %}" style="position:absolute; width:250px; margin: 10px"/>
-                        
-                       <div style="height: 60vh; border: blue solid 2px;">  
-                        <h1>Lorem ipsum dolor sit amet, consectetur adipiscing elit</h1>
+                <div class="flex-left-half">
+                    <img class="logo-image" src="{% static "user_management/img/logo-white-text-on-green.png" %}"/>
+                    
+                    <div class="main-title">  
+                    <h1 class="main-title-text">Welcome back!</h1>
+                    </div>
+
+                    <div class="sub-title" >  
+                    <h2 class="sub-title-text">Sign in to view some lorem ipsum dolor sit amet, consectetur adipiscing elit</h2>
+                    </div>
+                  
+                    <div class="main-image-section">  
+                    <img class="main-image" src="{% static "user_management/img/test-laptop-man.png" %}"/>
+                    </div>
+
 
                     </div>
-                      </div>
                     
-                    <div style="width:50vw; height: 100vh; border: red 1px solid;">
-                    
-                        <h1> R</h1>
+                    <div class="flex-right-half">
+                        <div class="right-title" >
+                            <img class="mapstand-logo-right" src="{% static "user_management/img/logo-inverted.png" %}"/>
+                            <h1 class="right-title-text"> Sign in </h1>
+                        </div>
+
+                        <div class="sign-in-section">
+                            <div class="sign-in-avatar-box">
+                                <img class="sign-in-avatar" src="{% static "user_management/img/default-avatar.png" %}"/>
+                            </div>
+
+                            <div class="sign-in-form">
+                                <form>
+                                    <input type="email" id="email" name="email" placeholder="Enter your email address">
+                                    <br>
+                                    <input type="password" id="password" name="password" placeholder="Enter your password">
+                                
+                                    <div class="lower-form">
+
+                                        <div class="underform-section">
+                                            <div class="underform-half-remember-me">
+                                            <label class="check" for="checkbox"><input id="checkbox" type="checkbox"> &nbsp;&nbsp;&nbsp;Remember me </label>
+                                            </div>
+                                            <div class="underform-half-forgot-password">
+                                            <a href="">Forgot password?</a>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                            <br>
+                                    
+                                    <div class="submit-button-section">
+                                        <input class="submit-button" type="submit" value="Sign in">
+                                    </div>
+                                    <div class="no-account-section">
+                                        <p>Don't have an account?<a href=""> Sign up</a></p>
+                                    </div>
+
+
+                                </form>
+                            </div>
+                                
+                            </div>
+
+
+                        </div>
+
+                
                     </div>
-            </div>
         </section>
 
 
