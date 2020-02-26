@@ -1,5 +1,6 @@
 import typing
 import dramatiq
+from django.conf import settings
 from django.core.mail import EmailMessage, EmailMultiAlternatives
 from django.template.loader import render_to_string
 
@@ -7,7 +8,7 @@ from django.contrib.auth import get_user_model
 
 
 @dramatiq.actor(max_retries=3)
-def send_activation_email(email, activation_url, sender='support@djam.com', subject="Activate Your Account"):
+def send_activation_email(email, activation_url, sender=settings.DEFAULT_FROM_EMAIL, subject="Activate Your Account"):
     # Email subject *must not* contain newlines
     subject = ''.join(subject.splitlines())
 
@@ -27,7 +28,7 @@ def send_activation_email(email, activation_url, sender='support@djam.com', subj
 
 
 @dramatiq.actor(max_retries=3)
-def send_user_notification_email(msg: str, receivers: typing.List, sender='support@djam.com', subject="Djam notification"):
+def send_user_notification_email(msg: str, receivers: typing.List, sender=settings.DEFAULT_FROM_EMAIL, subject="Djam notification"):
     # Email subject *must not* contain newlines
     subject = ''.join(subject.splitlines())
 
@@ -36,7 +37,7 @@ def send_user_notification_email(msg: str, receivers: typing.List, sender='suppo
 
 
 @dramatiq.actor(max_retries=3)
-def send_staff_notification_email(msg, sender='support@djam.com', subject="Djam administration notification"):
+def send_staff_notification_email(msg, sender=settings.DEFAULT_FROM_EMAIL, subject="Djam administration notification"):
     # Email subject *must not* contain newlines
     subject = ''.join(subject.splitlines())
 
