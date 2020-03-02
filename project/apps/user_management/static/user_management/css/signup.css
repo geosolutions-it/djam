@@ -1,5 +1,5 @@
 .right-title {
-    height: 0vh !important;
+    height: 10vh !important;
 }
 
 .sign-up-box {
@@ -39,17 +39,14 @@
 
 
 .underform-box {
-    width: 100%;
-    /* display: flex; */
-    padding-left: 30px;
-    padding-right: 30px;
-    text-align: left;
-  
+  display: block;
+  text-align: left;
+
   }
 
 .underform-box label {
     font-weight: 400;
-    font-size: 1.2em;
+    font-size: 1.3em;
     color: #727272;
 }
 
@@ -61,5 +58,85 @@
 
 .underform-box label a:hover{
     color: #4e8e92;
+}
+
+.underform-box .agree-to-terms {
+    width: 100%;
+    margin-bottom: 1vh;
+}
+
+.underform-box .agree-to-marketing {
+    width: 100%;
+    margin-bottom: 1vh;
+}
+
+
+@media only screen and (max-width: 1200px){
+    .flex-right-half{
+      /* margin-top: 2vh; */
+    }
+    .right-title {
+        position: absolute;
+        left: 0;
+        top: 0;
+        text-align: left;
+    }
+    .mapstand-logo-right{
+        margin: 20px;
+        width: 200px;
+    }
+  }
+
+@media only screen and (max-width: 700px){
+    .sign-up-form {
+        width: 90%;
+        margin-left: 5%;
+        margin-right: 5%;
+}
+
+.mapstand-avatar {
+    margin: 40px;
+    margin-top: 5vh;
+}
+
+.mapstand-avatar-box{
+    height: 15vh;
+}
+}
+
+@media only screen and (max-width: 500px){
+.sign-up-form {
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+.mapstand-avatar {
+    width: 50px;
+    margin-top: 20px;
+}
+
+
+.mapstand-avatar-box {
+    text-align: right;
+    height: 12vh;
+    }
+.mapstand-logo-right{
+    width: 180px;
+    margin-top: 20px;
+    margin-left: 30px;
+}
+
+.sign-up-form #first-name, #last-name, #email, #password {
+    margin: 1.5vh;
+}
+
+.sign-up-form #first-name, #last-name, #email, #password {
+    font-size: 1.2em;
+}
+.underform-box label {
+    font-size: 1em;
+    text-align: left;
+}
+
 }
 
