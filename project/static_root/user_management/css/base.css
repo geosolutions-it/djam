@@ -10,10 +10,10 @@ html, body {margin: 0; height: 100%; width: 100%; overflow: hidden}
   width:50vw; 
   height: 100vh; 
   background-color: #668B4E; 
-  background-position: center bottom;  
+  /* background-position: center bottom;   */
   /* background-image: url(../img/test_background.png);  */
-  background-repeat: no-repeat; 
-  background-size: auto;"
+  /* background-repeat: no-repeat; 
+  background-size: auto;" */
 }
 
 .flex-right-half {
@@ -45,10 +45,13 @@ html, body {margin: 0; height: 100%; width: 100%; overflow: hidden}
   color: white;
   height: 6vh; 
   padding-left: 60px;
+  padding-right: 60px;
+
 }
 
 .sub-title-text {
-  font-size: 1.5em;
+  font-size: 1.4em;
+  line-height: 2em;
 }
 
 .main-image-section {
@@ -75,14 +78,22 @@ height: 40vh;
   text-align: center;
   height: 20vh;
   position: relative;
+  
+}
+
+.mapstand-logo-right {
+  display: none;
 }
 
 .right-title-text {
+  font-size: 1.8em;
   position: absolute;
   bottom: 0;
   width: 100%;
   text-align:center;
   color: #535353;
+  display: none;
+
 }
 
 .sign-in-section {
@@ -124,6 +135,13 @@ height: 40vh;
   margin: 20px;
 }
 
+.sign-in-form input {
+  /* border-style:solid;
+  border:none; */
+
+  border:1px solid #e0e0e0
+}
+
 
 *::-webkit-input-placeholder {
   color: #a5a5a5;
@@ -150,6 +168,15 @@ height: 40vh;
   /* modern browser */
   color: #a5a5a5;
 }
+
+/* Changes the colour of chromes autofill input box */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active  {
+    -webkit-box-shadow: 0 0 0 30px #f6f6f6 inset !important;
+}
+
 
 
 
@@ -264,116 +291,87 @@ input[type="checkbox"]{
 }
 
 
-@media only screen and (min-width: 600px){
-.flex-container {
-  background-color: red;
-}
+@media only screen and (max-width: 1200px){
+  .flex-container {
+    flex-direction: column;
+  }
 
-}
+  .flex-left-half {
+    display: none;
+  }
 
-
-
-
-
-
-
-
-
-
+  .flex-right-half {
+    width:80vw; 
+    height: 80vh;
+    margin: 10vw;
+  }
 
 
-
-
-
-
-
-
-
-
-
-/* 
-.content {
-  width: 100%;
-  min-width: 800px;
-  height: 100%;
-  min-height: 700px;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 1536px;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px 0 rgba(0,0,0,.3);
-  display: flex;
-  justify-content: center;
-  background-color: #609845;
-  box-sizing: border-box;
-
-  color: white;
-}
-
-.flex-basis-60 {
-  flex-basis: 60%;
-}
-
-.flex-basis-40 {
-  flex-basis: 40%;
-}
-
-.flex-column-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.login-picture {
-  background: url(/static/user_management/img/background.jpg);
-  border-radius: 0 10px 10px 0;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-.message-wrapper {
-  padding: 20px;
-  color: black;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px 0 rgba(0,0,0,.3);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.logo {
-  background: url(/static/user_management/img/logo-inverted.png);
-  margin-right: 6px;
-  width: 400px;
-  height: 100px;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-.message-header {
-  text-align: center;
-  color: #609845;
-  font-weight: bolder;
-  margin-top: 40px;
-}
-
-.message-error {
-  text-align: center;
-  color: red;
-  margin-top: 40px;
+.mapstand-logo-right {
+  display: inline-block;
 }
 
 
-@media all and (max-device-width: 768px) {
+}
 
-    .flex-basis-60 {
-        flex-basis: 100%;
-    }
+.mapstand-logo-right {
+  width: 300px;
+  /* margin: 20px; */
+}
 
-    .flex-basis-40 {
-      display: none;
-    }
+@media only screen and (max-width: 800px){
 
-} */
+  .flex-right-half {
+    width:90vw; 
+    height: 80vh;
+    margin: 5vw;
+  }
+
+  .mapstand-logo-right {
+    margin-top: 40px;
+  }
+
+  .right-title{
+    height: 25vh;
+  }
+
+}
+
+@media only screen and (max-width: 700px){
+
+  .flex-right-half {
+    width:100vw; 
+    height: 100vh;
+    margin: 0;
+  }
+
+  .sign-in-form{
+    width: 100%;
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+
+
+  .right-title{
+    height: 23vh;
+  }
+
+  .right-title-text {
+    display: none;
+  }
+
+}
+
+
+
+
+
+@media screen and (min-height: 1200px) and (max-width: 1100px) {
+  .flex-right-half {
+    margin-top: 15vh;
+  }
+
+
+}
+
+

@@ -10,37 +10,74 @@
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-show-password/1.0.3/bootstrap-show-password.min.js"></script>
 {%  endblock %}
 
-{% block message %}
-    <form role="form" method="post" action="{% url 'register' %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <h3 class="message-header">Welcome to Mapstand</h3>
+
+
+    <!-- Left panel -->
+
+    {% block left_title %}
+    Sign up free and unleash lorem ipsum
+    {% endblock left_title %}
+    
+    {% block left_subtitle %}
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+    {% endblock left_subtitle %}
+
+    {% block left_image %}
+    <img class="main-image" src="{% static "user_management/img/test-laptop-man.png" %}"/>
+    {% endblock left_image %}
+
+
+    <!-- Right/ mobile panel -->
+
+    {% block right_action %}
+
+
+    <div class="sign-up-box common-input-form">
+        <div class="mapstand-avatar-box">
+            <img class="mapstand-avatar" src="{% static "user_management/img/default-avatar.png" %}"/>
         </div>
-        <div class="form-group">
-            <label for="first_name">First Name</label>
-            <input type="text" class="form-control input-lg" name="first_name" id="id_first_name" placeholder="Enter Your First Name" {% if form.first_name.value %} value="{{ form.first_name.value }}" {% endif %}>
-            {{ form.first_name.errors }}
+
+        <div class="sign-up-form">
+            <form>
+                {% csrf_token %}
+                <input type="text" id="first-name" name="first-name" placeholder="Enter your first name">
+                <br>
+                <input type="text" id="last-name" name="last-name" placeholder="Enter your last name">
+                <br>
+                <input type="email" id="email" name="email" placeholder="Enter your email address">
+                <br>
+                <input type="password" id="password" name="password" placeholder="Enter your password">
+                <br>
+                <input type="password" id="password" name="password" placeholder="Enter your password (again)">
+            
+                <div class="lower-form">
+
+                    <div class="underform-box">
+                        <div class="underform-agree-to-terms">
+                        <label class="check" for="checkbox"><input id="checkbox" type="checkbox"> &nbsp;&nbsp;&nbsp;I agree to the Mapstand <a href="">terms and conditions</a> </label>
+                        </div>
+                        <br>
+                        <div class="underform-agree-to-marketing">
+                        <label class="check" for="checkbox"><input id="checkbox" type="checkbox"> &nbsp;&nbsp;&nbsp;I'd like to hear about Mapstands offers and services </label>
+                        </div>
+                    </div>
+
+                </div>
+                        <br>
+                
+                <div class="submit-button-section">
+                    <input class="submit-button" type="submit" value="Sign in">
+                </div>
+                <div class="no-account-section">
+                    <p>Don't have an account?<a href=""> Sign up</a></p>
+                </div>
+
+
+            </form>
         </div>
-        <div class="form-group">
-            <label for="last_name">Last Name</label>
-            <input type="text" class="form-control input-lg" name="last_name" id="id_last_name" placeholder="Enter Your Last Name" {% if form.last_name.value %} value="{{ form.last_name.value }}" {% endif %}>
-            {{ form.last_name.errors }}
+            
         </div>
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="text" class="form-control input-lg" name="email" id="id_email" required placeholder="Enter email"  {% if form.email.value %} value="{{ form.email.value }}" {% endif %}>
-            {{ form.email.errors }}
-        </div>
-        <div class="form-group">
-            <label for="Password">Password</label>
-            <input type="password" class="form-control input-lg" name="password1" id="id_password1" data-toggle="password" required placeholder="Enter password">
-            {{ form.password1.errors }}
-        </div>
-        <div class="form-group">
-            <label for="username">Password confirmation</label>
-            <input type="password" class="form-control input-lg" name="password2" id="id_password2" data-toggle="password" required placeholder="Repeat password">
-            {{ form.password2.errors }}
-        </div>
-        <button type="submit" class="btn btn-lg btn-primary pull-right" id="btn_submit">Sign In</button>
-    </form>
-{%  endblock %}
+    
+
+
+    {% endblock right_action %}

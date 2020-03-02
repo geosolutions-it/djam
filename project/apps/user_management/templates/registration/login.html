@@ -23,7 +23,7 @@
     <title>Mapstand Login</title>
   </head>
     <body class="mapstand" data-ms2-container="mapstand">
-        <section id="loginform" class="outer-wrapper">
+        <!-- <section id="signin-section" class="outer-wrapper"> -->
             <div class="flex-container">
                 <div class="flex-left-half">
                     <img class="logo-image" src="{% static "user_management/img/logo-white-text-on-green.png" %}"/>
@@ -49,20 +49,21 @@
                             <h1 class="right-title-text"> Sign in </h1>
                         </div>
 
-                        <div class="sign-in-section">
-                            <div class="sign-in-avatar-box">
-                                <img class="sign-in-avatar" src="{% static "user_management/img/default-avatar.png" %}"/>
+                        <div class="sign-in-box common-input-form">
+                            <div class="mapstand-avatar-box">
+                                <img class="mapstand-avatar" src="{% static "user_management/img/default-avatar.png" %}"/>
                             </div>
 
                             <div class="sign-in-form">
                                 <form>
+                                    {% csrf_token %}
                                     <input type="email" id="email" name="email" placeholder="Enter your email address">
                                     <br>
                                     <input type="password" id="password" name="password" placeholder="Enter your password">
                                 
                                     <div class="lower-form">
 
-                                        <div class="underform-section">
+                                        <div class="underform-box">
                                             <div class="underform-half-remember-me">
                                             <label class="check" for="checkbox"><input id="checkbox" type="checkbox"> &nbsp;&nbsp;&nbsp;Remember me </label>
                                             </div>
@@ -92,56 +93,9 @@
 
                 
                     </div>
-        </section>
+     
 
-
-
-    <!-- <section id="loginform" class="outer-wrapper">
-      <div class="inner-wrapper">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-8 col-sm-offset-2">
-                    <div class="mps-logo">
-                        <img class="mps-logo-img" src="{% static "user_management/img/logo-inverted.png" %}">
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-4 col-sm-offset-4">
-                    <div class="mps-error">
-                        {% if form.non_field_errors %}
-                            <div class="row text-center">
-                                {% for error in form.non_field_errors %}
-                                    <p>{{ error|safe }}</p>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                    </div>
-                    <form role="form" method="post" action="{% url 'login' %}?{{ request.GET.urlencode }}">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <label for="username">Username / Email</label>
-                            <input type="text" class="form-control input-lg" name="username" id="username" placeholder="Enter email">
-                            {% if form.username.errors %}
-                                <p>{{ form.username.errors }}</p>
-                            {% endif %}
-                        </div>
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" class="form-control input-lg" name="password" id="password" data-toggle="password" placeholder="Password">
-                            {% if form.password.errors %}
-                                <p>{{ form.password.errors }}</p>
-                            {% endif %}
-                        </div>
-                        <input type="hidden" name="next" value="{{ next }}" />
-                        <button type="submit" class="btn btn-lg btn-primary pull-right mps-btn" id="btn_submit">Sign In</button>
-                    </form>
-                    <div class="footer"><a href="{% url 'password_reset' %}">Forgot your password?</a></div>
-                </div>
-              </div>
-            </div>
-        </div>
-    </section>
+    <!-- </section> -->
 
 
 
