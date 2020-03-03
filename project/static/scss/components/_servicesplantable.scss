@@ -1,0 +1,156 @@
+section#servicesplantable {
+  background: $white;
+  // background: linear-gradient(to right, $green, $green);
+  padding: 4rem 0;
+
+  .services-plan-table {
+    padding: 5rem 0 2rem 0;
+  }
+
+  hr {
+    margin: 1.5rem 0;
+  }
+
+  ul li {
+    margin-bottom: 1rem;
+  }
+
+  .btn {
+    font-size: 80%;
+    border-radius: 6px;
+    letter-spacing: 0.1rem;
+    padding: 0.7rem;
+    opacity: 0.8;
+    transition: all 0.2s;
+  }
+  .btn:hover {
+    cursor: pointer;
+    opacity: 1;
+  }
+  .pricing-matrix-table {
+    table-layout: fixed;
+  }
+  .width-full {
+    width: 100% !important;
+  }
+  table {
+    border-spacing: 0;
+    border-collapse: collapse;
+  }
+  .pricing-matrix-table td,
+  .pricing-matrix-table th {
+    padding: 8px;
+    border: 1px solid #e1e4e8;
+  }
+  .pricing-matrix-table-dark td {
+    background-color: $green-dark;
+    color: $white;
+  }
+  .pricing-matrix-table .pricing-matrix-table-dark {
+    background-color: $green-dark;
+    border-color: $green;
+    color: $white;
+  }
+  .fas.fa-check {
+    color: $green;
+  }
+
+  .fas.fa-times {
+    color: $grey-light;
+  }
+  th p {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+  h6 p {
+    line-height: 1.45;
+    margin: 0;
+  }
+
+  /* Hover Effects on Card */
+}
+@media (max-width: $mobile-max-width) {
+  section#servicesplantable {
+    padding: 2.5rem 0;
+
+    .section-heading {
+      font-size: 2.3rem;
+    }
+    .section-subheading {
+      font-size: 1rem;
+      margin: 0 auto;
+      padding: 1.5rem 2rem;
+    }
+    .btn {
+      font-size: 55%;
+      white-space: inherit !important;
+    }
+    .btn:hover .btn {
+      opacity: 1;
+    }
+    h4 {
+      font-size: 1rem !important;
+    }
+    h6 {
+      font-size: 0.7rem !important;
+    }
+  }
+}
+
+.tooltip-service {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-service .tooltiptext {
+  visibility: hidden;
+  width: 200px;
+  background-color: rgb(85, 85, 85);
+  color: rgb(220, 220, 220);
+  text-align: center;
+  border-radius: 3px;
+  padding: 6px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -90px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 0.8em;
+}
+
+.tooltip-service .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: rgb(85, 85, 85) transparent transparent transparent;
+}
+
+.tooltip-service:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+@media only screen and (max-width: 770px) {
+  .tooltip-service .tooltiptext {
+    width: 140px;
+    margin-left: -60px;
+  }
+}
+
+  #button-availalbe-text {
+    font-size: 0.8em;
+    text-align: center;
+    color: #9d9d9d;
+  }
+
+  #button-availalbe-text-light {
+    font-size: 0.8em;
+    text-align: center;
+    color: #c2c2c2;
+  }
