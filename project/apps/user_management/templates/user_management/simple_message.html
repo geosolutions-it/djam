@@ -1,0 +1,11 @@
+{% extends 'user_management/base.html' %}
+{% load static %}
+
+{% block message %}
+    {% if message %}
+        <h3 class="message-header">{{ message|safe }}</h3>
+    {% endif %}
+    {% if error %}
+        <h4 class="message-error">{{ error|safe }}</h4>
+    {% endif %}
+{%  endblock %}
