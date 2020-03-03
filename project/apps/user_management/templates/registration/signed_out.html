@@ -2,7 +2,7 @@
 
 {% block header_scripts %}
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'user_management/css/login.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'user_management/css/signed_out.css' %}">
 
 {%  endblock %}
 
@@ -11,7 +11,7 @@
     <!-- Left panel -->
 
     {% block left_title %}
-    Welcome back!
+    You've signed out!
     {% endblock left_title %}
     
     {% block left_subtitle %}

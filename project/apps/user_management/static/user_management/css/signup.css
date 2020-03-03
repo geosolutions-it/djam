@@ -1,3 +1,9 @@
+.main-image{
+    width: 50vw;
+    opacity: 0.3;
+    left: 0;
+}
+
 .right-title {
     height: 10vh !important;
 }
