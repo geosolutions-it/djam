@@ -34,12 +34,12 @@
     text-align: center;
 }
 
-.sign-up-form #first-name, #last-name, #email, #password{
+.sign-up-form #id_first_name, #id_last_name, #id_email, #id_password1, #id_password2 {
     width: 90%;
     height: 50px;
     font-size: 1.5em;
     padding: 10px;
-    margin: 20px;
+    margin: 1.7vh;
 }
 
 
@@ -47,6 +47,8 @@
 .underform-box {
   display: block;
   text-align: left;
+  margin-left: 0.6vw;
+  margin-top: 1vh;
 
   }
 
@@ -56,19 +58,27 @@
     color: #727272;
 }
 
-.underform-box label a{
+.underform-box a{
     font-weight: 700;
     color: #6a8685;
     text-decoration: none;
 }
 
-.underform-box label a:hover{
+.underform-box a:hover{
     color: #4e8e92;
 }
 
 .underform-box .agree-to-terms {
     width: 100%;
     margin-bottom: 1vh;
+    margin-top: 3vh;
+    text-align: center;
+
+}
+
+.agree-to-terms p {
+    font-size: 1em;
+    color: #575757;
 }
 
 .underform-box .agree-to-marketing {

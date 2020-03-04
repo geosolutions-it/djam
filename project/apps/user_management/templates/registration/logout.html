@@ -19,7 +19,7 @@
     {% endblock left_subtitle %}
 
     {% block left_image %}
-    <img class="main-image" src="{% static "user_management/img/test-laptop-man.png" %}"/>
+    <img class="main-image" src="{% static "user_management/img/sleeping-at-computer.png" %}"/>
     {% endblock left_image %}
 
 
@@ -34,9 +34,9 @@
         </div>
 
         <div class="sign-in-form">
-            <form>
+            <form role="form" method="post" action="{% url 'login' %}?{{ request.GET.urlencode }}">
                 {% csrf_token %}
-                <input type="email" id="email" name="email" placeholder="Enter your email address">
+                <input type="text" id="username" name="username" placeholder="Enter your email address">
                 <br>
                 <input type="password" id="password" name="password" placeholder="Enter your password">
             

@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 class EmailConfirmationSentView(View):
 
     def get(self, request):
-        return render(request, 'user_management/simple_message.html', context={'message': 'Please confirm your email address <br> to complete registration.'})
+        return render(request, 'user_management/activation_msg_sent.html', context={'message': 'Please confirm your email address to complete registration.'})
 
 
 class EmailConfirmationView(View):

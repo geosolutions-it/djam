@@ -34,9 +34,9 @@
         </div>
 
         <div class="sign-in-form">
-            <form>
+            <form role="form" method="post" action="{% url 'login' %}?{{ request.GET.urlencode }}">
                 {% csrf_token %}
-                <input type="email" id="email" name="email" placeholder="Enter your email address">
+                <input type="text" id="username" name="username" placeholder="Enter your email address">
                 <br>
                 <input type="password" id="password" name="password" placeholder="Enter your password">
             

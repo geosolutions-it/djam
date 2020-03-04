@@ -34,26 +34,41 @@
         </div>
 
         <div class="sign-up-form">
-            <form>
+            <form role="form" method="post" action="{% url 'register' %}">
                 {% csrf_token %}
-                <input type="text" id="first-name" name="first-name" placeholder="Enter your first name">
-                <br>
-                <input type="text" id="last-name" name="last-name" placeholder="Enter your last name">
-                <br>
-                <input type="email" id="email" name="email" placeholder="Enter your email address">
-                <br>
-                <input type="password" id="password" name="password" placeholder="Enter your password">
-                <br>
-                <input type="password" id="password" name="password" placeholder="Enter your password (again)">
+
+                <input type="text" id="id_first_name" name="first_name" placeholder="Enter your first name">
+                {{ form.first_name.errors }}
+
+                
+                <input type="text" id="id_last_name" name="last_name" placeholder="Enter your last name">
+                {{ form.last_name.errors }}
+                
+
+                <input type="text" id="id_email" name="email" placeholder="Enter your email address">
+                {{ form.email.errors }}
+                
+
+                <input type="password" id="id_password1" name="password1" placeholder="Enter your password">
+                {{ form.password1.errors }}
+                
+
+                <input type="password" id="id_password2" name="password2" placeholder="Enter your password (again)">
+                {{ form.password2.errors }}
             
                 <div class="lower-form">
 
                     <div class="underform-box">
-                        <div class="agree-to-terms">
-                        <label class="check" for="checkbox-terms"><input  id="checkbox-terms" type="checkbox"> &nbsp;&nbsp;&nbsp;I agree to the Mapstand <a href="">terms and conditions</a> </label>
-                        </div>
+                       
                         <div class="agree-to-marketing">
-                        <label class="check" for="checkbox-marketing"><input id="checkbox-marketing" type="checkbox"> &nbsp;&nbsp;&nbsp;I'd like to hear about Mapstands offers and services </label>
+                        <label class="check" for="id_consent"><input name="consent" id="id_consent" type="checkbox"> &nbsp;&nbsp;&nbsp;I'd like to hear about Mapstands offers and services </label>
+                        </div>
+
+                        <div class="agree-to-terms">
+                        <p>
+                            By clicking 'Sign Up', you agree to MapStand's <a href="https://www.mapstand.com/terms/">Terms of Use</a>
+                            & <a href="https://www.mapstand.com/privacy/">Privacy Policy</a>
+                        </p>
                         </div>
                     </div>
 
