@@ -57,3 +57,15 @@ def send_hubspot_notify(email, username, subscription, first_name, last_name):
             )
     except Exception as e:
         logger.error(f"Hubspot registration: Failed to send a post request to Hubspot url {hubspot_url}: Exception {e}")
+
+
+def register_login_in_hubspot(email):
+    hubspot_url = f'https://track.hubspot.com/v1/event?_n={settings.HUBSPOT_LOGIN_EVENT_ID}_a={settings.HUBSPOT_HUB_ID}&email={email}'
+    try:
+        r = requests.get(url=hubspot_url)
+        if r.status_code != 200:
+            logger.error(
+                f"Hubspot registration: Failed to send a post request to Hubspot url {hubspot_url}: status code: {r.status_code}: text: {r.text}"
+            )
+    except Exception as e:
+        logger.error(f"Hubspot registration: Failed to send a post request to Hubspot url {hubspot_url}: Exception {e}")
