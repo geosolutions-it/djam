@@ -28,7 +28,7 @@ def register_user_in_hubspot(sender, instance, **kwargs):
         logging.debug(f'Hubspot registration: SKIPPED. User with "{instance.email}" email does not exist in the DB yet.')
         return
 
-    if db_user.consent and not db_user.email_confirmed and instance.email_confirmed:
+    if instance.email_confirmed:
         # user gave their consent at registration, and now their email is confirmed
         logging.info(f'Hubspot registration: registering user with email "{instance.email}" in Hubspot.')
         send_hubspot_notify(instance.email, instance.username, instance.consent, instance.first_name, instance.last_name)
