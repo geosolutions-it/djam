@@ -37,7 +37,7 @@
 .sign-up-form #id_first_name, #id_last_name, #id_email, #id_password1, #id_password2 {
     width: 90%;
     height: 50px;
-    font-size: 1.5em;
+    font-size: 1.2em;
     padding: 10px;
     margin: 1.7vh;
 }
@@ -54,7 +54,7 @@
 
 .underform-box label {
     font-weight: 400;
-    font-size: 1.3em;
+    font-size: 1.2em;
     color: #727272;
 }
 

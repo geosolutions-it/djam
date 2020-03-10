@@ -28,7 +28,9 @@ html, body {
 .logo-image {
   position:absolute; 
   width:250px; 
-  margin: 20px
+  margin: 20px;
+  z-index:1; 
+
 }
 
 .main-title {

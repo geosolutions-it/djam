@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 class UMUserCreationForm(UserCreationForm):
     first_name = forms.CharField(max_length=50, required=True)
     last_name = forms.CharField(max_length=50, required=True)
-    email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
+    email = forms.EmailField(max_length=254, help_text='Required. Input a valid email address.')
     consent = forms.BooleanField(required=False)
 
     class Meta:

@@ -15,8 +15,11 @@
 <body class="mapstand" data-ms2-container="mapstand">
         <div class="flex-container">
             <div class="flex-left-half">
-                <img class="logo-image" src="{% static "user_management/img/logo-white-text-on-green.png" %}"/>
                 
+                <a class="logo-image" href="{% url 'login' %}"> 
+                    <img src="{% static "user_management/img/logo-white-text-on-green.png" %}"/>
+                </a>
+
                 <div class="main-title">  
                     <h1 class="main-title-text">
                     {% block left_title %}
