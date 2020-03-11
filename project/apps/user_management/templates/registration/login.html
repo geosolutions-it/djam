@@ -38,11 +38,7 @@
                 {% csrf_token %}
 
                 <input type="text" id="username" name="username" placeholder="Enter your email address">
-                <div>
-                    {% for msg in form.first_name.errors %} 
-                    {{ msg }} 
-                    {% endfor %}
-                </div>
+
 
                 <input type="password" id="password" name="password" placeholder="Enter your password">
             

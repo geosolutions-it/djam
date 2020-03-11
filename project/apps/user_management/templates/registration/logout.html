@@ -33,7 +33,7 @@
             <img class="mapstand-avatar" src="{% static "user_management/img/default-avatar.png" %}"/>
         </div>
 
-        <div class="sign-in-form">
+        <div class="sign-in-form"> 
             <form role="form" method="post" action="{% url 'login' %}?{{ request.GET.urlencode }}">
                 {% csrf_token %}
 
