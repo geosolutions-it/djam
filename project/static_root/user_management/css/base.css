@@ -1,6 +1,10 @@
 /* turn scroll off */
-html, body {margin: 0; height: 100%; width: 100%; overflow: hidden}
-
+html, body {
+  margin: 0; 
+  height: 100%; 
+  width: 100%; 
+  overflow: hidden;
+}
 
 .flex-container {
   display: flex; 
@@ -24,7 +28,9 @@ html, body {margin: 0; height: 100%; width: 100%; overflow: hidden}
 .logo-image {
   position:absolute; 
   width:250px; 
-  margin: 20px
+  margin: 20px;
+  z-index:1; 
+
 }
 
 .main-title {
@@ -56,19 +62,15 @@ html, body {margin: 0; height: 100%; width: 100%; overflow: hidden}
 
 .main-image-section {
 position: relative;
-
 height: 40vh;
 /* align-items: center; */
 }
 
 .main-image {
-
   left: 20%;
-
   opacity: 0.1;
   position: absolute;
   bottom: 0;
-
   width: 30vw;
   height: auto;
 }
@@ -78,7 +80,6 @@ height: 40vh;
   text-align: center;
   height: 20vh;
   position: relative;
-  
 }
 
 .mapstand-logo-right {
@@ -96,50 +97,90 @@ height: 40vh;
 
 }
 
-.sign-in-section {
-  height: 80vh;
-  position: relative;
+.underform-box {
+  width: 100%;
+  display: flex;
+  padding-left: 30px;
+  padding-right: 30px;
+
 }
 
-.sign-in-avatar-box {
+input[type="checkbox"]{
+  width: 15px;
+  height: 15px;
+  padding: 0;
+  margin-left: 3px;
+  vertical-align: bottom;
+  position: relative;
+  top: -3px;
+  *overflow: hidden;
+}
+
+/* Turns off text highlighting by double clicking on labels */
+label {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+   user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Opera and Firefox */
+}
+
+.submit-button-section {
+  /* border: red 2px solid; */
   position: relative;
   width: 100%;
-  height: 20vh;
-  text-align: center;
-
 }
 
-.sign-in-avatar{
-  margin: 40px;
-  margin-top: 7vh;
-  
-}
-
-.sign-in-form {
-  /* border: orange 2px solid; */
-
-  width: 70%;
-  margin-left: 15%;
-  margin-right: 15%;
-  /* margin-top: 10%; */
-  height: 50vh;
-  position: absolute;
-  text-align: center;
-}
-
-.sign-in-form #email, #password{
+.submit-button{
+  /* border: red 2px solid; */
   width: 90%;
   height: 50px;
-  font-size: 1.5em;
-  padding: 10px;
-  margin: 20px;
+
+  color: white;
+  font-size: 1.2em;
+  font-weight: 600;
+  background-color: #3a8ea8;
+  opacity: 0.9;
 }
 
-.sign-in-form input {
-  /* border-style:solid;
-  border:none; */
+.submit-button:hover {
+  opacity: 1.0;
+}
 
-  border:1px solid #e0e0e0
+.alternative-option-section {
+  margin: 20px;
+  font-size: 1.2em;
+}
+
+.alternative-option-section p{
+  color: grey;
+  font-weight: 400;
+}
+
+.alternative-option-section a{
+  color: grey;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.alternative-option-section a:hover{
+  color: #3a8ea8;
+}
+
+
+
+
+
+.mapstand-logo-right {
+  width: 300px;
+  /* margin: 20px; */
+}
+
+
+.common-input-form input {
+  border:1px solid #e0e0e0;
 }
 
 
@@ -178,119 +219,6 @@ input:-webkit-autofill:active  {
 }
 
 
-
-
-
-.underform-section {
-  /* border: orange 2px solid; */
-
-  width: 100%;
-  display: flex;
-  padding-left: 30px;
-  padding-right: 30px;
-
-}
-
-.underform-half-remember-me {
-  width: 50%;
-  text-align: left;
-}
-
-.underform-half-remember-me input{
-  width: 13px;
-  height: 13px;
-  padding: 0;
-  margin-left: 3px;
-  vertical-align: bottom;
-  position: relative;
-  top: -3px;
-  *overflow: hidden;
-}
-
-input[type="checkbox"]{
-  width: 16px;
-  height: 16px;
-}
-
-.underform-half-remember-me label {
-  font-size: 1.1em;
-  font-weight: 600;
-  color: #8f8f8f;
-  display: block;
-
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Old versions of Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-   user-select: none; /* Non-prefixed version, currently
-                                  supported by Chrome, Opera and Firefox */
-}
-
-
-.underform-half-forgot-password {
-  width: 50%;
-  text-align: right;
-}
-
-.underform-half-forgot-password a {
-  font-size: 1.1em;
-  font-weight: 600;
-  color: #747474;
-}
-
-.underform-half-forgot-password a:hover {
-  text-decoration: none;
-  color: #3a8ea8;
-}
-
-
-
-.submit-button-section {
-  /* border: red 2px solid; */
-  position: relative;
-  width: 100%;
-}
-
-.submit-button{
-  /* border: red 2px solid; */
-  width: 90%;
-  height: 50px;
-
-  color: white;
-  font-size: 1.2em;
-  font-weight: 600;
-  background-color: #3a8ea8;
-  opacity: 0.9;
-
-}
-
-.submit-button:hover {
-  opacity: 1.0;
-}
-
-.no-account-section {
-  padding: 20px;
-  font-size: 1.2em;
-}
-
-.no-account-section p{
-  color: grey;
-  font-weight: 400;
-}
-
-.no-account-section a{
-  color: grey;
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.no-account-section a:hover{
-  color: #3a8ea8;
-
-}
-
-
 @media only screen and (max-width: 1200px){
   .flex-container {
     flex-direction: column;
@@ -306,18 +234,12 @@ input[type="checkbox"]{
     margin: 10vw;
   }
 
-
 .mapstand-logo-right {
   display: inline-block;
 }
 
-
 }
 
-.mapstand-logo-right {
-  width: 300px;
-  /* margin: 20px; */
-}
 
 @media only screen and (max-width: 800px){
 
@@ -330,40 +252,15 @@ input[type="checkbox"]{
   .mapstand-logo-right {
     margin-top: 40px;
   }
-
-  .right-title{
-    height: 25vh;
-  }
-
 }
 
-@media only screen and (max-width: 700px){
-
+@media only screen and (max-width: 1200px){
   .flex-right-half {
     width:100vw; 
-    height: 100vh;
-    margin: 0;
+    height: 80vh;
+    margin: 0vw;
   }
-
-  .sign-in-form{
-    width: 100%;
-    margin-left: 0px;
-    margin-right: 0px;
-  }
-
-
-  .right-title{
-    height: 23vh;
-  }
-
-  .right-title-text {
-    display: none;
-  }
-
 }
-
-
-
 
 
 @media screen and (min-height: 1200px) and (max-width: 1100px) {
