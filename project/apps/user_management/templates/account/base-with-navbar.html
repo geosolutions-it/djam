@@ -1,0 +1,74 @@
+{% load static %}
+<head>
+    <link rel="shortcut icon" href="{% static "user_management/img/favicon.ico" %}" type="image/x-icon">
+    <link rel="icon" href="{% static "user_management/img/favicon.ico" %}" type="image/x-icon">
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'user_management/css/base-with-navbar.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {% block header_scripts %}{% endblock header_scripts %}
+</head>
+
+<body class="mapstand" data-ms2-container="mapstand">
+
+    <header>
+        <nav class="base-navbar">
+            Hello worldsefs
+        </nav>
+    </header>
+
+    <main>
+        <div class="flex-container">
+            <div class="flex-left-half">
+                
+                <a class="logo-image" href="{% url 'login' %}"> 
+                    <img src="{% static "user_management/img/logo-white-text-on-green.png" %}"/>
+                </a>
+
+                <div class="main-title">  
+                    <h1 class="main-title-text">
+                    {% block left_title %}
+                    {% endblock left_title %}
+                    </h1>
+                    
+                </div>
+
+                <div class="sub-title" >
+                    <h2 class="sub-title-text">  
+                    {% block left_subtitle %}
+                    {% endblock left_subtitle %}
+                    </h2>
+                </div>
+              
+                <div class="main-image-section">  
+                    {% block left_image %}
+                    {% endblock left_image %}
+                </div>
+
+
+                </div>
+                
+                <div class="flex-right-half">
+                    <div class="right-title" >
+                        <img class="mapstand-logo-right" src="{% static "user_management/img/logo-inverted.png" %}"/>
+                        {% block right_title %}
+                        {% endblock right_title %}
+                    </div>
+
+                    {% block right_action %}
+                    {% endblock right_action %}
+
+                    
+
+
+                    </div>
+
+            
+                </div>
+            </main>
+ 
+</body>
+
