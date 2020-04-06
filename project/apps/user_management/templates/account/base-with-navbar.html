@@ -9,6 +9,10 @@
     <link rel="stylesheet" type="text/css" href="{% static 'user_management/css/base-with-navbar.css' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <script src="https://kit.fontawesome.com/d8ad894077.js" crossorigin="anonymous"></script>
+
+
+
     {% block header_scripts %}{% endblock header_scripts %}
 </head>
 
@@ -16,7 +20,17 @@
 
     <header>
         <nav class="base-navbar">
-            Hello worldsefs
+            <div class="left-navbar-section">
+            <a href="{% url 'logout' %}">
+            Logout
+            </a>
+            </div>
+            <div class="right-navbar-section">
+            <a href="https://app.mapstand.com/">
+                <i class="fas fa-globe-europe fa-lg"></i>
+                Back to Map
+            </a>
+            </div>
         </nav>
     </header>
 
