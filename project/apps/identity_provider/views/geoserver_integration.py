@@ -2,6 +2,7 @@ import logging
 
 from rest_framework import views, permissions, status
 from rest_framework.response import Response
+from rest_framework.renderers import JSONRenderer
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
@@ -54,6 +55,7 @@ class GeoserverTokenIntrospectionView(TokenIntrospectionView):
 
 
 class GeoserverIntrospection(views.APIView):
+    renderer_classes = [JSONRenderer]
 
     def user_groups_geoserver_format(self, user_id):
         user_groups = Group.objects.filter(Q(users__id=user_id))
