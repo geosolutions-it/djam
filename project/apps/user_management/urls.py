@@ -3,7 +3,7 @@ from apps.user_management.views.account_page import AccountPageView, AccountEdit
 from django.contrib.auth import views as auth_views
 
 from apps.user_management.views.signup import SignupView
-from apps.user_management.forms import UMPasswordResetForm, UMAuthenticationForm
+from apps.user_management.forms import UMPasswordResetForm, UMAuthenticationForm, CustomChangePasswordForm
 from apps.user_management.views.email_confirmation import EmailConfirmationView, EmailConfirmationSentView, \
     ResendVerificationEmailView
 
@@ -21,13 +21,13 @@ urlpatterns = [
     ),
     path(
         'accounts/password_change/',
-        auth_views.PasswordChangeView.as_view(template_name='account/password_change_form.html'),
+        auth_views.PasswordChangeView.as_view(template_name='account/password_change_form.html',form_class=CustomChangePasswordForm),
         name='password_change'
     ),
     path(
         'accounts/password_change/done/',
         auth_views.PasswordChangeDoneView.as_view(template_name='account/password_change_done.html'),
-        name='password_change_done'
+        name='password_change_done',
     ),
     path(
         'accounts/password_reset/',

@@ -4,13 +4,15 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordResetForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordResetForm, AuthenticationForm, PasswordChangeForm
 from django.forms import ModelForm
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 from django.conf import settings
+from django.forms.widgets import PasswordInput, TextInput
+
 
 from .tasks import send_multi_alternatives_mail
 
@@ -158,3 +160,11 @@ class UMAuthenticationForm(AuthenticationForm):
                     ),
                     code='email_not_confirmed',
                 )
+
+class CustomChangePasswordForm(PasswordChangeForm):
+    old_password = forms.CharField(widget=PasswordInput(attrs={'placeholder':'Enter your old password'}))
+    new_password1 = forms.CharField(widget=PasswordInput(attrs={'placeholder':'Enter your new password'}))
+    new_password2 = forms.CharField(widget=PasswordInput(attrs={'placeholder':'Enter your new password (again)'}))
+
+
+    
