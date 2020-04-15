@@ -116,7 +116,17 @@ Generating API key can be done in the admin page -> `API KEY PERMISSIONS` -> `AP
 
 ## Running the tests
 
-No tests are yet preapared
+In the `project` folder simply run:
+
+`./run_tests.sh`
+
+To generate a html report simply run:
+
+`coverage html`
+
+And to view something like:
+
+`firefox htmlcov/index.html`
 
 ## Deployment
 
@@ -144,3 +154,4 @@ For Postgres on the host machine:
 ## Versioning
 
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/geosolutions-it/djam/tags). 
+
