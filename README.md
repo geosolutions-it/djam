@@ -1,6 +1,8 @@
 # djam
 Django Access Management, implementing OpenID Identity Provider and custom Privilege Management System
 
+![Code Coverage](./coverage.svg)
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
@@ -127,6 +129,10 @@ To generate a html report simply run:
 And to view something like:
 
 `firefox htmlcov/index.html`
+
+To regenerate the coverage badge, simply run this in the project folder:
+
+`coverage-badge -o ../coverage.svg`
 
 ## Deployment
 
