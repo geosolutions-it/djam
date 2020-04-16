@@ -1,2 +1,2 @@
-from .test_identity_provider import *
-from .test_user_management import *
+from .functional_test_identity_provider import *
+from .functional_test_user_management import *
