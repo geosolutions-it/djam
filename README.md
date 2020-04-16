@@ -166,7 +166,12 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 As a prerequisite in your virtualenv run `pip install -r requirements-dev.txt`
 
-### Vscode
+## Running the linters
+
+`flake8 project/`
+`bandit project/`
+
+### Vscode Integration
 
 In your settings.json:
 
