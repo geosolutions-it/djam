@@ -174,7 +174,9 @@ In your settings.json:
 {
     "python.pythonPath": "venv/bin/python",
     "python.linting.flake8Path": "venv/bin/flake8",
+    "python.linting.banditPath": "venv/bin/bandit",
     "python.linting.enabled": true,
     "python.linting.flake8Enabled": true,
+    "python.linting.banditEnabled": true,
 }
 ```
