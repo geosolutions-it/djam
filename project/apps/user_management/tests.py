@@ -28,19 +28,20 @@ class UserTests(TestCase):
 
 
 class UserActivationCodeTests(TestCase):
+
     def create_user_activation(self):
         u = User.objects.create(email="johnsmith@example.net")
-        ua = UserActivationCode()
-        print(u.id)
-        ua.user_id = u.id
-        ua.save()
+        ua = UserActivationCode(user=u)
+
         return ua
 
     def test_user_activation_regeneration(self):
         ua_original = self.create_user_activation()
-        ua = copy.deepcopy(ua_original)
-        ua.regenerate_code()
-        self.assertNotEquals(ua_original.activation_code, ua.activation_code)
-        self.assertNotEquals(ua_original.creation_date, ua.creation_date)
+        ua_code = ua_original.activation_code
+        ua_date = ua_original.creation_date
+        ua_original.regenerate_code()
+
+        self.assertNotEquals(ua_original.activation_code, ua_code)
+        self.assertNotEquals(ua_original.creation_date, ua_date)
 
 
