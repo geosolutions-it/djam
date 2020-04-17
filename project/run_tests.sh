@@ -17,3 +17,5 @@ export DJAM_EMAIL_PORT=
 export DJAM_SECRET_KEY='#tm%3(w*8^3rt$3!9hgkdsvh8e*81h4p&ul*px@pg-!*j0-yd$'
 
 coverage run --source='.' manage.py test
+rm ../coverage.svg
+coverage-badge -o ../coverage.svg
