@@ -44,6 +44,8 @@ class AccountPageView(UserGtObjectMixin, LoginRequiredMixin, DetailView):
     template_name = 'account/user.html'
     pk_url_kwarg = 'id'
 
+    
+
 
 class AccountEditView(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
     model = get_user_model()

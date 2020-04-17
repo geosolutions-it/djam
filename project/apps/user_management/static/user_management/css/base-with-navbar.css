@@ -27,7 +27,7 @@ html, body {
   width: 50%;
   text-align: left;
   padding-left: 30px;
-  padding-top: 15px;
+  padding-top: 8px;
 }
 
 .right-navbar-section {
@@ -72,10 +72,13 @@ html, body {
 
 .logo-image {
   position:absolute; 
-  width:250px; 
-  margin: 20px;
+  /* margin: 30px; */
   z-index:1; 
+  /* border: red solid 1px; */
+}
 
+.logo-image img{
+  width:140px; 
 }
 
 .main-title {

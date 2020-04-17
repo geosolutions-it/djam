@@ -21,9 +21,9 @@
     <header>
         <nav class="base-navbar">
             <div class="left-navbar-section">
-            <a href="{% url 'logout' %}">
-            Logout
-            </a>
+                <div class="logo-image"> 
+                    <img src="{% static "user_management/img/mapstand-white-logo.svg" %}"/>
+                </div>
             </div>
             <div class="right-navbar-section">
             <a href="https://app.mapstand.com/">
@@ -38,9 +38,6 @@
         <div class="flex-container">
             <div class="flex-left-half">
                 
-                <a class="logo-image" href="{% url 'login' %}"> 
-                    <img src="{% static "user_management/img/logo-white-text-on-green.png" %}"/>
-                </a>
 
                 <div class="main-title">  
                     <h1 class="main-title-text">

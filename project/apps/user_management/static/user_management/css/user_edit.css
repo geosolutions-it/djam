@@ -1,0 +1,109 @@
+.right-title {
+  height: 10vh;
+}
+
+
+.form-box {
+  height: 80vh;
+  position: relative;
+  /* border: red 1px solid; */
+  
+}
+
+.mapstand-avatar-box {
+  position: relative;
+  width: 100%;
+  height: 20vh;
+  text-align: center;
+}
+
+.mapstand-avatar {
+  margin: 40px;
+  margin-top: 7vh;
+}
+
+.user-edit-form-box {
+  width: 70%;
+  margin-left: 15%;
+  margin-right: 15%;
+  height: 50vh;
+  position: absolute;
+  text-align: center;
+  /* border: blue 1px solid; */
+  
+
+}
+
+.user-edit-form-box p {
+  font-size: 1.2em;
+  margin-top:5vh;
+}
+
+.user-edit-form-box .form-group {
+  text-align: left;
+  width: 90%;
+  height: 70px;
+  margin: 5%;
+  /* border: green 1px solid; */
+  
+}
+
+.user-edit-form-box .password-form-group {
+  text-align: left;
+  width: 70%;
+  height: 10px;
+  margin: 5%;
+  /* border: green 1px solid; */
+  
+}
+
+.form-group label {
+  /* font-weight: bold;
+  text-align: left;
+  float: left; */
+  display: inline-block;
+}
+
+
+
+.change-password-link {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #739773;
+}
+
+a:hover {
+  text-decoration: none;
+  color: #88b488;
+  cursor:pointer;
+}
+
+
+@media only screen and (max-width: 1200px){
+  .mapstand-logo-right {
+    width: 250px;
+    margin: 2vh;
+}
+}
+
+
+@media only screen and (max-width: 650px){
+h1 {
+  font-size: 1.9em;
+}
+.mapstand-avatar-box {
+  height: 16vh;
+}
+.mapstand-avatar {
+  width: 15vw;
+}
+
+.right-title {
+  display: none;
+}
+.user-edit-form-box {
+  width: 100%;
+  margin-left: 0px;
+  margin-right: 0px;
+}
+}

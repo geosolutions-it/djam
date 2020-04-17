@@ -54,8 +54,13 @@ urlpatterns = [
     path(r'user/register/', SignupView.as_view(), name='register'),
     re_path(r'user/account/edit/(?P<id>\w+)/', AccountEditView.as_view(), name='user_account_edit'),
 
-    path(r'user/account/', AccountPageView.as_view(), name="user_account"),
-    re_path(r'user/account/(?P<id>\w+)/', AccountPageView.as_view(), name='user_account'),
+    # First release views using AccountEditView as simpler until more profile features added then use the below commented out views
+    path(r'user/account/', AccountEditView.as_view(), name="user_account"),
+    re_path(r'user/account/(?P<id>\w+)/', AccountEditView.as_view(), name='user_account'),
+
+    # Commented out until other profile features are introduced. No point having these views until then.
+    # path(r'user/account/', AccountPageView.as_view(), name="user_account"),
+    # re_path(r'user/account/(?P<id>\w+)/', AccountPageView.as_view(), name='user_account'),
 
     path(r'user/activation_msg_sent/', EmailConfirmationSentView.as_view(), name='activation_msg_sent'),
     path(r'user/<uuid:user_uuid>/email_confirmation/', EmailConfirmationView.as_view(), name='email_confirmation'),

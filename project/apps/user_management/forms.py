@@ -62,10 +62,12 @@ class ResendActivationEmailForm(forms.Form):
 class UserAccountForm(ModelForm):
     last_name = forms.CharField(max_length=30, required=False)
     first_name = forms.CharField(max_length=150, required=False)
+    email = forms.CharField(max_length=150, required=False)
+
 
     class Meta:
         model = get_user_model()
-        fields = ('first_name', 'last_name', )
+        fields = ('first_name', 'last_name', 'email')
 
 
 class UMPasswordResetForm(PasswordResetForm):
