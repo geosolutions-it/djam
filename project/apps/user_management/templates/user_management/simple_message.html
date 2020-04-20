@@ -1,12 +1,74 @@
 {% extends 'user_management/base.html' %}
-{% load static %}
 
-{% block message %}
-    {% if message %}
-        <h3 class="message-header">{{ message|safe }}</h3>
-    {% endif %}
-    {% if error %}
-        <h4 class="message-error">{{ error|safe }}</h4>
-    {% endif %}
+{% block header_scripts %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'user_management/css/login.css' %}">
+
 {%  endblock %}
 
+
+
+    <!-- Left panel -->
+
+    {% block left_title %}
+    You've sucessfully registered
+    {% endblock left_title %}
+    
+    {% block left_subtitle %}
+    Sign in to lorem ipsum dolor sit amet, consectetur adipiscing elit
+    {% endblock left_subtitle %}
+
+    {% block left_image %}
+    <img class="main-image" src="{% static "user_management/img/test-laptop-man.png" %}"/>
+    {% endblock left_image %}
+
+
+    <!-- Right/ mobile panel -->
+
+    {% block right_action %}
+
+
+    <div class="sign-in-box common-input-form">
+        <div class="mapstand-avatar-box">
+            <img class="mapstand-avatar" src="{% static "user_management/img/default-avatar.png" %}"/>
+        </div>
+
+        <div class="sign-in-form">
+            <form role="form" method="post" action="{% url 'login' %}?{{ request.GET.urlencode }}">
+                {% csrf_token %}
+
+                <input type="text" id="username" name="username" placeholder="Enter your email address">
+
+
+                <input type="password" id="password" name="password" placeholder="Enter your password">
+            
+                <div class="lower-form">
+
+                    <div class="underform-box">
+                        <div class="underform-half-remember-me">
+                        <label class="check" for="checkbox"><input id="checkbox" type="checkbox"> &nbsp;&nbsp;&nbsp;Remember me </label>
+                        </div>
+                        <div class="underform-half-forgot-password">
+                        <a href="{% url 'password_reset' %}">Forgot password?</a>
+                        </div>
+                    </div>
+
+                </div>
+                        <br>
+                
+                <div class="submit-button-section">
+                    <input class="submit-button" type="submit" value="Sign in">
+                </div>
+                <div class="alternative-option-section">
+                    <p>Don't have an account?<a href="{% url 'register' %}"> Sign up</a></p>
+                </div>
+
+
+            </form>
+        </div>
+            
+        </div>
+    
+
+
+    {% endblock right_action %}

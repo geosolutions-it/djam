@@ -1,5 +1,17 @@
+.flex-right-half {
+  margin-top: 5vh;
+}
+
+.main-image {
+  bottom: -35px;
+}
+
 .right-title {
   height: 10vh;
+}
+
+.mapstand-logo-right {
+  display: none;
 }
 
 
