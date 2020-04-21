@@ -28,7 +28,7 @@
     </mj-section>
     <mj-section background-color="#fafafa">
       <mj-column width="400px" border="20px solid #ffffff" background-color="#ffffff" >
-        <mj-text font-style="italic" font-size="21px" color="#626262" align="center"font-weight="bold">Welcome to Mapstand!</mj-text>
+        <mj-text font-size="21px" color="#626262" align="center" font-weight="bold">Welcome to Mapstand!</mj-text>
         				 <mj-divider border-color="#609845" width="100px"></mj-divider>
 
         <mj-text color="#525252" font-size="14px" line-height="1.5">Thanks for joining the MapStand community. There's just one more step before you get to the fun part. Verify your email address by clicking the button below.</mj-text>
@@ -38,8 +38,7 @@
     </mj-section>
     <mj-section background-color="#fafafa">
       <mj-column>
-       <mj-text color="#525252" font-size="10px" align="center">© 2020  <a href="https://www.mapstand.com" class="website">MapStand Limited</a>. All rights reserved. <br></br>
-3 Waterhouse Square, 138 - 142 Holborn, London.</mj-text>
+       <mj-text color="#525252" font-size="10px" align="center">© 2020  <a href="https://www.mapstand.com" class="website">MapStand Limited</a>. All rights reserved. <br></br>3 Waterhouse Square, 138 - 142 Holborn, London.</mj-text>
 
       </mj-column>
     </mj-section>
