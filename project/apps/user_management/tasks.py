@@ -17,7 +17,6 @@ def send_activation_email(email, activation_url, sender=settings.DEFAULT_FROM_EM
         {
             'activation_url': activation_url,
             # TODO: change this once any server is deployed
-            'greeting_url': 'https://image.flaticon.com/icons/png/512/774/774502.png',
             'logo_url': 'https://mapstand-frontend-prod.s3-eu-west-2.amazonaws.com/images/logo-inverted.png',
         }
     )
@@ -73,3 +72,5 @@ def send_multi_alternatives_mail(
         email_message.attach_alternative(html_email, 'text/html')
 
     email_message.send()
+    print(email_template_name)
+    print(html_email_template_name)
