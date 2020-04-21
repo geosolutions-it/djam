@@ -8,7 +8,7 @@ from django.contrib.auth import get_user_model
 
 
 @dramatiq.actor(max_retries=3)
-def send_activation_email(email, activation_url, sender=settings.DEFAULT_FROM_EMAIL, subject="Activate Your Account"):
+def send_activation_email(email, activation_url, sender=settings.DEFAULT_FROM_EMAIL, subject="Activate your Mapstand Account"):
     # Email subject *must not* contain newlines
     subject = ''.join(subject.splitlines())
 
@@ -72,5 +72,4 @@ def send_multi_alternatives_mail(
         email_message.attach_alternative(html_email, 'text/html')
 
     email_message.send()
-    print(email_template_name)
-    print(html_email_template_name)
+

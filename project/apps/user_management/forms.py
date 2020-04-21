@@ -73,7 +73,7 @@ class UserAccountForm(ModelForm):
 class UMPasswordResetForm(PasswordResetForm):
 
     def send_mail(self, subject_template_name, email_template_name,
-                  context, from_email, to_email, html_email_template_name):
+                  context, from_email, to_email, html_email_template_name=None):
         """
         Function sending password reset email using Dramatiq
         """
@@ -108,6 +108,10 @@ class UMPasswordResetForm(PasswordResetForm):
         Generate a one-use only link for resetting password and send it to the
         user's email, which is registered in the database (case-sensitive).
         """
+        email_template_name = 'registration/password_reset_email_txt.html'
+
+        if not html_email_template_name:
+            html_email_template_name = 'registration/password_reset_email.html'
 
         email = self.cleaned_data["email"]
         for user in self.get_users(email):
@@ -128,11 +132,11 @@ class UMPasswordResetForm(PasswordResetForm):
                 'protocol': 'https' if use_https else 'http',
                 **(extra_email_context or {}),
             }
-
             self.send_mail(
                 subject_template_name, email_template_name, context, from_email,
-                user.email, html_email_template_name,
+                user.email, html_email_template_name=html_email_template_name,
             )
+
 
 
 
