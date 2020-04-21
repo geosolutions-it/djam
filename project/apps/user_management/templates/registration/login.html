@@ -38,10 +38,19 @@
                 {% csrf_token %}
 
                 <input type="text" id="username" name="username" placeholder="Enter your email address">
-
+                <div>
+                    {% for msg in form.username.errors %} 
+                    {{ msg }} 
+                    {% endfor %}
+                </div>
 
                 <input type="password" id="password" name="password" placeholder="Enter your password">
-            
+                <div class=form-error-message>
+                    {% if form.errors %}
+                    <p>Please enter a correct username and password. Note that both fields may be case-sensitive.</p>
+                    {% endif %}
+                </div>
+
                 <div class="lower-form">
 
                     <div class="underform-box">

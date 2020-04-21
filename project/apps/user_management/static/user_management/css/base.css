@@ -220,6 +220,12 @@ input:-webkit-autofill:active  {
     -webkit-box-shadow: 0 0 0 30px #f6f6f6 inset !important;
 }
 
+.form-error-message {
+  color: red;
+  font-size: 1em;
+  font-weight: bold;
+}
+
 
 @media only screen and (max-width: 1200px){
   .flex-container {

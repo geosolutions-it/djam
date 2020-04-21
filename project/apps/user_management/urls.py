@@ -1,5 +1,5 @@
 from django.urls import path, re_path, include
-from apps.user_management.views.account_page import AccountPageView, AccountEditView, UMLoginView
+from apps.user_management.views.account_page import AccountPageView, AccountEditView, UMLoginView, PasswordAccountEditView
 from django.contrib.auth import views as auth_views
 
 from apps.user_management.views.signup import SignupView
@@ -29,6 +29,11 @@ urlpatterns = [
         auth_views.PasswordChangeDoneView.as_view(template_name='account/password_change_done.html'),
         name='password_change_done',
     ),
+    # path(r'accounts/password_change/done/', AccountEditView.as_view(), name="user_account"),
+    # re_path(r'accounts/password_change/done/(?P<id>\w+)/', PasswordAccountEditView.as_view(template_name='account/password_change_done.html'), name='password_change_done'),
+
+
+
     path(
         'accounts/password_reset/',
         auth_views.PasswordResetView.as_view(form_class=UMPasswordResetForm),
@@ -52,17 +57,27 @@ urlpatterns = [
     # ---- end of: django.contrib.auth.urls.views ----
 
     path(r'user/register/', SignupView.as_view(), name='register'),
-    re_path(r'user/account/edit/(?P<id>\w+)/', AccountEditView.as_view(), name='user_account_edit'),
 
-    # First release views using AccountEditView as simpler until more profile features added then use the below commented out views
-    path(r'user/account/', AccountEditView.as_view(), name="user_account"),
-    re_path(r'user/account/(?P<id>\w+)/', AccountEditView.as_view(), name='user_account'),
-
-    # Commented out until other profile features are introduced. No point having these views until then.
-    # path(r'user/account/', AccountPageView.as_view(), name="user_account"),
-    # re_path(r'user/account/(?P<id>\w+)/', AccountPageView.as_view(), name='user_account'),
 
     path(r'user/activation_msg_sent/', EmailConfirmationSentView.as_view(), name='activation_msg_sent'),
     path(r'user/<uuid:user_uuid>/email_confirmation/', EmailConfirmationView.as_view(), name='email_confirmation'),
     path(r'user/resend_activation_email/', ResendVerificationEmailView.as_view(), name='resend_verification_email'),
+   
+   
+    re_path(r'user/account/edit/(?P<id>\w+)/', AccountEditView.as_view(), name='user_account_edit'),
+
+    re_path(r'user/account/edit2/(?P<id>\w+)/', AccountEditView.as_view(), name='user_account_edit_2'),
+
+
+
+    # First release views using AccountEditView as simpler until more profile features added then use the below commented out views
+    # path(r'user/account/', AccountEditView.as_view(), name="user_account"),
+    # re_path(r'user/account/(?P<id>\w+)/', AccountEditView.as_view(), name='user_account'),
+
+    # path(r'user/account2/', AccountEditView.as_view(), name="user_account"),
+    # re_path(r'user/account2/(?P<id>\w+)/', AccountEditView.as_view(), name='user_account'),
+
+    # Commented out until other profile features are introduced. No point having these views until then.
+    # path(r'user/account/', AccountPageView.as_view(), name="user_account"),
+    # re_path(r'user/account/(?P<id>\w+)/', AccountPageView.as_view(), name='user_account'),
 ]

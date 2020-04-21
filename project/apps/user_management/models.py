@@ -85,6 +85,15 @@ class User(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
     legacy_user_id = models.IntegerField(null=True, blank=False)
     consent = models.BooleanField(blank=True, null=True)
+    organisation = models.CharField(_('organisation'), max_length=150, blank=True)
+    job_title = models.CharField(_('job title'), max_length=150, blank=True)
+    linkedIn = models.URLField(_('linkedin'), max_length=250, blank=True)
+    twitter = models.URLField(_('twitter'), max_length=250, blank=True)
+    website = models.URLField(_('website'), max_length=250, blank=True)
+    phone_number = models.CharField(_('phone number'), max_length=25, blank=True)
+    about = models.CharField(_('about'), max_length=2000, blank=True)
+    keywords = models.CharField(_('keywords'), max_length=250, blank=True)
+    address = models.CharField(_('address'), max_length=250, blank=True)
 
     objects = UserManager()
 
