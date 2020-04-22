@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-virtualenv --no-site-packages -p /usr/bin/python3 venv_test
+python -m venv venv_test
 source venv_test/bin/activate
 pip install -r requirements.txt
 pip install -r requirements-dev.txt
