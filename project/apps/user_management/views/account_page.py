@@ -55,6 +55,7 @@ class AccountEditView(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
         return f'/user/account/{self.object.id}'
 
 
+
 class PasswordAccountEditView(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
     model = get_user_model()
     form_class = UserAccountForm
