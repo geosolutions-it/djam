@@ -78,6 +78,7 @@ class UMPasswordResetForm(PasswordResetForm):
         Function sending password reset email using Dramatiq
         """
         # User object is not serializable - has to be replaced for passing arguments to Dramatiq
+        # TODO: change logo_url once any server is deployed
         user = context.pop('user')
         context['username'] = user.get_username()
 
@@ -87,25 +88,30 @@ class UMPasswordResetForm(PasswordResetForm):
             context,
             from_email,
             to_email,
-            html_email_template_name=None
+            html_email_template_name
         )
 
     def save(
             self,
             domain_override=None,
             subject_template_name='registration/password_reset_subject.txt',
-            email_template_name='registration/password_reset_email.html',
+            email_template_name='registration/password_reset_email_txt.html',
             use_https=False,
             token_generator=default_token_generator,
             from_email=None,
             request=None,
-            html_email_template_name=None,
-            extra_email_context=None
+            html_email_template_name='registration/password_reset_email.html',
+            extra_email_context=None,
+            logo_url='https://mapstand-frontend-prod.s3-eu-west-2.amazonaws.com/images/logo-inverted.png'
     ):
         """
         Generate a one-use only link for resetting password and send it to the
         user's email, which is registered in the database (case-sensitive).
         """
+        email_template_name = 'registration/password_reset_email_txt.html'
+
+        if not html_email_template_name:
+            html_email_template_name = 'registration/password_reset_email.html'
 
         email = self.cleaned_data["email"]
         for user in self.get_users(email):
@@ -122,6 +128,7 @@ class UMPasswordResetForm(PasswordResetForm):
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                 'user': user,
                 'token': token_generator.make_token(user),
+                'logo_url': logo_url,
                 'protocol': 'https' if use_https else 'http',
                 **(extra_email_context or {}),
             }
@@ -129,6 +136,8 @@ class UMPasswordResetForm(PasswordResetForm):
                 subject_template_name, email_template_name, context, from_email,
                 user.email, html_email_template_name=html_email_template_name,
             )
+
+
 
 
 class UMAuthenticationForm(AuthenticationForm):
