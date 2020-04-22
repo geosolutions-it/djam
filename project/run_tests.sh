@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 export DJAM_PROJECT_ENVIRONMENT=test
 export DJAM_DB_NAME=
 export DJAM_DB_USER=
