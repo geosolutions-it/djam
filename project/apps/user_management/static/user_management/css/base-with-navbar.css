@@ -1,12 +1,11 @@
-
 /* turn scroll off */
-html, body {
-  margin: 0; 
-  height: 100%; 
-  width: 100%; 
+html,
+body {
+  margin: 0;
+  height: 100%;
+  width: 100%;
   overflow: hidden;
 }
-
 
 .base-navbar {
   position: relative;
@@ -27,7 +26,7 @@ html, body {
   width: 50%;
   text-align: left;
   padding-left: 30px;
-  padding-top: 15px;
+  padding-top: 7.5px;
 }
 
 .right-navbar-section {
@@ -38,27 +37,25 @@ html, body {
 
 }
 
-.base-navbar i {
+.right-link {
+  padding: 0 10px;
+}
+
+.right-link i {
   padding-right: 4px;
 }
 
-
-
-
-
-
-
 .flex-container {
-  display: flex; 
+  display: flex;
 }
 
 .flex-left-half {
-  width:50vw; 
-  height: calc(100vh - 60px); 
+  width: 50vw;
+  height: calc(100vh - 60px);
 
   /* height: 90vh;  */
 
-  background-color: #668B4E; 
+  background-color: #668B4E;
   /* background-position: center bottom;   */
   /* background-image: url(../img/test_background.png);  */
   /* background-repeat: no-repeat; 
@@ -66,30 +63,30 @@ html, body {
 }
 
 .flex-right-half {
-  width:50vw; 
-  height: calc(100vh - 60px) 
+  width: 50vw;
+  height: calc(100vh - 60px)
 }
 
 .logo-image {
-  position:absolute; 
+  position: absolute;
   /* margin: 30px; */
-  z-index:1; 
+  z-index: 1;
   /* border: red solid 1px; */
 }
 
 
-.logo-image img{
-  width:140px; 
+.logo-image img {
+  width: 140px;
 }
 
 .main-title {
   color: white;
-  height: calc(50vh - 60px); 
+  height: calc(50vh - 60px);
   padding-left: 60px;
   position: relative;
 }
 
-.main-title-text{
+.main-title-text {
   position: absolute;
   bottom: 0;
   font-size: 3em;
@@ -98,7 +95,7 @@ html, body {
 .sub-title {
   position: relative;
   color: white;
-  height: 6vh; 
+  height: 6vh;
   padding-left: 60px;
   padding-right: 60px;
 
@@ -110,9 +107,9 @@ html, body {
 }
 
 .main-image-section {
-position: relative;
-height: 40vh;
-/* align-items: center; */
+  position: relative;
+  height: 40vh;
+  /* align-items: center; */
 }
 
 .main-image {
@@ -140,7 +137,7 @@ height: 40vh;
   position: absolute;
   bottom: 0;
   width: 100%;
-  text-align:center;
+  text-align: center;
   color: #535353;
   display: none;
 
@@ -154,7 +151,7 @@ height: 40vh;
 
 }
 
-input[type="checkbox"]{
+input[type="checkbox"] {
   width: 15px;
   height: 15px;
   padding: 0;
@@ -167,12 +164,18 @@ input[type="checkbox"]{
 
 /* Turns off text highlighting by double clicking on labels */
 label {
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Old versions of Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-   user-select: none; /* Non-prefixed version, currently
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Old versions of Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
                                   supported by Chrome, Opera and Firefox */
 }
 
@@ -182,7 +185,7 @@ label {
   width: 100%;
 }
 
-.submit-button{
+.submit-button {
   /* border: red 2px solid; */
   width: 90%;
   height: 50px;
@@ -203,24 +206,20 @@ label {
   font-size: 1.2em;
 }
 
-.alternative-option-section p{
+.alternative-option-section p {
   color: grey;
   font-weight: 400;
 }
 
-.alternative-option-section a{
+.alternative-option-section a {
   color: grey;
   font-weight: 600;
   text-decoration: none;
 }
 
-.alternative-option-section a:hover{
+.alternative-option-section a:hover {
   color: #3a8ea8;
 }
-
-
-
-
 
 .mapstand-logo-right {
   width: 300px;
@@ -228,33 +227,36 @@ label {
   display: none;
 }
 
-
 .common-input-form input {
-  border:1px solid #e0e0e0;
+  border: 1px solid #e0e0e0;
 }
-
 
 *::-webkit-input-placeholder {
   color: #a5a5a5;
 }
+
 *:-moz-placeholder {
   /* FF 4-18 */
   color: #a5a5a5;
   opacity: 1;
 }
+
 *::-moz-placeholder {
   /* FF 19+ */
   color: #a5a5a5;
   opacity: 1;
 }
+
 *:-ms-input-placeholder {
   /* IE 10+ */
   color: #a5a5a5;
 }
+
 *::-ms-input-placeholder {
   /* Microsoft Edge */
   color: #a5a5a5;
 }
+
 *::placeholder {
   /* modern browser */
   color: #a5a5a5;
@@ -262,14 +264,14 @@ label {
 
 /* Changes the colour of chromes autofill input box */
 input:-webkit-autofill,
-input:-webkit-autofill:hover, 
-input:-webkit-autofill:focus, 
-input:-webkit-autofill:active  {
-    -webkit-box-shadow: 0 0 0 30px #f6f6f6 inset !important;
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px #f6f6f6 inset !important;
 }
 
 
-@media only screen and (max-width: 1200px){
+@media only screen and (max-width: 1200px) {
   .flex-container {
     flex-direction: column;
   }
@@ -279,22 +281,30 @@ input:-webkit-autofill:active  {
   }
 
   .flex-right-half {
-    width:80vw; 
+    width: 80vw;
     height: 80vh;
     margin: 10vw;
   }
 
-.mapstand-logo-right {
-  display: none;
-}
+  .mapstand-logo-right {
+    display: none;
+  }
+
+  .right-navbar-section {
+    padding-right: 10px;
+  }
+
+  .left-navbar-section {
+    padding-left: 10px;
+  }
 
 }
 
 
-@media only screen and (max-width: 800px){
+@media only screen and (max-width: 800px) {
 
   .flex-right-half {
-    width:90vw; 
+    width: 90vw;
     height: 80vh;
     margin: 5vw;
   }
@@ -302,11 +312,15 @@ input:-webkit-autofill:active  {
   .mapstand-logo-right {
     margin-top: 40px;
   }
+
+  .right-link b {
+    display: none;
+  }
 }
 
-@media only screen and (max-width: 1200px){
+@media only screen and (max-width: 1200px) {
   .flex-right-half {
-    width:100vw; 
+    width: 100vw;
     height: 80vh;
     margin: 0vw;
   }
@@ -320,5 +334,3 @@ input:-webkit-autofill:active  {
 
 
 }
-
-

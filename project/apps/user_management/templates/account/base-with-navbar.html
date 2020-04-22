@@ -11,8 +11,6 @@
 
     <script src="https://kit.fontawesome.com/d8ad894077.js" crossorigin="anonymous"></script>
 
-
-
     {% block header_scripts %}{% endblock header_scripts %}
 </head>
 
@@ -21,15 +19,21 @@
     <header>
         <nav class="base-navbar">
             <div class="left-navbar-section">
-                <a href="{% url 'logout' %}">
-                    Logout
+                <div class="logo-image">
+                    <a class="right-link" href="https://app.mapstand.com/">
+                        <img src="{% static "user_management/img/mapstand-white-logo.svg" %}"/>
                     </a>
+                </div>
             </div>
             <div class="right-navbar-section">
-            <a href="https://app.mapstand.com/">
-                <i class="fas fa-globe-europe fa-lg"></i>
-                Back to Map
-            </a>
+                <a class="right-link" href="https://app.mapstand.com/">
+                    <i class="fas fa-map-marked-alt fa-lg"></i>
+                    <b>Back to Map</b>
+                </a>
+                <a class="right-link" href="{% url 'logout' %}">
+                    <i class="fas fa-sign-out-alt fa-lg"></i>
+                   <b>Logout</b>
+                </a>
             </div>
         </nav>
     </header>
