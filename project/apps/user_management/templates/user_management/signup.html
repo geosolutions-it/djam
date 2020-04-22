@@ -14,6 +14,7 @@
     Join the community!
     {% endblock left_title %}
     
+    {% block left_subtitle %}
     Global oil & gas news and industry activities all on one platform.
     {% endblock left_subtitle %}
 
@@ -84,8 +85,8 @@
 
                         <div class="agree-to-terms">
                         <p>
-                            By clicking 'Sign Up', you agree to MapStand's <a href="https://www.mapstand.com/terms/">Terms of Use</a>
-                            & <a href="https://www.mapstand.com/privacy/">Privacy Policy</a>
+                            By clicking 'Sign Up', you agree to MapStand's <a class="signing-link" href="https://www.mapstand.com/terms/">Terms of Use</a>
+                            & <a class="signing-link" href="https://www.mapstand.com/privacy/">Privacy Policy</a>
                         </p>
                         </div>
                     </div>
@@ -96,7 +97,7 @@
                     <input class="submit-button" type="submit" value="Sign up">
                 </div>
                 <div class="alternative-option-section">
-                    <p>Already have an account?<a href="{% url 'login' %}"> Sign in</a></p>
+                    <p>Already have an account?<a class="signing-link" href="{% url 'login' %}"> Sign in</a></p>
                 </div>
 
 

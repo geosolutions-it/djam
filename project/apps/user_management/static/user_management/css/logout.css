@@ -18,7 +18,7 @@
   text-align: center;
 }
 
-.mapstand-avatar{
+.mapstand-avatar {
   margin: 40px;
   margin-top: 7vh;
 }
@@ -32,7 +32,8 @@
   text-align: center;
 }
 
-.sign-in-form #username, #password{
+.sign-in-form #username,
+#password {
   width: 90%;
   height: 50px;
   font-size: 1.2em;
@@ -40,19 +41,10 @@
   margin: 20px;
 }
 
-
-
-
-
-
-
 .underform-half-remember-me {
   width: 50%;
   text-align: left;
 }
-
-
-
 
 .underform-half-remember-me label {
   font-size: 1.1em;
@@ -61,7 +53,6 @@
   display: block;
 
 }
-
 
 .underform-half-forgot-password {
   width: 50%;
@@ -79,25 +70,34 @@
   color: #3a8ea8;
 }
 
+.signing-link {
+  font-weight: 700;
+  color: #3A8EA8 !important;
+  opacity: 0.8;
+}
+
+.signing-link:hover {
+  text-decoration: none;
+  opacity: 1.0;
+  color: #808080 !important;
+}
 
 
-
-
-@media only screen and (max-width: 800px){
-  .right-title{
+@media only screen and (max-width: 800px) {
+  .right-title {
     height: 25vh;
   }
 }
 
 
-@media only screen and (max-width: 700px){
+@media only screen and (max-width: 700px) {
   .sign-in-form {
     width: 100%;
     margin-left: 0px;
     margin-right: 0px;
   }
 
-  .right-title{
+  .right-title {
     height: 23vh;
   }
 

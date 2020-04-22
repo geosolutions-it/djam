@@ -1,4 +1,4 @@
-.main-image{
+.main-image {
     width: 50vw;
     opacity: 0.3;
     left: 0;
@@ -20,7 +20,7 @@
     text-align: center;
 }
 
-.mapstand-avatar{
+.mapstand-avatar {
     margin: 40px;
     margin-top: 7vh;
 }
@@ -34,7 +34,11 @@
     text-align: center;
 }
 
-.sign-up-form #id_first_name, #id_last_name, #id_email, #id_password1, #id_password2 {
+.sign-up-form #id_first_name,
+#id_last_name,
+#id_email,
+#id_password1,
+#id_password2 {
     width: 90%;
     height: 50px;
     font-size: 1.2em;
@@ -42,15 +46,13 @@
     margin: 1.7vh;
 }
 
-
-
 .underform-box {
-  display: block;
-  text-align: left;
-  margin-left: 0.6vw;
-  margin-top: 1vh;
+    display: block;
+    text-align: left;
+    margin-left: 0.6vw;
+    margin-top: 1vh;
 
-  }
+}
 
 .underform-box label {
     font-weight: 400;
@@ -58,13 +60,13 @@
     color: #727272;
 }
 
-.underform-box a{
+.underform-box a {
     font-weight: 700;
     color: #6a8685;
     text-decoration: none;
 }
 
-.underform-box a:hover{
+.underform-box a:hover {
     color: #4e8e92;
 }
 
@@ -86,73 +88,94 @@
     margin-bottom: 1vh;
 }
 
+.signing-link {
+    font-weight: 700;
+    color: #3A8EA8 !important;
+    opacity: 0.8;
+}
 
-@media only screen and (max-width: 1200px){
-    .flex-right-half{
-      /* margin-top: 2vh; */
+.signing-link:hover {
+    text-decoration: none;
+    opacity: 1.0;
+    color: #808080 !important;
+}
+
+@media only screen and (max-width: 1200px) {
+    .flex-right-half {
+        /* margin-top: 2vh; */
     }
+
     .right-title {
         position: absolute;
         left: 0;
         top: 0;
         text-align: left;
     }
-    .mapstand-logo-right{
+
+    .mapstand-logo-right {
         margin: 20px;
         width: 200px;
     }
-  }
+}
 
-@media only screen and (max-width: 700px){
+@media only screen and (max-width: 700px) {
     .sign-up-form {
         width: 90%;
         margin-left: 5%;
         margin-right: 5%;
-}
-
-.mapstand-avatar {
-    margin: 40px;
-    margin-top: 5vh;
-}
-
-.mapstand-avatar-box{
-    height: 15vh;
-}
-}
-
-@media only screen and (max-width: 500px){
-.sign-up-form {
-    width: 90%;
-    margin-left: 5%;
-    margin-right: 5%;
-}
-.mapstand-avatar {
-    width: 50px;
-    margin-top: 20px;
-}
-
-
-.mapstand-avatar-box {
-    text-align: right;
-    height: 12vh;
     }
-.mapstand-logo-right{
-    width: 180px;
-    margin-top: 20px;
-    margin-left: 30px;
+
+    .mapstand-avatar {
+        margin: 40px;
+        margin-top: 5vh;
+    }
+
+    .mapstand-avatar-box {
+        height: 15vh;
+    }
 }
 
-.sign-up-form #first-name, #last-name, #email, #password {
-    margin: 1.5vh;
-}
+@media only screen and (max-width: 500px) {
+    .sign-up-form {
+        width: 90%;
+        margin-left: 5%;
+        margin-right: 5%;
+    }
 
-.sign-up-form #first-name, #last-name, #email, #password {
-    font-size: 1.2em;
-}
-.underform-box label {
-    font-size: 1em;
-    text-align: left;
-}
+    .mapstand-avatar {
+        width: 50px;
+        margin-top: 20px;
+    }
 
+
+    .mapstand-avatar-box {
+        text-align: right;
+        height: 12vh;
+    }
+
+    .mapstand-logo-right {
+        width: 180px;
+        margin-top: 20px;
+        margin-left: 30px;
+    }
+
+    .sign-up-form #first-name,
+    #last-name,
+    #email,
+    #password {
+        margin: 1.5vh;
+    }
+
+    .sign-up-form #first-name,
+    #last-name,
+    #email,
+    #password {
+        font-size: 1.2em;
+    }
+
+    .underform-box label {
+        font-size: 1em;
+        text-align: left;
+    }
 }
 

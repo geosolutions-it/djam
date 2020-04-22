@@ -53,7 +53,7 @@
                         <label class="check" for="checkbox"><input id="checkbox" type="checkbox"> &nbsp;&nbsp;&nbsp;Remember me </label>
                         </div>
                         <div class="underform-half-forgot-password">
-                        <a href="{% url 'password_reset' %}">Forgot password?</a>
+                        <a class="signing-link" href="{% url 'password_reset' %}">Forgot password?</a>
                         </div>
                     </div>
 
@@ -64,7 +64,7 @@
                     <input class="submit-button" type="submit" value="Sign in">
                 </div>
                 <div class="alternative-option-section">
-                    <p>Don't have an account?<a href="{% url 'register' %}"> Sign up</a></p>
+                    <p>Don't have an account?<a class="signing-link" href="{% url 'register' %}"> Sign up</a></p>
                 </div>
 
 

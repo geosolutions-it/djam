@@ -7,19 +7,16 @@
   position: relative;
 }
 
-.mapstand-avatar-box {
-  position: relative;
+.top-image-box {
   width: 100%;
-  height: 20vh;
   text-align: center;
 }
 
-.mapstand-avatar {
-  margin: 40px;
-  margin-top: 7vh;
+.mail-image {
+  width: 250px;
 }
 
-.password-reset-form-box {
+.resend-email-form-box {
   width: 70%;
   margin-left: 15%;
   margin-right: 15%;
@@ -28,18 +25,18 @@
   text-align: center;
 }
 
-.password-reset-form-box h1 {
+.resend-email-form-box h1 {
   color: #8b8b8b;
   font-size: 3em;
 }
 
-.password-reset-form-box p {
+.resend-email-form-box p {
   color: #8b8b8b;
   font-size: 1.2em;
   margin-top: 5vh;
 }
 
-.password-reset-form-box #username,
+.resend-email-form-box #username,
 #password {
   width: 90%;
   height: 50px;
@@ -49,7 +46,7 @@
 }
 
 /* removes Email: label */
-.password-reset-form label {
+.resend-email-form label {
   display: none;
 }
 
@@ -59,16 +56,4 @@
   font-size: 1.2em;
   padding: 10px;
   margin: 20px;
-}
-
-.verification-link {
-  font-weight: 700;
-  color: #3A8EA8;
-  opacity: 0.8;
-}
-
-.verification-link:hover {
-  text-decoration: none;
-  opacity: 1.0;
-  color: #808080;
 }
