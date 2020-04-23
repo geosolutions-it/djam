@@ -2,7 +2,7 @@
 
 {% block header_scripts %}
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'user_management/css/logout.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'user_management/css/login.css' %}">
 
 {%  endblock %}
 
@@ -33,7 +33,8 @@
             <img class="mapstand-avatar" src="{% static "user_management/img/default-avatar.png" %}"/>
         </div>
 
-        <div class="sign-in-form"> 
+        <div class="sign-in-form">
+            <h1>Sign in to MapStand</h1> 
             <form role="form" method="post" action="{% url 'login' %}?{{ request.GET.urlencode }}">
                 {% csrf_token %}
 

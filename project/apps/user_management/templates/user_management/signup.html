@@ -34,10 +34,11 @@
         </div>
 
         <div class="sign-up-form">
+            <h1>Create your account</h1>
             <form role="form" method="post" action="{% url 'register' %}">
                 {% csrf_token %}
 
-                <input type="text" id="id_first_name" name="first_name" placeholder="Enter your first name">
+                <input type="text" id="id_first_name" name="first_name" required placeholder="Enter your first name">
                 <div>
                     {% for msg in form.first_name.errors %} 
                     {{ msg }} 
@@ -45,7 +46,7 @@
                 </div>
 
                 
-                <input type="text" id="id_last_name" name="last_name" placeholder="Enter your last name">
+                <input type="text" id="id_last_name" name="last_name" required placeholder="Enter your last name">
                 <div>
                     {% for msg in form.last_name.errors %} 
                     {{ msg }} 
@@ -53,14 +54,14 @@
                 </div>
                 
 
-                <input type="text" id="id_email" name="email" placeholder="Enter your email address">
+                <input type="text" id="id_email" name="email" required placeholder="Enter your email address">
                 <div>
                 {% for msg in form.email.errors %} 
                 {{ msg }} 
                 {% endfor %}
                 </div>
 
-                <input type="password" id="id_password1" name="password1" placeholder="Enter your password">
+                <input type="password" id="id_password1" name="password1" required placeholder="Enter your password">
                 <div>
                     {% for msg in form.password1.errors %} 
                     {{ msg }} 
@@ -68,7 +69,7 @@
                 </div>
                 
 
-                <input type="password" id="id_password2" name="password2" placeholder="Enter your password (again)">
+                <input type="password" id="id_password2" name="password2" required placeholder="Enter your password (again)">
                 <div>
                     {% for msg in form.password2.errors %} 
                     {{ msg }} 

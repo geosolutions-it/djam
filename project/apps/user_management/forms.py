@@ -54,7 +54,7 @@ class ResendActivationEmailForm(forms.Form):
             get_user_model().objects.get(email=data)
         except ObjectDoesNotExist:
             logger.error(f'ResendActivationEmailForm: Validation error - no user found with "{data}" email')
-            raise forms.ValidationError('No user found with registered email.')
+            raise forms.ValidationError('No user found with that email!')
 
         return data
 

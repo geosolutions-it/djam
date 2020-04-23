@@ -34,6 +34,11 @@
     text-align: center;
 }
 
+.sign-up-form h1 {
+    color: #8b8b8b;
+    font-size: 3em;
+}
+
 .sign-up-form #id_first_name,
 #id_last_name,
 #id_email,
@@ -120,9 +125,11 @@
 
 @media only screen and (max-width: 700px) {
     .sign-up-form {
+        right: 5px;
+        left: 5px;
+        margin-left: 15px;
+        margin-right: 15px;
         width: 90%;
-        margin-left: 5%;
-        margin-right: 5%;
     }
 
     .mapstand-avatar {
@@ -136,46 +143,51 @@
 }
 
 @media only screen and (max-width: 500px) {
+
+    .right-title {
+        height: auto !important;
+        position: relative;
+        text-align: center;
+    }
+
     .sign-up-form {
         width: 90%;
-        margin-left: 5%;
-        margin-right: 5%;
     }
-
-    .mapstand-avatar {
-        width: 50px;
-        margin-top: 20px;
-    }
-
 
     .mapstand-avatar-box {
-        text-align: right;
-        height: 12vh;
+        display: none;
     }
 
     .mapstand-logo-right {
-        width: 180px;
-        margin-top: 20px;
-        margin-left: 30px;
+        width: 200px;
+        margin: 10px 0 10px 0;
     }
 
-    .sign-up-form #first-name,
-    #last-name,
-    #email,
-    #password {
-        margin: 1.5vh;
-    }
-
-    .sign-up-form #first-name,
-    #last-name,
-    #email,
-    #password {
+    .sign-up-form #id_first_name,
+    #id_last_name,
+    #id_email,
+    #id_password1,
+    #id_password2 {
         font-size: 1.2em;
+        margin: 1vh;
+    }
+
+    .sign-up-form h1 {
+        font-size: 2em;
     }
 
     .underform-box label {
         font-size: 1em;
         text-align: left;
     }
-}
+    .underform-box .agree-to-terms {
+        margin-top: 1vh;    
+    }
 
+    .sign-up-form {
+        overflow: auto;
+        overscroll-behavior-y: contain;
+        overflow-x: hidden;
+        height: 90vh;
+    }
+}

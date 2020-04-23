@@ -34,17 +34,18 @@
         </div>
 
         <div class="sign-in-form">
+            <h1>Sign in to MapStand</h1>
             <form role="form" method="post" action="{% url 'login' %}?{{ request.GET.urlencode }}">
                 {% csrf_token %}
 
-                <input type="text" id="username" name="username" placeholder="Enter your email address">
+                <input type="text" id="username" name="username" required placeholder="Enter your email address">
                 <div>
                     {% for msg in form.username.errors %} 
                     {{ msg }} 
                     {% endfor %}
                 </div>
 
-                <input type="password" id="password" name="password" placeholder="Enter your password">
+                <input type="password" id="password" name="password" required placeholder="Enter your password">
                 <div class=form-error-message>
                     {% if form.errors %}
                     <p>Please enter a correct username and password. Note that both fields may be case-sensitive.</p>
@@ -55,7 +56,7 @@
 
                     <div class="underform-box">
                         <div class="underform-half-remember-me">
-                        <label class="check" for="checkbox"><input id="checkbox" type="checkbox"> &nbsp;&nbsp;&nbsp;Remember me </label>
+                        <label class="check" for="checkbox"><input id="checkbox" type="checkbox"> &nbsp;Remember me </label>
                         </div>
                         <div class="underform-half-forgot-password">
                         <a class="signing-link" href="{% url 'password_reset' %}">Forgot password?</a>
