@@ -8,22 +8,32 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Session',
+            name="Session",
             fields=[
-                ('session_key', models.CharField(max_length=40, primary_key=True, serialize=False, verbose_name='session key')),
-                ('session_data', models.TextField(verbose_name='session data')),
-                ('expire_date', models.DateTimeField(db_index=True, verbose_name='expire date')),
-                ('uuid', models.UUIDField(db_index=True, default=uuid.uuid4)),
+                (
+                    "session_key",
+                    models.CharField(
+                        max_length=40,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="session key",
+                    ),
+                ),
+                ("session_data", models.TextField(verbose_name="session data")),
+                (
+                    "expire_date",
+                    models.DateTimeField(db_index=True, verbose_name="expire date"),
+                ),
+                ("uuid", models.UUIDField(db_index=True, default=uuid.uuid4)),
             ],
             options={
-                'verbose_name': 'session',
-                'verbose_name_plural': 'sessions',
-                'abstract': False,
+                "verbose_name": "session",
+                "verbose_name_plural": "sessions",
+                "abstract": False,
             },
         ),
     ]

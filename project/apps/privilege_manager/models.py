@@ -18,6 +18,7 @@ class Group(models.Model):
     """
     v1 version of AuthZ Group model of Djam - for MVP only RBAC is supported
     """
+
     name = models.CharField(max_length=30)
     users = models.ManyToManyField(get_user_model(), blank=True)
 
@@ -34,7 +35,9 @@ def assign_user_to_default_permission_group(sender, instance, created, **kwargs)
         )
 
         try:
-            default_group = Group.objects.get(name=settings.DEFAULT_USER_PERMISSION_GROUP_NAME)
+            default_group = Group.objects.get(
+                name=settings.DEFAULT_USER_PERMISSION_GROUP_NAME
+            )
         except models.ObjectDoesNotExist:
             logging.info(
                 f'User Creation: No "{settings.DEFAULT_USER_PERMISSION_GROUP_NAME}" group found. '
@@ -50,12 +53,13 @@ class OpenIdLoginPrevention(models.Model):
     """
     v1 internal Djam policy enforcer preventing OIDC login to certain clients
     """
+
     oidc_client = models.OneToOneField(Client, on_delete=models.CASCADE)
     groups = models.ManyToManyField(Group, blank=True)
 
     class Meta:
-        verbose_name = 'OpenID Login Prevention'
-        verbose_name_plural = 'OpenID Login Preventions'
+        verbose_name = "OpenID Login Prevention"
+        verbose_name_plural = "OpenID Login Preventions"
 
     def __str__(self):
         return self.oidc_client.name

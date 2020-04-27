@@ -7,13 +7,18 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('user_management', '0001_initial'),
+        ("user_management", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='user',
-            name='email',
-            field=apps.user_management.models.CaseInsensitiveEmailField(error_messages={'unique': 'A user with that email already exists.'}, max_length=254, unique=True, verbose_name='email address'),
+            model_name="user",
+            name="email",
+            field=apps.user_management.models.CaseInsensitiveEmailField(
+                error_messages={"unique": "A user with that email already exists."},
+                max_length=254,
+                unique=True,
+                verbose_name="email address",
+            ),
         ),
     ]

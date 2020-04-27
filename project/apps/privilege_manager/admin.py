@@ -10,6 +10,6 @@ admin.site.register(OpenIdLoginPrevention)
 
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
-    list_display = ('name',)
-    ordering = ('name',)
-    search_fields = ('name',)
+    list_display = ("name",)
+    ordering = ("name",)
+    search_fields = ("name",)

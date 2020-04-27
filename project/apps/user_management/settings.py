@@ -1,8 +1,7 @@
-
 AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
+    "django.contrib.auth.backends.ModelBackend",
     # enable email based login
-    'apps.user_management.auth_backends.AuthenticationEmailBackend'
+    "apps.user_management.auth_backends.AuthenticationEmailBackend",
 )
 
 # ---- Registration flow modifiers ----

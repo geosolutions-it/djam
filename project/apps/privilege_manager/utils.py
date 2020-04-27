@@ -14,7 +14,9 @@ def has_login_permission(user, oidc_client_id):
     """
 
     try:
-        preventions = OpenIdLoginPrevention.objects.get(oidc_client__client_id=oidc_client_id)
+        preventions = OpenIdLoginPrevention.objects.get(
+            oidc_client__client_id=oidc_client_id
+        )
     except ObjectDoesNotExist:
         # if the Client has no preventions registered, allow login
         return True, None
@@ -28,6 +30,10 @@ def has_login_permission(user, oidc_client_id):
     if groups_allowed.intersection(user_groups):
         has_permission = True
 
-    message = "Your subscription does not allow this login. You need to upgrade your subscription to continue." if not has_permission else None
+    message = (
+        "Your subscription does not allow this login. You need to upgrade your subscription to continue."
+        if not has_permission
+        else None
+    )
 
     return has_permission, message

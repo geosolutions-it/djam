@@ -10,17 +10,37 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('identity_provider', '0003_auto_20200211_1024'),
+        ("identity_provider", "0003_auto_20200211_1024"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ApiKey',
+            name="ApiKey",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('key', models.UUIDField(default=uuid.uuid4)),
-                ('revoked', models.BooleanField(default=False, help_text='If the API key is revoked, clients cannot use it.')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("key", models.UUIDField(default=uuid.uuid4)),
+                (
+                    "revoked",
+                    models.BooleanField(
+                        default=False,
+                        help_text="If the API key is revoked, clients cannot use it.",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

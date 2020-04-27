@@ -9,5 +9,5 @@ DRAMATIQ_BROKER = {
         "dramatiq.middleware.Retries",
         "django_dramatiq.middleware.AdminMiddleware",
         "django_dramatiq.middleware.DbConnectionsMiddleware",
-    ]
+    ],
 }

@@ -28,12 +28,13 @@ class CaseInsensitiveFieldMixin:
     Field mixin that uses case-insensitive lookup alternatives if they exist, but stores the original value.
     Note: Lookups that do not have case-insensitive versions (e.g. “in”) will not be case-insensitive.
     """
+
     LOOKUP_CONVERSIONS = {
-        'exact': 'iexact',
-        'contains': 'icontains',
-        'startswith': 'istartswith',
-        'endswith': 'iendswith',
-        'regex': 'iregex',
+        "exact": "iexact",
+        "contains": "icontains",
+        "startswith": "istartswith",
+        "endswith": "iendswith",
+        "regex": "iregex",
     }
 
     def get_lookup(self, lookup_name):
@@ -49,53 +50,50 @@ class User(AbstractBaseUser, PermissionsMixin):
     username_validator = UnicodeUsernameValidator()
 
     username = models.CharField(
-        _('username'),
+        _("username"),
         max_length=150,
         unique=True,
-        help_text=_('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
+        help_text=_(
+            "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
+        ),
         validators=[username_validator],
-        error_messages={
-            'unique': _("A user with that username already exists."),
-        },
+        error_messages={"unique": _("A user with that username already exists."),},
     )
-    first_name = models.CharField(_('first name'), max_length=30, blank=True)
-    last_name = models.CharField(_('last name'), max_length=150, blank=True)
+    first_name = models.CharField(_("first name"), max_length=30, blank=True)
+    last_name = models.CharField(_("last name"), max_length=150, blank=True)
     email = CaseInsensitiveEmailField(
-        _('email address'),
+        _("email address"),
         unique=True,
-        error_messages={
-            'unique': _("A user with that email already exists."),
-        },
+        error_messages={"unique": _("A user with that email already exists."),},
     )
     email_confirmed = models.BooleanField(default=False)
     uuid = models.UUIDField(default=uuid.uuid4, unique=True)
     is_staff = models.BooleanField(
-        _('staff status'),
+        _("staff status"),
         default=False,
-        help_text=_('Designates whether the user can log into this admin sites.'),
+        help_text=_("Designates whether the user can log into this admin sites."),
     )
     is_active = models.BooleanField(
-        _('active'),
+        _("active"),
         default=False,
         help_text=_(
-            'Designates whether this user should be treated as active. '
-            'Unselect this instead of deleting accounts.'
+            "Designates whether this user should be treated as active. "
+            "Unselect this instead of deleting accounts."
         ),
     )
-    date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
+    date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
     legacy_user_id = models.IntegerField(null=True, blank=False)
     consent = models.BooleanField(blank=True, null=True)
 
-
     objects = UserManager()
 
-    EMAIL_FIELD = 'email'
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email']
+    EMAIL_FIELD = "email"
+    USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = ["email"]
 
     class Meta:
-        verbose_name = _('user')
-        verbose_name_plural = _('users')
+        verbose_name = _("user")
+        verbose_name_plural = _("users")
 
     def clean(self):
         super().clean()
@@ -107,7 +105,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         """
         Return the first_name plus the last_name, with a space in between.
         """
-        full_name = '%s %s' % (self.first_name, self.last_name)
+        full_name = "%s %s" % (self.first_name, self.last_name)
         return full_name.strip()
 
     def get_short_name(self):
@@ -149,11 +147,11 @@ def registration_moderation_send_activation_email(sender, instance, **kwargs):
     if instance.is_active and not db_user.is_active:
         # if user has just been activated by app's staff member, notify them
         notification_task = send_user_notification_email.send(
-            'Your account was activated by our staff. From now on you can login to our application :)',
+            "Your account was activated by our staff. From now on you can login to our application :)",
             [db_user.email],
             subject="Your account is active!",
         )
         logger.info(
             f'Registration with moderation: Account activation notification email queued to be sent to "{db_user.email}". '
-            f'Dramatiq message_id: {notification_task.message_id}'
+            f"Dramatiq message_id: {notification_task.message_id}"
         )

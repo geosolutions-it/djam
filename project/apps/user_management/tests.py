@@ -29,7 +29,6 @@ class UserTests(TestCase):
 
 
 class UserActivationCodeTests(TestCase):
-
     def create_user_activation(self):
         u = create_user(email="johnsmith@example.net")
         ua = UserActivationCode(user=u)
@@ -49,14 +48,12 @@ class UserActivationCodeTests(TestCase):
 class UserPostSaveActivationCode(TestCase):
     def test_user_activation_post_hook(self):
         u = create_user(email="johnsmith@example.net")
-        self.assertEquals(
-            1,
-            UserActivationCode.objects.filter(user=u).count()
-        )
+        self.assertEquals(1, UserActivationCode.objects.filter(user=u).count())
+
 
 class UserPreSaveActivationEmail(TestCase):
     def test_user_activation_pre_hook(self):
-        # TODO - This pre hook may need 
+        # TODO - This pre hook may need
         # refactoring and something like DI
         # so we can mock and test
         pass
