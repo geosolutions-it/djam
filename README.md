@@ -185,3 +185,4 @@ In your settings.json:
     "python.linting.banditEnabled": true,
 }
 ```
+
