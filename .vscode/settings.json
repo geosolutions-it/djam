@@ -4,7 +4,7 @@
     "python.linting.enabled": true,
     "python.linting.banditEnabled": true,
     "python.formatting.provider": "black",
-    "editor.formatOnSave": false,
+    "editor.formatOnSave": true,
     "editor.rulers": [88],
     "editor.minimap.side": "right",
 }
