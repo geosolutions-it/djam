@@ -9,13 +9,17 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('identity_provider', '0004_apikey'),
+        ("identity_provider", "0004_apikey"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='apikey',
-            name='user',
-            field=models.ForeignKey(help_text="API key will have the same privilege groups as it's owner.", on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="apikey",
+            name="user",
+            field=models.ForeignKey(
+                help_text="API key will have the same privilege groups as it's owner.",
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

@@ -26,13 +26,13 @@ SECRET_KEY = os.getenv("DJAM_SECRET_KEY")
 DEBUG = False
 ALLOWED_HOSTS = []
 
-ROOT_URLCONF = 'urls'
+ROOT_URLCONF = "urls"
 
-WSGI_APPLICATION = 'wsgi.application'
+WSGI_APPLICATION = "wsgi.application"
 
-AUTH_USER_MODEL = 'user_management.User'
+AUTH_USER_MODEL = "user_management.User"
 
-SESSION_COOKIE_NAME = 'djam_sessionid'
-LOGIN_REDIRECT_URL = '/user/account/edit/'
+SESSION_COOKIE_NAME = "djam_sessionid"
+LOGIN_REDIRECT_URL = "/user/account/edit/"
 
-HOME_VIEW = os.getenv('DJAM_HOME_VIEW', 'login')
+HOME_VIEW = os.getenv("DJAM_HOME_VIEW", "login")

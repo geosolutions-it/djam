@@ -1,2 +1,1 @@
-
-SESSION_ENGINE = 'apps.identity_provider.session_backend'
+SESSION_ENGINE = "apps.identity_provider.session_backend"

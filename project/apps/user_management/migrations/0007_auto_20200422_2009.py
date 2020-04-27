@@ -6,44 +6,17 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('user_management', '0006_auto_20200421_1646'),
+        ("user_management", "0006_auto_20200421_1646"),
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='user',
-            name='about',
-        ),
-        migrations.RemoveField(
-            model_name='user',
-            name='address',
-        ),
-        migrations.RemoveField(
-            model_name='user',
-            name='job_title',
-        ),
-        migrations.RemoveField(
-            model_name='user',
-            name='keywords',
-        ),
-        migrations.RemoveField(
-            model_name='user',
-            name='linkedIn',
-        ),
-        migrations.RemoveField(
-            model_name='user',
-            name='organisation',
-        ),
-        migrations.RemoveField(
-            model_name='user',
-            name='phone_number',
-        ),
-        migrations.RemoveField(
-            model_name='user',
-            name='twitter',
-        ),
-        migrations.RemoveField(
-            model_name='user',
-            name='website',
-        ),
+        migrations.RemoveField(model_name="user", name="about",),
+        migrations.RemoveField(model_name="user", name="address",),
+        migrations.RemoveField(model_name="user", name="job_title",),
+        migrations.RemoveField(model_name="user", name="keywords",),
+        migrations.RemoveField(model_name="user", name="linkedIn",),
+        migrations.RemoveField(model_name="user", name="organisation",),
+        migrations.RemoveField(model_name="user", name="phone_number",),
+        migrations.RemoveField(model_name="user", name="twitter",),
+        migrations.RemoveField(model_name="user", name="website",),
     ]

@@ -6,53 +6,59 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('user_management', '0005_auto_20200218_1405'),
+        ("user_management", "0005_auto_20200218_1405"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='about',
-            field=models.CharField(blank=True, max_length=2000, verbose_name='about'),
+            model_name="user",
+            name="about",
+            field=models.CharField(blank=True, max_length=2000, verbose_name="about"),
         ),
         migrations.AddField(
-            model_name='user',
-            name='address',
-            field=models.CharField(blank=True, max_length=250, verbose_name='address'),
+            model_name="user",
+            name="address",
+            field=models.CharField(blank=True, max_length=250, verbose_name="address"),
         ),
         migrations.AddField(
-            model_name='user',
-            name='job_title',
-            field=models.CharField(blank=True, max_length=150, verbose_name='job title'),
+            model_name="user",
+            name="job_title",
+            field=models.CharField(
+                blank=True, max_length=150, verbose_name="job title"
+            ),
         ),
         migrations.AddField(
-            model_name='user',
-            name='keywords',
-            field=models.CharField(blank=True, max_length=250, verbose_name='keywords'),
+            model_name="user",
+            name="keywords",
+            field=models.CharField(blank=True, max_length=250, verbose_name="keywords"),
         ),
         migrations.AddField(
-            model_name='user',
-            name='linkedIn',
-            field=models.URLField(blank=True, max_length=250, verbose_name='linkedin'),
+            model_name="user",
+            name="linkedIn",
+            field=models.URLField(blank=True, max_length=250, verbose_name="linkedin"),
         ),
         migrations.AddField(
-            model_name='user',
-            name='organisation',
-            field=models.CharField(blank=True, max_length=150, verbose_name='organisation'),
+            model_name="user",
+            name="organisation",
+            field=models.CharField(
+                blank=True, max_length=150, verbose_name="organisation"
+            ),
         ),
         migrations.AddField(
-            model_name='user',
-            name='phone_number',
-            field=models.CharField(blank=True, max_length=25, verbose_name='phone number'),
+            model_name="user",
+            name="phone_number",
+            field=models.CharField(
+                blank=True, max_length=25, verbose_name="phone number"
+            ),
         ),
         migrations.AddField(
-            model_name='user',
-            name='twitter',
-            field=models.URLField(blank=True, max_length=250, verbose_name='twitter'),
+            model_name="user",
+            name="twitter",
+            field=models.URLField(blank=True, max_length=250, verbose_name="twitter"),
         ),
         migrations.AddField(
-            model_name='user',
-            name='website',
-            field=models.URLField(blank=True, max_length=250, verbose_name='website'),
+            model_name="user",
+            name="website",
+            field=models.URLField(blank=True, max_length=250, verbose_name="website"),
         ),
     ]

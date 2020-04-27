@@ -1,9 +1,10 @@
 {
     "python.pythonPath": "venv/bin/python",
-    "python.linting.flake8Path": "venv/bin/flake8",
     "python.linting.banditPath": "venv/bin/bandit",
     "python.linting.enabled": true,
-    "python.linting.flake8Enabled": true,
     "python.linting.banditEnabled": true,
-    "editor.rulers": [119],
+    "python.formatting.provider": "black",
+    "editor.formatOnSave": true,
+    "editor.rulers": [88],
+    "editor.minimap.side": "right",
 }

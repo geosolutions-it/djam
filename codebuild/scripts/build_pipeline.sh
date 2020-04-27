@@ -16,6 +16,7 @@ coverage report --fail-under=80
 cd -
 
 # Add black tests
+black --check project/
 
 deactivate
 rm -rf venv_test

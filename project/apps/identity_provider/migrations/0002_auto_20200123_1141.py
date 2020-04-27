@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('identity_provider', '0001_initial'),
+        ("identity_provider", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='session',
-            name='oidp_code',
+            model_name="session",
+            name="oidp_code",
             field=models.CharField(max_length=256, null=True),
         ),
         migrations.AddField(
-            model_name='session',
-            name='user_id',
+            model_name="session",
+            name="user_id",
             field=models.IntegerField(db_index=True, null=True),
         ),
     ]

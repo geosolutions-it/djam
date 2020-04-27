@@ -4,7 +4,13 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordResetForm, AuthenticationForm, PasswordChangeForm
+from django.contrib.auth.forms import (
+    UserCreationForm,
+    UserChangeForm,
+    PasswordResetForm,
+    AuthenticationForm,
+    PasswordChangeForm,
+)
 from django.forms import ModelForm
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
@@ -23,38 +29,51 @@ logger = logging.getLogger(__name__)
 class UMUserCreationForm(UserCreationForm):
     first_name = forms.CharField(max_length=50, required=True)
     last_name = forms.CharField(max_length=50, required=True)
-    email = forms.EmailField(max_length=254, help_text='Required. Input a valid email address.')
+    email = forms.EmailField(
+        max_length=254, help_text="Required. Input a valid email address."
+    )
     consent = forms.BooleanField(required=False)
 
     class Meta:
         model = get_user_model()
-        fields = ('first_name', 'last_name', 'email', 'password1', 'password2', 'consent',)
+        fields = (
+            "first_name",
+            "last_name",
+            "email",
+            "password1",
+            "password2",
+            "consent",
+        )
 
 
 class UMAdminUserCreationForm(UserCreationForm):
     class Meta:
         model = get_user_model()
-        fields = ('email', )
+        fields = ("email",)
 
 
 class UMAdminUserChangeForm(UserChangeForm):
     class Meta:
         model = get_user_model()
-        fields = '__all__'
+        fields = "__all__"
         field_classes = {}
 
 
 class ResendActivationEmailForm(forms.Form):
-    email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
+    email = forms.EmailField(
+        max_length=254, help_text="Required. Inform a valid email address."
+    )
 
     def clean_email(self):
-        data = self.cleaned_data.get('email')
+        data = self.cleaned_data.get("email")
 
         try:
             get_user_model().objects.get(email=data)
         except ObjectDoesNotExist:
-            logger.error(f'ResendActivationEmailForm: Validation error - no user found with "{data}" email')
-            raise forms.ValidationError('No user found with that email!')
+            logger.error(
+                f'ResendActivationEmailForm: Validation error - no user found with "{data}" email'
+            )
+            raise forms.ValidationError("No user found with that email!")
 
         return data
 
@@ -64,23 +83,28 @@ class UserAccountForm(ModelForm):
     first_name = forms.CharField(max_length=150, required=False)
     email = forms.CharField(max_length=150, required=False)
 
-
     class Meta:
         model = get_user_model()
-        fields = ('first_name', 'last_name', 'email')
+        fields = ("first_name", "last_name", "email")
 
 
 class UMPasswordResetForm(PasswordResetForm):
-
-    def send_mail(self, subject_template_name, email_template_name,
-                  context, from_email, to_email, html_email_template_name=None):
+    def send_mail(
+        self,
+        subject_template_name,
+        email_template_name,
+        context,
+        from_email,
+        to_email,
+        html_email_template_name=None,
+    ):
         """
         Function sending password reset email using Dramatiq
         """
         # User object is not serializable - has to be replaced for passing arguments to Dramatiq
         # TODO: change logo_url once any server is deployed
-        user = context.pop('user')
-        context['username'] = user.get_username()
+        user = context.pop("user")
+        context["username"] = user.get_username()
 
         send_multi_alternatives_mail.send(
             subject_template_name,
@@ -88,30 +112,30 @@ class UMPasswordResetForm(PasswordResetForm):
             context,
             from_email,
             to_email,
-            html_email_template_name
+            html_email_template_name,
         )
 
     def save(
-            self,
-            domain_override=None,
-            subject_template_name='registration/password_reset_subject.txt',
-            email_template_name='registration/password_reset_email_txt.html',
-            use_https=False,
-            token_generator=default_token_generator,
-            from_email=None,
-            request=None,
-            html_email_template_name='registration/password_reset_email.html',
-            extra_email_context=None,
-            logo_url='https://mapstand-frontend-prod.s3-eu-west-2.amazonaws.com/images/logo-inverted.png'
+        self,
+        domain_override=None,
+        subject_template_name="registration/password_reset_subject.txt",
+        email_template_name="registration/password_reset_email_txt.html",
+        use_https=False,
+        token_generator=default_token_generator,
+        from_email=None,
+        request=None,
+        html_email_template_name="registration/password_reset_email.html",
+        extra_email_context=None,
+        logo_url="https://mapstand-frontend-prod.s3-eu-west-2.amazonaws.com/images/logo-inverted.png",
     ):
         """
         Generate a one-use only link for resetting password and send it to the
         user's email, which is registered in the database (case-sensitive).
         """
-        email_template_name = 'registration/password_reset_email_txt.html'
+        email_template_name = "registration/password_reset_email_txt.html"
 
         if not html_email_template_name:
-            html_email_template_name = 'registration/password_reset_email.html'
+            html_email_template_name = "registration/password_reset_email.html"
 
         email = self.cleaned_data["email"]
         for user in self.get_users(email):
@@ -122,26 +146,27 @@ class UMPasswordResetForm(PasswordResetForm):
             else:
                 site_name = domain = domain_override
             context = {
-                'email': user.email,
-                'domain': domain,
-                'site_name': site_name,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                'user': user,
-                'token': token_generator.make_token(user),
-                'logo_url': logo_url,
-                'protocol': 'https' if use_https else 'http',
+                "email": user.email,
+                "domain": domain,
+                "site_name": site_name,
+                "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                "user": user,
+                "token": token_generator.make_token(user),
+                "logo_url": logo_url,
+                "protocol": "https" if use_https else "http",
                 **(extra_email_context or {}),
             }
             self.send_mail(
-                subject_template_name, email_template_name, context, from_email,
-                user.email, html_email_template_name=html_email_template_name,
+                subject_template_name,
+                email_template_name,
+                context,
+                from_email,
+                user.email,
+                html_email_template_name=html_email_template_name,
             )
 
 
-
-
 class UMAuthenticationForm(AuthenticationForm):
-
     def confirm_login_allowed(self, user):
         """
         Controls whether the given User may log in. This is a policy setting,
@@ -155,8 +180,7 @@ class UMAuthenticationForm(AuthenticationForm):
         """
         if not user.is_active:
             raise forms.ValidationError(
-                self.error_messages['inactive'],
-                code='inactive',
+                self.error_messages["inactive"], code="inactive",
             )
 
         if settings.REGISTRATION_EMAIL_CONFIRMATION:
@@ -166,16 +190,20 @@ class UMAuthenticationForm(AuthenticationForm):
                     # Error message cannot be added to self.error_messages, as usage of reverse() function at a class definition level causes
                     # in this case form import error.
                     _(
-                        f'Please confirm your email before continuation.'
+                        f"Please confirm your email before continuation."
                         f'Do you want to <a href="{reverse("resend_verification_email")}">re-send activation email</a>?'
                     ),
-                    code='email_not_confirmed',
+                    code="email_not_confirmed",
                 )
 
+
 class CustomChangePasswordForm(PasswordChangeForm):
-    old_password = forms.CharField(widget=PasswordInput(attrs={'placeholder':'Enter your old password'}))
-    new_password1 = forms.CharField(widget=PasswordInput(attrs={'placeholder':'Enter your new password'}))
-    new_password2 = forms.CharField(widget=PasswordInput(attrs={'placeholder':'Enter your new password (again)'}))
-
-
-    
+    old_password = forms.CharField(
+        widget=PasswordInput(attrs={"placeholder": "Enter your old password"})
+    )
+    new_password1 = forms.CharField(
+        widget=PasswordInput(attrs={"placeholder": "Enter your new password"})
+    )
+    new_password2 = forms.CharField(
+        widget=PasswordInput(attrs={"placeholder": "Enter your new password (again)"})
+    )
