@@ -3,6 +3,8 @@ Django Access Management, implementing OpenID Identity Provider and custom Privi
 
 ![Code Coverage](./coverage.svg)
 
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
