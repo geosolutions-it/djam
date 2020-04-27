@@ -1,0 +1,82 @@
+.s-post {
+    &-content {
+        position: relative;
+        top: -30px;
+        width: 95%;
+        padding: 40px 20px;
+        margin: auto;
+        background: #fff;
+        box-shadow: 2px 2px 4px #d4d4d4;
+
+        h5 {
+            min-height: 70px;
+        }
+
+        span {
+            color: #aaa;
+            margin-bottom: 15px;
+            font-size: 13px;
+        }
+
+        p {
+            color: #777;
+            letter-spacing: 0;
+            line-height: 1.8;
+            font-weight: 400;
+            font-size: 14px !important;
+            font-style: normal !important;
+        }
+
+        .rich-text {
+            height: 150px;
+        }
+        .read-more {
+            color: #000;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .read-more:hover {
+            cursor: pointer;
+            color: $hover-green;
+        }
+        a:hover {
+            text-decoration: none !important;
+        }
+    }
+}
+
+
+section#blog {
+    padding: 2.5rem 0;
+    background-color: #f8f9fa;
+
+  
+
+    .read-more-blogs {
+        @include border-radius(5px);
+        letter-spacing: 1px;
+        font-weight: 700;
+        color: #fff;
+        font-family: Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
+        cursor: pointer;
+        white-space: nowrap;
+        border: 1px solid #609845;
+        border-radius: 6px;
+        background: #609845;
+        padding: 0.8rem 1.5rem;
+
+        &.active {
+            color: #609845;
+        }
+
+        &:hover {
+            color: #609845;
+        }
+    }
+    .read-more-blogs:hover {
+        // color: #333333 !important;
+        border: 1px solid #609845;
+        cursor: pointer;
+        background-color: $hover-green !important;
+    }
+}

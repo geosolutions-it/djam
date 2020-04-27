@@ -1,0 +1,274 @@
+/* turn scroll off */
+html, body {
+  margin: 0; 
+  height: 100%; 
+  width: 100%; 
+  overflow: hidden;
+}
+
+.flex-container {
+  display: flex; 
+}
+
+.flex-left-half {
+  width:50vw; 
+  height: 100vh; 
+  background-color: #668B4E; 
+  /* background-position: center bottom;   */
+  /* background-image: url(../img/test_background.png);  */
+  /* background-repeat: no-repeat; 
+  background-size: auto;" */
+}
+
+.flex-right-half {
+  width:50vw; 
+  height: 100vh; 
+}
+
+.logo-image {
+  position:absolute; 
+  width:250px; 
+  margin: 20px;
+  z-index:1; 
+
+}
+
+.main-title {
+  color: white;
+  height: 50vh; 
+  padding-left: 60px;
+  position: relative;
+}
+
+.main-title-text{
+  position: absolute;
+  bottom: 0;
+  font-size: 3em;
+}
+
+.sub-title {
+  position: relative;
+  color: white;
+  height: 6vh; 
+  padding-left: 60px;
+  padding-right: 60px;
+
+}
+
+.sub-title-text {
+  font-size: 1.4em;
+  line-height: 2em;
+}
+
+.main-image-section {
+position: relative;
+height: 40vh;
+/* align-items: center; */
+}
+
+.main-image {
+  left: 20%;
+  opacity: 0.1;
+  position: absolute;
+  bottom: 0;
+  width: 30vw;
+  height: auto;
+}
+
+.right-title {
+  width: 100%;
+  text-align: center;
+  height: 20vh;
+  position: relative;
+}
+
+.mapstand-logo-right {
+  display: none;
+}
+
+.right-title-text {
+  font-size: 1.8em;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align:center;
+  color: #535353;
+  display: none;
+
+}
+
+.underform-box {
+  width: 100%;
+  display: flex;
+  padding-left: 30px;
+  padding-right: 30px;
+
+}
+
+input[type="checkbox"]{
+  width: 15px;
+  height: 15px;
+  padding: 0;
+  margin-left: 3px;
+  vertical-align: bottom;
+  position: relative;
+  top: -3px;
+  *overflow: hidden;
+}
+
+/* Turns off text highlighting by double clicking on labels */
+label {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+   user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Opera and Firefox */
+}
+
+.submit-button-section {
+  /* border: red 2px solid; */
+  position: relative;
+  width: 100%;
+}
+
+.submit-button{
+  /* border: red 2px solid; */
+  width: 90%;
+  height: 50px;
+
+  color: white;
+  font-size: 1.2em;
+  font-weight: 600;
+  background-color: #3a8ea8;
+  opacity: 0.9;
+}
+
+.submit-button:hover {
+  opacity: 1.0;
+}
+
+.alternative-option-section {
+  margin: 20px;
+  font-size: 1.2em;
+}
+
+.alternative-option-section p{
+  color: grey;
+  font-weight: 400;
+}
+
+.alternative-option-section a{
+  color: grey;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.alternative-option-section a:hover{
+  color: #3a8ea8;
+}
+
+
+
+
+
+.mapstand-logo-right {
+  width: 300px;
+  /* margin: 20px; */
+}
+
+
+.common-input-form input {
+  border:1px solid #e0e0e0;
+}
+
+
+*::-webkit-input-placeholder {
+  color: #a5a5a5;
+}
+*:-moz-placeholder {
+  /* FF 4-18 */
+  color: #a5a5a5;
+  opacity: 1;
+}
+*::-moz-placeholder {
+  /* FF 19+ */
+  color: #a5a5a5;
+  opacity: 1;
+}
+*:-ms-input-placeholder {
+  /* IE 10+ */
+  color: #a5a5a5;
+}
+*::-ms-input-placeholder {
+  /* Microsoft Edge */
+  color: #a5a5a5;
+}
+*::placeholder {
+  /* modern browser */
+  color: #a5a5a5;
+}
+
+/* Changes the colour of chromes autofill input box */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active  {
+    -webkit-box-shadow: 0 0 0 30px #f6f6f6 inset !important;
+}
+
+
+@media only screen and (max-width: 1200px){
+  .flex-container {
+    flex-direction: column;
+  }
+
+  .flex-left-half {
+    display: none;
+  }
+
+  .flex-right-half {
+    width:80vw; 
+    height: 80vh;
+    margin: 10vw;
+  }
+
+.mapstand-logo-right {
+  display: inline-block;
+}
+
+}
+
+
+@media only screen and (max-width: 800px){
+
+  .flex-right-half {
+    width:90vw; 
+    height: 80vh;
+    margin: 5vw;
+  }
+
+  .mapstand-logo-right {
+    margin-top: 40px;
+  }
+}
+
+@media only screen and (max-width: 1200px){
+  .flex-right-half {
+    width:100vw; 
+    height: 80vh;
+    margin: 0vw;
+  }
+}
+
+
+@media screen and (min-height: 1200px) and (max-width: 1100px) {
+  .flex-right-half {
+    margin-top: 15vh;
+  }
+
+
+}
+
+

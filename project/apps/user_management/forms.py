@@ -4,13 +4,15 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordResetForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordResetForm, AuthenticationForm, PasswordChangeForm
 from django.forms import ModelForm
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 from django.conf import settings
+from django.forms.widgets import PasswordInput, TextInput
+
 
 from .tasks import send_multi_alternatives_mail
 
@@ -21,7 +23,7 @@ logger = logging.getLogger(__name__)
 class UMUserCreationForm(UserCreationForm):
     first_name = forms.CharField(max_length=50, required=True)
     last_name = forms.CharField(max_length=50, required=True)
-    email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
+    email = forms.EmailField(max_length=254, help_text='Required. Input a valid email address.')
     consent = forms.BooleanField(required=False)
 
     class Meta:
@@ -52,7 +54,7 @@ class ResendActivationEmailForm(forms.Form):
             get_user_model().objects.get(email=data)
         except ObjectDoesNotExist:
             logger.error(f'ResendActivationEmailForm: Validation error - no user found with "{data}" email')
-            raise forms.ValidationError('No user found with registered email.')
+            raise forms.ValidationError('No user found with that email!')
 
         return data
 
@@ -60,10 +62,12 @@ class ResendActivationEmailForm(forms.Form):
 class UserAccountForm(ModelForm):
     last_name = forms.CharField(max_length=30, required=False)
     first_name = forms.CharField(max_length=150, required=False)
+    email = forms.CharField(max_length=150, required=False)
+
 
     class Meta:
         model = get_user_model()
-        fields = ('first_name', 'last_name', )
+        fields = ('first_name', 'last_name', 'email')
 
 
 class UMPasswordResetForm(PasswordResetForm):
@@ -74,6 +78,7 @@ class UMPasswordResetForm(PasswordResetForm):
         Function sending password reset email using Dramatiq
         """
         # User object is not serializable - has to be replaced for passing arguments to Dramatiq
+        # TODO: change logo_url once any server is deployed
         user = context.pop('user')
         context['username'] = user.get_username()
 
@@ -83,25 +88,30 @@ class UMPasswordResetForm(PasswordResetForm):
             context,
             from_email,
             to_email,
-            html_email_template_name=None
+            html_email_template_name
         )
 
     def save(
             self,
             domain_override=None,
             subject_template_name='registration/password_reset_subject.txt',
-            email_template_name='registration/password_reset_email.html',
+            email_template_name='registration/password_reset_email_txt.html',
             use_https=False,
             token_generator=default_token_generator,
             from_email=None,
             request=None,
-            html_email_template_name=None,
-            extra_email_context=None
+            html_email_template_name='registration/password_reset_email.html',
+            extra_email_context=None,
+            logo_url='https://mapstand-frontend-prod.s3-eu-west-2.amazonaws.com/images/logo-inverted.png'
     ):
         """
         Generate a one-use only link for resetting password and send it to the
         user's email, which is registered in the database (case-sensitive).
         """
+        email_template_name = 'registration/password_reset_email_txt.html'
+
+        if not html_email_template_name:
+            html_email_template_name = 'registration/password_reset_email.html'
 
         email = self.cleaned_data["email"]
         for user in self.get_users(email):
@@ -118,6 +128,7 @@ class UMPasswordResetForm(PasswordResetForm):
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                 'user': user,
                 'token': token_generator.make_token(user),
+                'logo_url': logo_url,
                 'protocol': 'https' if use_https else 'http',
                 **(extra_email_context or {}),
             }
@@ -125,6 +136,8 @@ class UMPasswordResetForm(PasswordResetForm):
                 subject_template_name, email_template_name, context, from_email,
                 user.email, html_email_template_name=html_email_template_name,
             )
+
+
 
 
 class UMAuthenticationForm(AuthenticationForm):
@@ -158,3 +171,11 @@ class UMAuthenticationForm(AuthenticationForm):
                     ),
                     code='email_not_confirmed',
                 )
+
+class CustomChangePasswordForm(PasswordChangeForm):
+    old_password = forms.CharField(widget=PasswordInput(attrs={'placeholder':'Enter your old password'}))
+    new_password1 = forms.CharField(widget=PasswordInput(attrs={'placeholder':'Enter your new password'}))
+    new_password2 = forms.CharField(widget=PasswordInput(attrs={'placeholder':'Enter your new password (again)'}))
+
+
+    

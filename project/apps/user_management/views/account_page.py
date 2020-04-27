@@ -53,3 +53,14 @@ class AccountEditView(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return f'/user/account/{self.object.id}'
+
+
+
+class PasswordAccountEditView(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
+    model = get_user_model()
+    form_class = UserAccountForm
+    template_name = 'account/password_change_done.html'
+    pk_url_kwarg = 'id'
+
+    def get_success_url(self):
+        return f'/user/account/{self.object.id}'

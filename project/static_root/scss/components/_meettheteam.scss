@@ -1,0 +1,30 @@
+section#meettheteam {
+    padding: 5rem 0;
+    background: $grey-light;
+
+    .team-members-pic {
+        $img-size: 100%;
+
+        img {
+            @include border-radius(15px);
+            width: $img-size;
+            max-width: 1000px;
+            height: auto;
+        }
+    }
+}
+
+@media (max-width: $mobile-max-width) {
+    section#meettheteam {
+        padding: 2.5rem 0;
+        
+        .team-members-pic {
+            $img-size: 100%;
+
+            img {
+                width: $img-size;
+                height: auto;
+            }
+        }
+    }
+}

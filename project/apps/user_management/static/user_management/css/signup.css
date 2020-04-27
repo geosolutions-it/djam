@@ -1,74 +1,193 @@
-
-body {
-  /*margin: 0;*/
-  font-size: 1em;
-  /*height: 100%;*/
-  font-weight: 400;
-  line-height: 1.5;
-  background: #a7db8f;
-  padding: 20px;
-  font-family: Play,Arial,Verdana,sans-serif;
-  min-width: 320px;
+.main-image {
+    width: 50vw;
+    opacity: 0.3;
+    left: 0;
 }
 
-.content {
-  width: 100%;
-  min-width: 800px;
-  height: 100%;
-  min-height: 700px;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 1536px;
-  /*max-height: 1024px;*/
-  /*height: 100%;*/
-  border-radius: 10px;
-  box-shadow: 0 2px 8px 0 rgba(0,0,0,.3);
-  display: flex;
-  justify-content: center;
-  background-color: #609845;
-  box-sizing: border-box;
-
-  color: white;
+.right-title {
+    height: 5vh !important;
 }
 
-.flex-basis-60 {
-  flex-basis: 60%;
+.sign-up-box {
+    height: 80vh;
+    position: relative;
 }
 
-.flex-basis-40 {
-  flex-basis: 40%;
+.mapstand-avatar-box {
+    position: relative;
+    width: 100%;
+    height: 20vh;
+    text-align: center;
 }
 
-.flex-column-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+.mapstand-avatar {
+    margin: 40px;
+    margin-top: 7vh;
 }
 
-.login-picture {
-  background: url(/static/user_management/img/background.jpg);
-  border-radius: 0 10px 10px 0;
-  background-repeat: no-repeat;
-  background-size: cover;
+.sign-up-form {
+    width: 70%;
+    margin-left: 15%;
+    margin-right: 15%;
+    height: 50vh;
+    position: absolute;
+    text-align: center;
 }
 
-.logo {
-  background: url(/static/user_management/img/logo-inverted.png);
-  margin-right: 6px;
-  width: 400px;
-  height: 100px;
-  background-repeat: no-repeat;
-  background-size: cover;
+.sign-up-form h1 {
+    color: #8b8b8b;
+    font-size: 3em;
 }
 
-@media all and (max-device-width: 768px) {
-    .flex-basis-60 {
-        flex-basis: 100%;
+.sign-up-form #id_first_name,
+#id_last_name,
+#id_email,
+#id_password1,
+#id_password2 {
+    width: 90%;
+    height: 50px;
+    font-size: 1.2em;
+    padding: 10px;
+    margin: 1.7vh;
+}
+
+.underform-box {
+    display: block;
+    text-align: left;
+    margin-left: 0.6vw;
+    margin-top: 1vh;
+
+}
+
+.underform-box label {
+    font-weight: 400;
+    font-size: 1.2em;
+    color: #727272;
+}
+
+.underform-box a {
+    font-weight: 700;
+    color: #6a8685;
+    text-decoration: none;
+}
+
+.underform-box a:hover {
+    color: #4e8e92;
+}
+
+.underform-box .agree-to-terms {
+    width: 100%;
+    margin-bottom: 1vh;
+    margin-top: 3vh;
+    text-align: center;
+
+}
+
+.agree-to-terms p {
+    font-size: 1em;
+    color: #575757;
+}
+
+.underform-box .agree-to-marketing {
+    width: 100%;
+    margin-bottom: 1vh;
+}
+
+.signing-link {
+    font-weight: 700;
+    color: #3A8EA8 !important;
+    opacity: 0.8;
+}
+
+.signing-link:hover {
+    text-decoration: none;
+    opacity: 1.0;
+    color: #808080 !important;
+}
+
+@media only screen and (max-width: 1200px) {
+    .flex-right-half {
+        /* margin-top: 2vh; */
     }
 
-    .flex-basis-40 {
-      display: none;
+    .right-title {
+        position: absolute;
+        left: 0;
+        top: 0;
+        text-align: left;
     }
 
+    .mapstand-logo-right {
+        margin: 20px;
+        width: 200px;
+    }
+}
+
+@media only screen and (max-width: 700px) {
+    .sign-up-form {
+        right: 5px;
+        left: 5px;
+        margin-left: 15px;
+        margin-right: 15px;
+        width: 90%;
+    }
+
+    .mapstand-avatar {
+        margin: 40px;
+        margin-top: 5vh;
+    }
+
+    .mapstand-avatar-box {
+        height: 15vh;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+
+    .right-title {
+        height: auto !important;
+        position: relative;
+        text-align: center;
+    }
+
+    .sign-up-form {
+        width: 90%;
+    }
+
+    .mapstand-avatar-box {
+        display: none;
+    }
+
+    .mapstand-logo-right {
+        width: 200px;
+        margin: 10px 0 10px 0;
+    }
+
+    .sign-up-form #id_first_name,
+    #id_last_name,
+    #id_email,
+    #id_password1,
+    #id_password2 {
+        font-size: 1.2em;
+        margin: 1vh;
+    }
+
+    .sign-up-form h1 {
+        font-size: 2em;
+    }
+
+    .underform-box label {
+        font-size: 1em;
+        text-align: left;
+    }
+    .underform-box .agree-to-terms {
+        margin-top: 1vh;    
+    }
+
+    .sign-up-form {
+        overflow: auto;
+        overscroll-behavior-y: contain;
+        overflow-x: hidden;
+        height: 90vh;
+    }
 }
