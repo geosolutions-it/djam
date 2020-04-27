@@ -1,21 +1,77 @@
-{% extends 'user_management/base.html' %}
+{% extends 'account/base-with-navbar.html' %}
 
-{% block message %}
-    <div class="account-detail">
-        <div class="account-detail-group">
-            <label>First name</label>
-            <div id="id_first_name">{{ object.first_name }}</div>
-        </div>
-        <div class="account-detail-group">
-            <label>Last name</label>
-            <div id="id_last_name">{{ object.last_name }}</div>
-        </div>
-        <div class="account-detail-group">
-            <label>Email</label>
-            <div id="id_email">{{ object.email }}</div>
-        </div>
+{% block header_scripts %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'user_management/css/user_edit.css' %}">
+{%  endblock %}
 
-        <a href="{% url 'user_account_edit' id=object.id %}">Edit profile</a>
-        <a href="{% url 'password_change' %}">Change password</a>
-    </div>
-{% endblock %}
+
+ <!-- Left panel -->
+
+ {% block left_title %}
+ Your profile
+ {% endblock left_title %}
+ 
+ {% block left_subtitle %}
+ Lorem and some lorem to lorem ipsum dolor sit amet, consectetur adipiscing elit
+ {% endblock left_subtitle %}
+
+ {% block left_image %}
+ <img class="main-image" src="{% static "user_management/img/server-man.png" %}"/>
+ {% endblock left_image %}
+
+
+ <!-- Right/ mobile panel -->
+
+ {% block right_action %}
+
+
+
+
+
+ <div class="form-box common-input-form">
+     <div class="mapstand-avatar-box">
+         <img class="mapstand-avatar" src="{% static "user_management/img/default-avatar.png" %}"/>
+     </div>
+
+     <div class="user-edit-form-box">
+         <form role="form" method="post" action="{% url 'user_account_edit' id=object.id %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="first_name">First name</label>
+                <input type="text" class="form-control input-lg" name="first_name" id="id_first_name" required
+                       placeholder="Enter first name"
+                        {% if form.first_name.value %}
+                       value="{{ form.first_name.value }}" {% endif %}>
+                {{ form.first_name.errors }}
+            </div>
+            <div class="form-group">
+                <label for="last_name">Last name</label>
+                <input type="text" class="form-control input-lg" name="last_name" id="id_last_name" required
+                       placeholder="Enter last name password" \
+                        {% if form.last_name.value %}
+                       value="{{ form.last_name.value }}" {% endif %}>
+                {{ form.last_name.errors }}
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="text" class="form-control input-lg" name="email" id="id_email" required
+                       placeholder="{{ form.email.value }}" \
+                        {% if form.email.value %}
+                       value="{{ form.email.value }}" {% endif %}>
+                {{ form.email.errors }}
+            </div>
+            <div class="form-group password-form-group">
+                <a href="{% url 'password_change' %}" class="change-password-link">
+                    Change password
+                </a>
+            </div>
+            <input class="submit-button" type="submit" value="Update Profile">
+        </form>
+     </div>
+         
+     </div>
+ 
+
+
+     {% endblock right_action %}

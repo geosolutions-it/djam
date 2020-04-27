@@ -1,0 +1,123 @@
+.main-image {
+  bottom: -50;
+}
+
+.form-box {
+  height: 80vh;
+  position: relative;
+}
+
+.top-image-box {
+  width: 100%;
+  text-align: center;
+}
+
+.mail-image {
+  width: 250px;
+}
+
+.resend-email-form-box {
+  width: 70%;
+  margin-left: 15%;
+  margin-right: 15%;
+  height: 50vh;
+  position: absolute;
+  text-align: center;
+}
+
+.resend-email-form-box h1 {
+  color: #8b8b8b;
+  font-size: 3em;
+}
+
+.resend-email-form-box p {
+  color: #8b8b8b;
+  font-size: 1.2em;
+  margin-top: 5vh;
+}
+
+.resend-email-form-box #username,
+#password {
+  width: 90%;
+  height: 50px;
+  font-size: 1.2em;
+  padding: 10px;
+  margin: 20px;
+}
+
+/* removes Email: label */
+.resend-email-form label {
+  display: none;
+}
+
+#id_email {
+  width: 90%;
+  height: 50px;
+  font-size: 1.2em;
+  padding: 10px;
+  margin: 20px;
+}
+
+.errorlist {
+  list-style-type: none;
+  padding: 0;
+  color: #ff0000;
+  font-weight: 700;
+}
+
+@media only screen and (max-width: 800px) {
+  .right-title {
+    height: 25vh;
+  }
+}
+
+
+@media only screen and (max-width: 700px) {
+
+  .right-title {
+    height: 23vh;
+  }
+
+  .right-title-text {
+    display: none;
+  }
+
+  .mail-image {
+    margin: 20px;
+    width: 50%;
+  }
+
+  .resend-email-form-box h1 {
+    color: #8b8b8b;
+    font-size: 2em;
+  }
+
+  .resend-email-form-box h2 {
+    color: #8b8b8b;
+    font-size: 1.2em;
+
+  }
+
+  #id_email {
+    margin: 20px 0;
+  }
+
+  .resend-email-form-box p {
+    color: #8b8b8b;
+    font-size: 1.2em;
+
+  }
+
+  .resend-email-form-box {
+    width: 90%;
+    margin-left: 15px;
+    margin-right: 15px;
+    right: 5px;
+    left: 5px;
+  }
+
+  .bottom-text-box {
+    padding-top: 2vh;
+  }
+
+}

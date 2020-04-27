@@ -1,0 +1,126 @@
+section#testimonials {
+    padding: 5rem 0;
+
+    .carousel-indicators li {
+        display: inline-block;
+        width: .8rem;
+        height: .8rem;
+        margin: .8rem;
+        text-indent: 0;
+        cursor: pointer;
+        border: none;
+        border-radius: 50%;
+        background-color: $green;
+        box-shadow: inset 1px 1px 1px 1px rgba(0, 0, 0, 0.5);
+    }
+
+    .carousel-indicators .active {
+        width: .8rem;
+        height: .8rem;
+        margin: .8rem;
+        background-color: $yellow;
+    }
+
+    .carousel-control-prev-icon {
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23609845' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E");
+    }
+
+    .carousel-control-next-icon {
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23609845' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E");
+    }
+
+
+    .testimonials {
+        margin: 0 auto;
+        padding: 0;
+        list-style: none;
+
+        .testimonial {
+            margin-bottom: 50px;
+            padding-bottom: 50px;
+            width: 80%;
+            margin: 0 auto;
+            text-align: center;
+
+            &:last-child {
+                border: 0;
+            }
+
+            blockquote {
+                padding: 20px;
+                font-size: 1.5rem;
+                font-style: italic;
+
+                p:first-child {
+                    &:before {
+                        content: "\f10d";
+                        padding-right: 30px;
+                        font-size: 2.5rem;
+                        font-family: 'Font Awesome 5 Free';
+                        font-weight: bold;
+                        color: $green;
+                    }
+                }
+
+                p:last-child {
+                    &:after {
+                        content: "\f10e";
+                        padding-left: 30px;
+                        font-size: 2.5rem;
+                        font-family: 'Font Awesome 5 Free';
+                        font-weight: bold;
+                        color: $green;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: $mobile-max-width) {
+    section#testimonials {
+        padding: 2.5rem 0;
+
+        .section-subheading {
+            margin-bottom: 3rem;
+        }
+
+        .testimonials {
+
+            .testimonial {
+                margin-bottom: 1.5rem;
+                padding-bottom: 2.5rem;
+                width: 85%;
+                margin: 0 auto;
+
+                p {
+                    margin-bottom: 3rem;
+                }
+
+                blockquote {
+                    padding: .5rem 1.5rem 0;
+                    font-size: 1.3rem !important;
+
+                    p {
+                        font-size: 1rem;
+                        margin-bottom: 0;
+                    }
+
+                    p:first-child {
+                        &:before {
+                            padding-right: 2rem;
+                            font-size: 1.5rem;
+                        }
+                    }
+
+                    p:last-child {
+                        &:after {
+                            padding-right: 2rem;
+                            font-size: 1.5rem;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -31,7 +31,7 @@ class SignupView(View):
             # compose activation link
             activation_url = generate_activation_link(user.username, request)
 
-            if activation_url is None:
+            if activation_url is None: 
                 user.delete()
                 return render(
                     request,

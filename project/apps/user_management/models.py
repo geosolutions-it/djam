@@ -86,6 +86,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     legacy_user_id = models.IntegerField(null=True, blank=False)
     consent = models.BooleanField(blank=True, null=True)
 
+
     objects = UserManager()
 
     EMAIL_FIELD = 'email'
