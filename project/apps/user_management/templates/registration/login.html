@@ -13,7 +13,7 @@
     {% block left_title %}
     Welcome back!
     {% endblock left_title %}
-    
+
     {% block left_subtitle %}
     The latest Oil & Gas news, maps and industry activities.
     {% endblock left_subtitle %}
@@ -40,15 +40,19 @@
 
                 <input type="text" id="username" name="username" required placeholder="Enter your email address">
                 <div>
-                    {% for msg in form.username.errors %} 
-                    {{ msg }} 
+                    {% for msg in form.username.errors %}
+                    {{ msg }}
                     {% endfor %}
                 </div>
 
                 <input type="password" id="password" name="password" required placeholder="Enter your password">
                 <div class=form-error-message>
-                    {% if form.errors %}
-                    <p>Please enter a correct username and password. Note that both fields may be case-sensitive.</p>
+                    {% if form.non_field_errors %}
+                        <div class="row text-center">
+                            {% for error in form.non_field_errors %}
+                                <p>{{ error|safe }}</p>
+                            {% endfor %}
+                        </div>
                     {% endif %}
                 </div>
 
@@ -62,10 +66,10 @@
                         <a class="signing-link" href="{% url 'password_reset' %}">Forgot password?</a>
                         </div>
                     </div>
-                  
+
                 </div>
                 <br>
-                
+
                 <div class="submit-button-section">
                     <input class="submit-button" type="submit" value="Sign in">
                 </div>
@@ -76,9 +80,9 @@
 
             </form>
         </div>
-            
+
         </div>
-    
+
 
 
     {% endblock right_action %}

@@ -190,7 +190,7 @@ class UMAuthenticationForm(AuthenticationForm):
                     # Error message cannot be added to self.error_messages, as usage of reverse() function at a class definition level causes
                     # in this case form import error.
                     _(
-                        f"Please confirm your email before continuation."
+                        f"Please confirm your email before continuation. "
                         f'Do you want to <a href="{reverse("resend_verification_email")}">re-send activation email</a>?'
                     ),
                     code="email_not_confirmed",
