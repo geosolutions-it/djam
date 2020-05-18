@@ -44,3 +44,27 @@ class CustomScopeClaims(ScopeClaims):
         User = get_user_model()
         dic = {"legacy_user_id": User.objects.get(pk=self.user.id).legacy_user_id}
         return dic
+
+    info_is_admin = (
+        _(u"Admin flag"),
+        _(u"Tells if user is djam admin"),
+    )
+
+    def scope_is_admin(self):
+        dic = {
+            "is_admin": self.user.is_superuser,
+        }
+
+        return dic
+
+    info_is_staff = (
+        _(u"Staff flag"),
+        _(u"Tells if user is djam staff member"),
+    )
+
+    def scope_is_staff(self):
+        dic = {
+            "is_staff": self.user.is_staff,
+        }
+
+        return dic
