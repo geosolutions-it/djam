@@ -1,9 +1,12 @@
 from django import forms
+from django.contrib.auth import get_user_model
 from django.core import exceptions
 from django.shortcuts import reverse
 from django.test import TestCase, Client
+from rest_framework import status
+from rest_framework.test import APITestCase
 
-from tests.factories.user_management_factory import UserFactory
+from tests.factories.user_management_factory import UserFactory, GroupFactory
 from apps.user_management.forms import UMAuthenticationForm
 
 
@@ -15,7 +18,7 @@ class TestUserManagement(TestCase):
         user.save()
 
         form = UMAuthenticationForm(
-            None, {"username": user.username, "password": user_psw,}
+            None, {"username": user.username, "password": user_psw, }
         )
 
         self.assertFalse(
@@ -135,3 +138,93 @@ class TestUserManagement(TestCase):
         )
 
         print(account_page_response)
+
+
+class TestGetUserData(APITestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.admin = UserFactory(username='admin', is_staff=True, is_superuser=True)
+        cls.user = UserFactory(username='test_user')
+        cls.u1 = UserFactory(username='u1', last_login='2020-05-21T07:59:26.324Z')
+        cls.u2 = UserFactory(username='u2', last_login='2020-05-11T07:59:26.342Z')
+        cls.pro_group = GroupFactory(name='pro')
+        cls.ent_group = GroupFactory(name='enterprise')
+        cls.free_group = GroupFactory(name='free')
+        cls.free_group.users.add(*[cls.user, cls.u1, cls.u2, cls.admin])
+        cls.pro_group.users.add(cls.admin)
+        cls.ent_group.users.add(cls.u1)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.admin.delete()
+        cls.user.delete()
+        cls.u1.delete()
+        cls.u2.delete()
+        cls.pro_group.delete()
+        cls.ent_group.delete()
+        cls.free_group.delete()
+
+    def setUp(self):
+        User = get_user_model()
+        self.admin = User.objects.get(username='admin')
+        self.user = User.objects.get(username='test_user')
+
+    def test_user_not_allowed(self):
+        self.client.force_authenticate(self.user)
+        response = self.client.get(reverse('fetch_users'))
+        self.assertEquals(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_user_allowed(self):
+        users_count = 4
+        self.client.force_authenticate(self.admin)
+        response = self.client.get(reverse('fetch_users'))
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertEquals(response.json().get('count', 0), users_count)
+
+    def test_user_allowed_filter_groups(self):
+        users_count = 1
+        self.client.force_authenticate(self.admin)
+        response = self.client.get(reverse('fetch_users') + '?groups=pro')
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertEquals(response.json().get('count', 0), users_count)
+
+    def test_user_allowed_filter_wrong_groups(self):
+        users_count = 0
+        self.client.force_authenticate(self.admin)
+        response = self.client.get(reverse('fetch_users') + '?groups=test')
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertEquals(response.json().get('count', 0), users_count)
+
+    def test_user_allowed_filter_mult_groups(self):
+        users_count = 2
+        self.client.force_authenticate(self.admin)
+        response = self.client.get(reverse('fetch_users') + '?groups=enterprise,pro')
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertEquals(response.json().get('count', 0), users_count)
+
+    def test_user_allowed_filter_wrong_filter(self):
+        users_count = 4
+        self.client.force_authenticate(self.admin)
+        response = self.client.get(reverse('fetch_users') + '?not_a_filter=free,pro')
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertEquals(response.json().get('count', 0), users_count)
+
+    def test_user_allowed_filter_older_than(self):
+        users_count = 2
+        self.client.force_authenticate(self.admin)
+        response = self.client.get(reverse('fetch_users') + '?older=2020-05-21T11:19:10Z')
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertEquals(response.json().get('count', 0), users_count)
+
+    def test_user_allowed_filter_newer_than(self):
+        users_count = 0
+        self.client.force_authenticate(self.admin)
+        response = self.client.get(reverse('fetch_users') + '?newer=2020-05-21T11:19:10Z')
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertEquals(response.json().get('count', 0), users_count)
+
+    def test_user_allowed_filter_wrong_date(self):
+        self.client.force_authenticate(self.admin)
+        response = self.client.get(reverse('fetch_users') + '?newer=wrongg_fate')
+        self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)

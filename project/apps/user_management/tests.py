@@ -1,6 +1,4 @@
 from django.test import TestCase
-import copy
-
 # Create your tests here.
 from apps.user_management.models import User, UserActivationCode
 

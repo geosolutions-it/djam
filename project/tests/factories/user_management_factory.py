@@ -1,6 +1,8 @@
 import factory
 from django.contrib.auth import get_user_model
 
+from apps.privilege_manager.models import Group
+
 
 class AdminFactory(factory.DjangoModelFactory):
     class Meta:
@@ -26,3 +28,10 @@ class UserFactory(factory.DjangoModelFactory):
     email_confirmed = True
     is_active = True
     is_staff = False
+
+
+class GroupFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = Group
+
+    name = factory.Faker("name")
