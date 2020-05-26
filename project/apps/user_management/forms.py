@@ -16,12 +16,12 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
+from django.forms.widgets import PasswordInput
+from captcha.fields import ReCaptchaField
+from captcha.widgets import ReCaptchaV3
 from django.conf import settings
-from django.forms.widgets import PasswordInput, TextInput
-
 
 from .tasks import send_multi_alternatives_mail
-
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +33,7 @@ class UMUserCreationForm(UserCreationForm):
         max_length=254, help_text="Required. Input a valid email address."
     )
     consent = forms.BooleanField(required=False)
+    captcha = ReCaptchaField(widget=ReCaptchaV3())
 
     class Meta:
         model = get_user_model()
@@ -90,13 +91,13 @@ class UserAccountForm(ModelForm):
 
 class UMPasswordResetForm(PasswordResetForm):
     def send_mail(
-        self,
-        subject_template_name,
-        email_template_name,
-        context,
-        from_email,
-        to_email,
-        html_email_template_name=None,
+            self,
+            subject_template_name,
+            email_template_name,
+            context,
+            from_email,
+            to_email,
+            html_email_template_name=None,
     ):
         """
         Function sending password reset email using Dramatiq
@@ -116,17 +117,17 @@ class UMPasswordResetForm(PasswordResetForm):
         )
 
     def save(
-        self,
-        domain_override=None,
-        subject_template_name="registration/password_reset_subject.txt",
-        email_template_name="registration/password_reset_email_txt.html",
-        use_https=False,
-        token_generator=default_token_generator,
-        from_email=None,
-        request=None,
-        html_email_template_name="registration/password_reset_email.html",
-        extra_email_context=None,
-        logo_url="https://mapstand-frontend-prod.s3-eu-west-2.amazonaws.com/images/logo-inverted.png",
+            self,
+            domain_override=None,
+            subject_template_name="registration/password_reset_subject.txt",
+            email_template_name="registration/password_reset_email_txt.html",
+            use_https=False,
+            token_generator=default_token_generator,
+            from_email=None,
+            request=None,
+            html_email_template_name="registration/password_reset_email.html",
+            extra_email_context=None,
+            logo_url="https://mapstand-frontend-prod.s3-eu-west-2.amazonaws.com/images/logo-inverted.png",
     ):
         """
         Generate a one-use only link for resetting password and send it to the

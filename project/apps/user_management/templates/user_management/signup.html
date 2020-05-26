@@ -38,43 +38,54 @@
             <form role="form" method="post" action="{% url 'register' %}">
                 {% csrf_token %}
 
+
                 <input type="text" id="id_first_name" name="first_name" required placeholder="Enter your first name">
                 <div>
-                    {% for msg in form.first_name.errors %} 
-                    {{ msg }} 
+                    {% for msg in form.first_name.errors %}
+                    {{ msg }}
                     {% endfor %}
                 </div>
 
-                
+
                 <input type="text" id="id_last_name" name="last_name" required placeholder="Enter your last name">
                 <div>
-                    {% for msg in form.last_name.errors %} 
-                    {{ msg }} 
+                    {% for msg in form.last_name.errors %}
+                    {{ msg }}
                     {% endfor %}
                 </div>
-                
+
 
                 <input type="text" id="id_email" name="email" required placeholder="Enter your email address">
                 <div>
-                {% for msg in form.email.errors %} 
-                {{ msg }} 
+                {% for msg in form.email.errors %}
+                {{ msg }}
                 {% endfor %}
                 </div>
 
                 <input type="password" id="id_password1" name="password1" required placeholder="Enter your password">
                 <div>
-                    {% for msg in form.password1.errors %} 
-                    {{ msg }} 
+                    {% for msg in form.password1.errors %}
+                    {{ msg }}
                     {% endfor %}
                 </div>
-                
+
 
                 <input type="password" id="id_password2" name="password2" required placeholder="Enter your password (again)">
                 <div>
-                    {% for msg in form.password2.errors %} 
-                    {{ msg }} 
+                    {% for msg in form.password2.errors %}
+                    {{ msg }}
                     {% endfor %}
                 </div>
+
+                <div class="captcha">
+                    {{ form.captcha }}
+                    <div>
+                        {% for msg in form.captcha.errors %}
+                        {{ msg }}
+                        {% endfor %}
+                    </div>
+                </div>
+
             
                 <div class="lower-form">
 

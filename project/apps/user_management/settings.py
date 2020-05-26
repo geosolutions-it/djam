@@ -1,3 +1,4 @@
+import os
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
     # enable email based login
