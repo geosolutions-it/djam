@@ -7,11 +7,22 @@ from django.contrib.auth.views import LoginView
 from django.core.exceptions import PermissionDenied
 from django.http import Http404
 from django.shortcuts import resolve_url
+from django.urls import reverse
 from django.utils.translation import gettext as _
-from django.views.generic import UpdateView, DetailView
+from django.views.generic import UpdateView, DetailView, RedirectView
 from apps.user_management.forms import UserAccountForm
 
 logger = logging.getLogger(__name__)
+
+
+class ProfileRedirectView(RedirectView):
+
+    def get_redirect_url(self, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            return reverse('user_account', kwargs={
+                'id': self.request.user.pk
+            })
+        return reverse(settings.HOME_VIEW)
 
 
 class UserGtObjectMixin:
