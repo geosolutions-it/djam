@@ -12,10 +12,7 @@ These instructions will get you a copy of the project up and running on your loc
 ### Prerequisites
 
 * An SMTP email server
-* Python 3.7 with:
-    * Django 3.0+
-    * Dramatiq 1.7+
-    * psycopg2 2.8+
+* Python 3.7
 * PostgreSQL 11.0+
 * RabbitMQ 3.8+
 
