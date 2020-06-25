@@ -1,4 +1,5 @@
 {% load static %}
+{% load configuration_tags %}
 <head>
     <link rel="shortcut icon" href="{% static "user_management/img/favicon.ico" %}" type="image/x-icon">
     <link rel="icon" href="{% static "user_management/img/favicon.ico" %}" type="image/x-icon">
@@ -20,13 +21,13 @@
         <nav class="base-navbar">
             <div class="left-navbar-section">
                 <div class="logo-image">
-                    <a class="right-link" href="https://app.mapstand.com/">
+                    <a class="right-link" href={% get_mapstand_url %}>
                         <img src="{% static "user_management/img/mapstand-white-logo.svg" %}"/>
                     </a>
                 </div>
             </div>
             <div class="right-navbar-section">
-                <a class="right-link" href="https://app.mapstand.com/">
+                <a class="right-link" href={% get_map_url %}>
                     <i class="fas fa-map-marked-alt fa-lg"></i>
                     <b>Back to Map</b>
                 </a>
