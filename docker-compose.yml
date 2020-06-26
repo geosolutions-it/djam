@@ -24,10 +24,10 @@ services:
         build:
           context: ./
         restart: always
-        command: uwsgi  --emperor uwsgi.ini
+#        command: uwsgi  --emperor uwsgi.ini
         # command: uwsgi --ini uwsgi.ini
-        ports:
-        - "8002:8000"
+#        ports:
+#        - "8002:8000"
         volumes:
           - djam_static:/djam/project/static
         environment:
