@@ -26,8 +26,8 @@ class SignupView(View):
         if form.is_valid():
             user = form.save()
 
-            if not settings.REGISTRATION_MODERATION:
-                user.is_active = True
+            if settings.REGISTRATION_MODERATION:
+                user.is_active = False
                 user.save()
 
             # compose activation link
