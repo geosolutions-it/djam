@@ -23,7 +23,6 @@ class GeoServerRolesView(views.APIView):
 
     def get(self, request, format=None):
         group_names = [group.name for group in Group.objects.all()]
-        group_names.append("admin")
 
         return Response({"groups": group_names})
 
