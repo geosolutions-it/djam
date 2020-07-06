@@ -19,6 +19,9 @@ def add_default_groups(apps, schema_editor):
     hub_group = Group(name="hub")
     hub_group.save()
 
+    admin_group = Group(name="admin")
+    admin_group.save()
+
 
 class Migration(migrations.Migration):
 
