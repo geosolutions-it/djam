@@ -1,0 +1,53 @@
+{% extends 'user_management/base.html' %}
+
+{% block header_scripts %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'user_management/css/signup_resend_activation_email.css' %}">
+
+
+{%  endblock %}
+
+
+
+    <!-- Left panel -->
+
+    {% block left_title %}
+    Troubles with the first login?
+    {% endblock left_title %}
+
+    {% block left_subtitle %}
+    You didn't receive verification email or the link is expired?
+    {% endblock left_subtitle %}
+
+    {% block left_image %}
+    <img class="main-image" src="{% static "user_management/img/server-man.png" %}"/>
+    {% endblock left_image %}
+
+
+    <!-- Right/ mobile panel -->
+
+    {% block right_action %}
+
+    <div class="form-box common-input-form">
+        <div class="top-image-box">
+            <img class="mail-image" src="{% static "user_management/img/email-sent.png" %}"/>
+        </div>
+
+        <div class="resend-email-form-box">
+            <h1>Resend Verification Email</h1>
+            <p>Please enter your email address in the form below to resend your verification email.</p>
+            <form role="form" method="POST" action="{% url 'resend_verification_email' %}">
+                {% csrf_token %}
+                <div>
+                    <input type="text" name="email" id="id_email" required placeholder="Enter your email"
+                    {% if form.email.value %} value="{{ form.email.value }}" {% endif %}>
+                    {{ form.email.errors }}
+                </div>
+                <div class="submit-button-section">
+                    <input class="submit-button" type="submit" value="Re-send">
+                </div>
+            </form>
+
+        </div>
+
+{% endblock right_action %}

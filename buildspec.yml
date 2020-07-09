@@ -1,0 +1,11 @@
+version: 0.1
+
+phases:
+  build:
+    commands:
+      - bash -e ./codebuild/scripts/build_pipeline.sh
+
+cache:
+  paths:
+    - '/usr/local/pkgs/**/*'
+    - '/root/.cache/pip/**/*'

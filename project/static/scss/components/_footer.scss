@@ -1,0 +1,160 @@
+// .footer {
+//   position: absolute;
+//   bottom: 0;
+//   width: 100%;
+//   height: 500px;
+// }
+
+footer {
+  font-family: Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: $offwhite;
+  // font-size: 0.8em;
+
+  p {
+    color: $offwhite;
+    font-size: 0.8em;
+  }
+  a {
+    color: $offwhite;
+  }
+
+  .footer-top-section {
+    button:hover {
+      cursor: hand;
+      cursor: pointer;
+    }
+
+    padding: 2rem 0;
+
+    background: $grey-sub;
+    // height: 25vh;
+    // width: 100%;
+
+    .get-in-touch-button button {
+      cursor: pointer;
+      // padding-bottom: 3vh;
+    }
+
+    .get-in-touch-button find-out-more {
+      cursor: pointer;
+    }
+
+    .accept {
+      color: $grey-dark;
+      a {
+        color: $grey-dark;
+      }
+    }
+
+    .get-in-touch-button {
+      background-color: #dce059;
+      color: #494949;
+      font-size: 80%;
+      border-radius: 6px;
+      letter-spacing: 0.1rem;
+      padding: 1rem 2.5rem;
+      transition: all 0.2s;
+      // border: rgb(54, 54, 54) solid 1px;
+      outline:none !important;
+      border: none !important;
+
+
+    }
+
+    .get-in-touch-button:hover {
+      cursor: pointer;
+      color: #2f2f2f !important;
+      background-color: #ced633 !important;
+
+      border: none !important;
+      outline:none !important;
+      box-shadow: none !important;
+    }
+    .get-in-touch-button:focus {
+      cursor: pointer;
+      color: #2f2f2f  !important;
+      // background-color: #abb141 !important;
+
+      border: none !important;
+      outline:none !important;
+      box-shadow: none !important;
+    }
+    .get-in-touch-button:active {
+      cursor: pointer;
+      color: #2f2f2f  !important;
+      // background-color: #abb141 !important;
+
+      border: none !important;
+      outline:none !important;
+      box-shadow: none !important;
+
+    }
+  }
+  .footer-middle-section {
+    padding: 2rem 0;
+
+    background: #333333;
+    // height: 30vh;
+
+    .list-inline {
+      padding-top: 1rem;
+    }
+
+    h3 {
+      font-family: Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 0.9em;
+      color: $offwhite;
+    }
+
+    .company-details {
+      padding-top: 2rem;
+      padding-left: 30%;
+      padding-right: 30%;
+
+      // width: 50%;
+    }
+  }
+  .footer-bottom-section {
+    background: $grey-dark;
+    padding-bottom: 2rem;
+    // height: 14vh;
+    // position: absolute;
+
+    .site_map {
+      ul {
+        padding-left: 0px;
+      }
+      
+      ul li {
+        display: inline-block;
+        cursor: hand;
+        cursor: pointer;
+       
+
+        a {
+          color: $offwhite;
+          font-size: 0.8em;
+        }
+      }
+    }
+
+    li:hover {
+      cursor: hand;
+      cursor: pointer;
+    }
+
+    .copyright {
+      position: relative;
+      font-size: 0.8em;
+    }
+  }
+}
+
+@media (max-width: $mobile-max-width) {
+  footer {
+    .company-details {
+      padding-left: 10% !important;
+      padding-right: 10% !important;
+    }
+  }
+}

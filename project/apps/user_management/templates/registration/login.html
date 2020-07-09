@@ -1,104 +1,88 @@
-{# Login page template (rendered whether LOGIN_URL is called, insetad of default django login page) #}
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="{% static "user_management/img/favicon.ico" %}" type="image/x-icon">
-    <link rel="icon" href="{% static "user_management/img/favicon.ico" %}" type="image/x-icon">
+{% extends 'user_management/base.html' %}
 
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+{% block header_scripts %}
+    {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'user_management/css/login.css' %}">
 
-    <style>
-        html, body {
-            height:100%;
-            font-family: 'Open Sans', sans-serif;
-        }
+{%  endblock %}
 
-        .mapstand {
-            background-color: white;
-        }
 
-        .outer-wrapper {
-            display: table;
-            width: 100%;
-            height: 100%;
-        }
 
-        .inner-wrapper {
-              display:table-cell;
-              vertical-align:middle;
-              padding:15px;
-        }
+    <!-- Left panel -->
 
-        form {
-            font-size: 14px;
-        }
+    {% block left_title %}
+    Welcome back!
+    {% endblock left_title %}
 
-        .mps-error {
-            color: red;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
+    {% block left_subtitle %}
+    The latest Oil & Gas news, maps and industry activities.
+    {% endblock left_subtitle %}
 
-        .mps-logo {
-            text-align: center;
-            margin: 50px;
-        }
+    {% block left_image %}
+    <img class="main-image" src="{% static "user_management/img/test-laptop-man.png" %}"/>
+    {% endblock left_image %}
 
-        .mps-logo-img {
-            width: 400px
-        }
 
-        .mps-btn {
-            width: 100%;
-        }
-    </style>
-    <title>Mapstand Login</title>
-  </head>
-    <body class="mapstand" data-ms2-container="mapstand">
+    <!-- Right/ mobile panel -->
 
-    <section id="loginform" class="outer-wrapper">
-      <div class="inner-wrapper">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-8 col-sm-offset-2">
-                    <div class="mps-logo">
-                        <img class="mps-logo-img" src="{% static "user_management/img/logo-inverted.png" %}">
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-4 col-sm-offset-4">
-                    <div class="mps-error">
-                        {% if form.errors %}
-                            <div class="row text-center">
-                                <p>Your username and password didn't match.</br>Please try again.</p>
-                            </div>
-                        {% endif %}
-                    </div>
-                    <form role="form" method="post" action="{% url 'login' %}?{{ request.GET.urlencode }}">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <label for="username">Username / Email</label>
-                            <input type="text" class="form-control input-lg" name="username" id="username" placeholder="Enter email">
-                        </div>
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" class="form-control input-lg" name="password" id="password" placeholder="Password">
-                        </div>
-                        <input type="hidden" name="next" value="{{ next }}" />
-                        <button type="submit" class="btn btn-lg btn-primary pull-right mps-btn" id="btn_submit">Sign In</button>
-                    </form>
-                    <div class="footer"><a href="{% url 'password_reset' %}">Forgot your password?</a></div>
-                </div>
-              </div>
-            </div>
+    {% block right_action %}
+
+
+    <div class="sign-in-box common-input-form">
+        <div class="mapstand-avatar-box">
+            <img class="mapstand-avatar" src="{% static "user_management/img/default-avatar.png" %}"/>
         </div>
-    </section>
-    </body>
-</html>
+
+        <div class="sign-in-form">
+            <h1>Sign in to MapStand</h1>
+            <form role="form" method="post" action="{% url 'login' %}?{{ request.GET.urlencode }}">
+                {% csrf_token %}
+
+                <input type="text" id="username" name="username" required placeholder="Enter your email address">
+                <div>
+                    {% for msg in form.username.errors %}
+                    {{ msg }}
+                    {% endfor %}
+                </div>
+
+                <input type="password" id="password" name="password" required placeholder="Enter your password">
+                <div class=form-error-message>
+                    {% if form.non_field_errors %}
+                        <div class="row text-center">
+                            {% for error in form.non_field_errors %}
+                                <p>{{ error|safe }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="lower-form">
+
+                    <div class="underform-box">
+                        <div class="underform-half-remember-me">
+                        <label class="check" for="checkbox"><input id="checkbox" type="checkbox"> &nbsp;Remember me </label>
+                        </div>
+                        <div class="underform-half-forgot-password">
+                        <a class="signing-link" href="{% url 'password_reset' %}">Forgot password?</a>
+                        </div>
+                    </div>
+
+                </div>
+                <br>
+
+                <div class="submit-button-section">
+                    <input class="submit-button" type="submit" value="Sign in">
+                </div>
+                <div class="alternative-option-section">
+                    <p>Don't have an account?<a class="signing-link" href="{% url 'register' %}"> Sign up</a></p>
+                </div>
+
+
+            </form>
+        </div>
+
+        </div>
+
+
+
+    {% endblock right_action %}

@@ -1,0 +1,23 @@
+{
+  "name": "djam",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm run build-css",
+    "build-css": "node-sass --include-path node_modules ./static/scss/index.scss ./static/css/mapstand.css",
+    "watch-sass": "npm run build-css && node-sass --include-path node_modules ./static/scss/index.scss -w ./static/css/mapstand.css",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^3.3.5",
+    "jquery": "^2.1.4",
+    "node-sass": "^4.5.3"
+  },
+  "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.3.1"
+  }
+}
+
