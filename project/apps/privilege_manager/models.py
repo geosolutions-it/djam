@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 import logging
+from enum import Enum
 
 from django.conf import settings
 from django.db import models
@@ -18,6 +19,11 @@ class Group(models.Model):
     """
     v1 version of AuthZ Group model of Djam - for MVP only RBAC is supported
     """
+    class GroupNames(Enum):
+        FREE = 'free'
+        PRO = 'pro'
+        ENTERPRISE = 'enterprise'
+        HUB = 'hub'
 
     name = models.CharField(max_length=30)
     users = models.ManyToManyField(get_user_model(), blank=True)
