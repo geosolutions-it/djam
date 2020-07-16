@@ -87,6 +87,20 @@
   color: #808080 !important;
 }
 
+.underform-box {
+  /* text-align: center;
+  align-items: center; */
+
+}
+
+.underform-half-forgot-password {
+  text-align: center;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+
+}
+
 @media only screen and (max-width: 800px) {
   .right-title {
     height: 25vh;
