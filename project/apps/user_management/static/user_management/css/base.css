@@ -229,7 +229,6 @@ input:-webkit-autofill:active  {
 .form-error-message {
   color: red;
   font-size: 1em;
-  font-weight: bold;
 }
 
 
