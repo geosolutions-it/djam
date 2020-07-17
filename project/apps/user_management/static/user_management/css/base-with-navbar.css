@@ -227,6 +227,15 @@ label {
   display: none;
 }
 
+.errorlist {
+  list-style: none;
+  color: red;
+  text-decoration: none;
+  padding: 0px;
+  list-style-type: none;
+  text-align: center;
+}
+
 .common-input-form input {
   border: 1px solid #e0e0e0;
 }

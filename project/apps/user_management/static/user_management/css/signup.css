@@ -110,9 +110,6 @@
     padding: 0px;
 }
 
-.error-message {
-    color: red;
-}
 
 @media only screen and (max-width: 1200px) {
     .flex-right-half {

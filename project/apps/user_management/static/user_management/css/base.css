@@ -231,6 +231,20 @@ input:-webkit-autofill:active  {
   font-size: 1em;
 }
 
+.error-message {
+  color: red;
+}
+
+.errorlist {
+  list-style: none;
+  color: red;
+  text-decoration: none;
+  padding: 0px;
+  list-style-type: none;
+  text-align: center;
+
+}
+
 
 @media only screen and (max-width: 1200px){
   .flex-container {
