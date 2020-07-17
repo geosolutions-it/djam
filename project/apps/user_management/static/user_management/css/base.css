@@ -182,7 +182,9 @@ label {
 
 
 .mapstand-logo-right {
-  width: 300px;
+  width: 200px;
+  margin-top: 40px;
+
   /* margin: 20px; */
 }
 

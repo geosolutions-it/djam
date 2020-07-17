@@ -46,22 +46,11 @@
   margin: 1.7vh;
 }
 
-.underform-half-remember-me {
-  width: 50%;
-  text-align: left;
-}
-
-.underform-half-remember-me label {
-  font-size: 1.1em;
-  font-weight: 600;
-  color: #8f8f8f;
-  display: block;
-
-}
 
 .underform-half-forgot-password {
   width: 50%;
   text-align: right;
+  white-space: nowrap;
 }
 
 .underform-half-forgot-password a {
@@ -87,11 +76,7 @@
   color: #808080 !important;
 }
 
-.underform-box {
-  /* text-align: center;
-  align-items: center; */
 
-}
 
 .underform-half-forgot-password {
   text-align: center;
@@ -101,10 +86,14 @@
 
 }
 
+
+
+
 @media only screen and (max-width: 800px) {
   .right-title {
     height: 25vh;
   }
+
 }
 
 
@@ -140,5 +129,35 @@
   .sign-in-box {
     overflow: auto;
     overscroll-behavior-y: contain;
+  }
+  .mapstand-avatar{
+    width: 12vh;
+  }
+}
+
+
+@media only screen and (max-height: 560px) {
+  .mapstand-avatar-box {
+    display: none;
+  }
+  /* .right-title {
+    display: none;
+  } */
+  html, body {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  overflow: scroll;
+ }
+ .mapstand-logo-right {
+  margin-top: 10px;
+  width: 160px;
+ }
+   .right-title {
+    height: 12vh !important;
+    
+  }
+  h1 {
+    font-size: 1.5em !important;
   }
 }

@@ -197,3 +197,26 @@
         height: 90vh;
     }
 }
+
+@media only screen and (max-height: 560px) {
+    .mapstand-avatar-box {
+      height: 20vh;
+    }
+    .right-title {
+      position: relative;
+      align-items: center;
+      text-align: center;
+
+    }
+    .mapstand-avatar{
+        display: none;
+    }
+    html, body {
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    overflow: scroll;
+   }
+   .mapstand-avatar-box {
+   }
+  }

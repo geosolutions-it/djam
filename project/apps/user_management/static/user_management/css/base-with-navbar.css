@@ -45,6 +45,39 @@ body {
   padding-right: 4px;
 }
 
+.back-to-map-button {
+  background-color: #59bb71af;
+  color: white;
+  border: none;
+  border-radius: 2px;
+  color: white;
+  padding: 9px 40px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-top: -10px;
+}
+
+.back-to-map-button:hover {
+  background-color: #59bb71a4;
+  color: white;
+
+}
+
+.back-to-map-button:focus {
+  background-color: #59bb718e;
+  color: white;
+
+}
+
+.back-to-map-button:active {
+  background-color: #59bb718a;
+  color: white;
+
+}
+
+
 .flex-container {
   display: flex;
 }
