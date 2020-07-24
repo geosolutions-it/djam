@@ -121,3 +121,34 @@
   }
 
 }
+
+@media only screen and (max-height: 600px) {
+  html, body {
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    overflow: scroll;
+   }
+}
+
+
+@media only screen and (max-height: 560px) {
+  .mapstand-avatar-box {
+    display: none;
+  }
+  .right-title {
+    display: none;
+  }
+  html, body {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  overflow: scroll;
+ }
+ .top-image-box {
+     display: none;
+ }
+ .middle-text-box{
+     margin-top: 30vh;
+ }
+}

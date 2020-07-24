@@ -182,7 +182,9 @@ label {
 
 
 .mapstand-logo-right {
-  width: 300px;
+  width: 200px;
+  margin-top: 40px;
+
   /* margin: 20px; */
 }
 
@@ -229,7 +231,20 @@ input:-webkit-autofill:active  {
 .form-error-message {
   color: red;
   font-size: 1em;
-  font-weight: bold;
+}
+
+.error-message {
+  color: red;
+}
+
+.errorlist {
+  list-style: none;
+  color: red;
+  text-decoration: none;
+  padding: 0px;
+  list-style-type: none;
+  text-align: center;
+
 }
 
 

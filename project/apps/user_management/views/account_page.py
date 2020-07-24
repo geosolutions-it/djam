@@ -67,6 +67,11 @@ class AccountEditView(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return f"/user/account/{self.object.id}"
 
+    def get_context_data(self):
+        context = super().get_context_data()
+        context['fix_error'] = self.request.GET.get('fix_error')
+        return context
+
 
 class PasswordAccountEditView(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
     model = get_user_model()

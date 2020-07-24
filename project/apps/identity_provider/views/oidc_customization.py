@@ -1,6 +1,7 @@
 import re
 import json
 
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.db.models import ObjectDoesNotExist
 from oidc_provider.views import AuthorizeView, TokenView
@@ -15,6 +16,10 @@ class AuthorizeViewWithSessionKey(AuthorizeView):
     """
 
     def get(self, request, *args, **kwargs):
+
+        # in case user data are missing, stop the flow and force fix
+        if request.user.is_authenticated and not self._user_claims_valid(request.user):
+            return HttpResponseRedirect(request.user.get_absolute_url() + '?fix_error=1')
 
         # limit login access to a Client application to only privileged users
         client_id = request.GET.get("client_id", None)
@@ -34,6 +39,9 @@ class AuthorizeViewWithSessionKey(AuthorizeView):
         self.update_session_with_code(response)
 
         return response
+
+    def _user_claims_valid(self, user):
+        return user.first_name and user.last_name and user.username
 
     def post(self, request, *args, **kwargs):
 
@@ -88,7 +96,7 @@ class StatelessAuthorizeView(AuthorizeViewWithSessionKey):
         if response.has_header("location"):
             # check if state param is empty
             if re.search("&state=$", response._headers["location"][1]) or re.search(
-                "&state=&", response._headers["location"][1]
+                    "&state=&", response._headers["location"][1]
             ):
                 # remove empty state from redirect url
                 response._headers["location"] = (

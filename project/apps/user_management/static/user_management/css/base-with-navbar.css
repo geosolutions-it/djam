@@ -45,6 +45,36 @@ body {
   padding-right: 4px;
 }
 
+.back-to-map-button {
+  background-color: #d6792d;
+  color: #e0e0e0 !important;
+  border: none;
+  border-radius: 2px;
+  padding: 9px 40px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-top: -10px;
+}
+
+.back-to-map-button:hover {
+  background-color: #d6792de5;
+  color: #e0e0e0;
+
+}
+
+.back-to-map-button:focus {
+  background-color: #d6792dc9;
+  color: #e0e0e0;
+
+}
+
+.right-link.logout-button:hover {
+  color: #e0e0e0d8;
+}
+
+
 .flex-container {
   display: flex;
 }
@@ -78,6 +108,7 @@ body {
 .logo-image img {
   width: 140px;
 }
+
 
 .main-title {
   color: white;
@@ -227,6 +258,15 @@ label {
   display: none;
 }
 
+.errorlist {
+  list-style: none;
+  color: red;
+  text-decoration: none;
+  padding: 0px;
+  list-style-type: none;
+  text-align: center;
+}
+
 .common-input-form input {
   border: 1px solid #e0e0e0;
 }
@@ -311,6 +351,10 @@ input:-webkit-autofill:active {
 
   .mapstand-logo-right {
     margin-top: 40px;
+  }
+
+  .back-to-map-button {
+    padding: 13px 15px;
   }
 
   .right-link b {
