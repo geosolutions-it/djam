@@ -11,11 +11,11 @@
     <!-- Left panel -->
 
     {% block left_title %}
-    You've successfully registered!
+    Successfully registered!
     {% endblock left_title %}
     
     {% block left_subtitle %}
-    Welcome to the community! Now you can sign in and enjoy Mapstand.
+    Welcome to the community! Sign in to explore Mapstand.
     {% endblock left_subtitle %}
 
     {% block left_image %}
@@ -46,9 +46,6 @@
                 <div class="lower-form">
 
                     <div class="underform-box">
-                        <div class="underform-half-remember-me">
-                        <label class="check" for="checkbox"><input id="checkbox" type="checkbox"> &nbsp;&nbsp;&nbsp;Remember me </label>
-                        </div>
                         <div class="underform-half-forgot-password">
                         <a class="signing-link" href="{% url 'password_reset' %}">Forgot password?</a>
                         </div>

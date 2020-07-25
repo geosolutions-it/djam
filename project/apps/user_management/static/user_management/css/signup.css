@@ -198,6 +198,16 @@
     }
 }
 
+@media only screen and (max-height: 760px) {
+    .flex-right-half {
+    overflow: scroll !important;
+    margin-top: 0px !important;
+   }
+   .form-box {
+     padding-bottom: 200px;
+   }
+  }
+
 @media only screen and (max-height: 560px) {
     .mapstand-avatar-box {
       height: 20vh;
@@ -211,12 +221,5 @@
     .mapstand-avatar{
         display: none;
     }
-    html, body {
-    margin: 0;
-    height: 100%;
-    width: 100%;
-    overflow: scroll;
-   }
-   .mapstand-avatar-box {
-   }
+
   }
