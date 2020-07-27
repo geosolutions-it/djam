@@ -113,7 +113,7 @@
 
 }
 
-
+/* 
 @media only screen and (max-height: 750px) {
     .flex-right-half {
     overflow: scroll !important;
@@ -137,4 +137,39 @@
    .middle-text-box{
        margin-top: 30vh;
    }
+  } */
+
+
+
+@media only screen and (max-width: 1200px) {
+    .flex-container {
+      height: 100vh;
+   }
+  }
+  
+  
+  @media only screen and (max-height: 750px) {
+    .flex-right-half {
+    overflow: scroll !important;
+    margin-top: 0px !important;
+    height: 100vh !important;
+   }
+   .form-box {
+     height: 700px;
+   }
+  }
+  
+  @media only screen and (max-height: 560px) {
+    .mapstand-avatar-box {
+      display: none;
+    }
+    .form-box {
+      height: 500px;
+    }
+    .top-image-box {
+        display: none;
+    }
+    .middle-text-box{
+        margin-top: 30vh;
+    }
   }

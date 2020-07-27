@@ -114,13 +114,14 @@
   }
 }
 
-@media only screen and (max-height: 560px) {
-  .mapstand-avatar-box {
-    display: none;
-  }
-  .right-title {
-    display: none;
-  }
+
+@media only screen and (max-width: 1200px) {
+  .flex-container {
+    height: 100vh;
+ }
+ .right-title {
+  display: none;
+}
 }
 
 
@@ -128,8 +129,24 @@
   .flex-right-half {
   overflow: scroll !important;
   margin-top: 0px !important;
+  height: 100vh !important;
  }
  .form-box {
-   padding-bottom: 200px;
+   height: 660px;
  }
+}
+
+@media only screen and (max-height: 560px) {
+  .mapstand-avatar-box {
+    display: none;
+  }
+  .right-title {
+    display: none;
+  }
+  .form-box {
+    height: 500px;
+  }
+  .password-change-form-box{
+    padding-top: 20vh;
+  }
 }

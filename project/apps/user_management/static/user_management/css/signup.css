@@ -110,10 +110,9 @@
     padding: 0px;
 }
 
-
+/* 
 @media only screen and (max-width: 1200px) {
     .flex-right-half {
-        /* margin-top: 2vh; */
     }
 
     .right-title {
@@ -127,8 +126,8 @@
         margin: 20px;
         width: 200px;
     }
-}
-
+} */
+/* 
 @media only screen and (max-width: 700px) {
     .sign-up-form {
         right: 5px;
@@ -146,8 +145,8 @@
     .mapstand-avatar-box {
         height: 15vh;
     }
-}
-
+} */
+/* 
 @media only screen and (max-width: 500px) {
 
     .right-title {
@@ -196,8 +195,8 @@
         overflow-x: hidden;
         height: 90vh;
     }
-}
-
+} */
+/* 
 @media only screen and (max-height: 760px) {
     .flex-right-half {
     overflow: scroll !important;
@@ -206,8 +205,8 @@
    .form-box {
      padding-bottom: 200px;
    }
-  }
-
+  } */
+/* 
 @media only screen and (max-height: 560px) {
     .mapstand-avatar-box {
       height: 20vh;
@@ -222,4 +221,87 @@
         display: none;
     }
 
+  } */
+
+
+
+@media only screen and (max-width: 1200px) {
+    .flex-container {
+      height: 100vh;
+   }
+   .mapstand-avatar{
+       display: none;
+   }
   }
+  
+  
+  @media only screen and (max-height: 750px) {
+    .flex-right-half {
+    overflow: scroll !important;
+    margin-top: 0px !important;
+    height: 100vh !important;
+   }
+   .form-box {
+     height: 300px;
+   }
+   .mapstand-avatar-box {
+    display: none;
+  }
+  .sign-up-box{
+      margin-top: 15vh;
+  }
+  }
+  
+  @media only screen and (max-height: 660px) {
+
+    .sign-up-box {
+        margin-top: 10vh;
+    }
+    /* .right-title {
+      display: none;
+    } */
+    .form-box {
+      height: 300px;
+    }
+    .mapstand-logo-right {
+        margin-top: 10px;
+    }
+  }
+
+
+  @media only screen and (max-width: 500px) {
+
+
+    .sign-up-form {
+        width: 90%;
+    }
+
+
+
+
+    .sign-up-form #id_first_name,
+    #id_last_name,
+    #id_email,
+    #id_password1,
+    #id_password2 {
+        font-size: 1.2em;
+        margin: 1vh;
+    }
+
+    .sign-up-form h1 {
+        font-size: 2em;
+    }
+
+    .underform-box label {
+        font-size: 1em;
+        text-align: left;
+    }
+    .underform-box .agree-to-terms {
+        margin-top: 1vh;    
+    }
+
+    .sign-up-form {
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+}

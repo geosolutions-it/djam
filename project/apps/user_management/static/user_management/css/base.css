@@ -278,9 +278,9 @@ input:-webkit-autofill:active  {
     margin: 5vw;
   }
 
-  .mapstand-logo-right {
-    margin-top: 40px;
-  }
+  /* .mapstand-logo-right {
+    margin-top: 40vh;
+  } */
 }
 
 @media only screen and (max-width: 1200px){
