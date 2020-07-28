@@ -17,19 +17,31 @@
 }
 
 .form-error-header {
-  font-size: 1.4em;
+  font-size: 1em;
   color: red;
-  font-weight: bold;
-  margin-top: 15px;
-  margin-bottom: 5px;
+  margin: 5px 20px;
+}
+
+.form-error-message {
+  color: red;
+  font-size: 1em;
+  margin: 5px 20px;
+}
+
+.error-message {
+  color: red;
 }
 
 .errorlist {
-  padding: 0;
+  list-style: none;
   color: red;
+  text-decoration: none;
+  padding: 0;
+  list-style-type: none;
+  text-align: center;
   margin: 0;
-  max-width:270px;
-  list-style-type:none;
-  word-wrap:break-word;
+  word-wrap: break-word;
+  margin: 5px 20px;
+
 }
 
