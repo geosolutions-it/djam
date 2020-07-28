@@ -135,20 +135,23 @@
   }
 }
 
+/* 
+@media only screen and (max-height: 760px) {
+  .flex-right-half {
+  overflow: scroll !important;
+  margin-top: 0px !important;
+  height: 100%;
+ }
+ .form-box {
+   padding-bottom: 200px;
+ }
+}
+
 
 @media only screen and (max-height: 560px) {
   .mapstand-avatar-box {
     display: none;
   }
-  /* .right-title {
-    display: none;
-  } */
-  html, body {
-  margin: 0;
-  height: 100%;
-  width: 100%;
-  overflow: scroll;
- }
  .mapstand-logo-right {
   margin-top: 10px;
   width: 160px;
@@ -160,4 +163,62 @@
   h1 {
     font-size: 1.5em !important;
   }
+} */
+/* 
+@media only screen and (max-width: 1200px) {
+  .flex-container {
+    height: 100vh;
+ }
+}
+
+
+@media only screen and (max-height: 750px) {
+  .flex-right-half {
+  overflow: scroll !important;
+  margin-top: 0px !important;
+  height: 100vh !important;
+ }
+ .form-box {
+   height: 600px;
+ }
+}
+
+@media only screen and (max-height: 560px) {
+  .mapstand-avatar-box {
+    display: none;
+  }
+  .right-title {
+    display: none;
+  }
+  .form-box {
+    height: 500px;
+  }
+} */
+
+
+
+@media only screen and (max-width: 1200px) {
+  .flex-container {
+    height: 100vh;
+ }
+}
+  
+@media only screen and (max-height: 750px) {
+  .flex-right-half {
+  overflow: scroll !important;
+  margin-top: 0px !important;
+  height: 100vh !important;
+ }
+ .form-box {
+   height: 300px;
+ }
+}
+
+@media only screen and (max-height: 560px) {
+  .mapstand-avatar-box {
+    display: none;
+  }
+  /* .right-title{
+    display: none;
+  } */
 }
