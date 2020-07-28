@@ -58,13 +58,6 @@
   margin: 20px;
 }
 
-.errorlist {
-  list-style-type: none;
-  padding: 0;
-  color: #ff0000;
-  font-weight: 700;
-}
-
 @media only screen and (max-width: 800px) {
   .right-title {
     height: 25vh;

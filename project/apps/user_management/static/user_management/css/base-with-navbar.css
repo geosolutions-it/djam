@@ -258,13 +258,26 @@ label {
   display: none;
 }
 
+.form-error-message {
+  color: red;
+  font-size: 1em;
+  margin: 5px 20px;
+}
+
+.error-message {
+  color: red;
+}
+
 .errorlist {
   list-style: none;
   color: red;
   text-decoration: none;
-  padding: 0px;
+  padding: 0;
   list-style-type: none;
   text-align: center;
+  margin: 0;
+  word-wrap: break-word;
+  margin: 5px 20px;
 }
 
 .common-input-form input {
