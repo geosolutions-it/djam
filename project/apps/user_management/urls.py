@@ -7,6 +7,7 @@ from apps.user_management.views.account_page import (
 )
 from django.contrib.auth import views as auth_views
 
+from apps.user_management.views.password_change import CustomPasswordChangeView
 from apps.user_management.views.signup import SignupView
 from apps.user_management.forms import (
     UMPasswordResetForm,
@@ -33,7 +34,7 @@ urlpatterns = [
     ),
     path(
         "accounts/password_change/",
-        auth_views.PasswordChangeView.as_view(
+        CustomPasswordChangeView.as_view(
             template_name="account/password_change_form.html",
             form_class=CustomChangePasswordForm,
         ),

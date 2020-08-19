@@ -89,7 +89,7 @@ class UserAccountForm(ModelForm):
         fields = ("first_name", "last_name", "email")
 
 
-class UMPasswordResetForm(PasswordResetForm):
+class FormSendEmailMixin:
     def send_mail(
             self,
             subject_template_name,
@@ -115,6 +115,9 @@ class UMPasswordResetForm(PasswordResetForm):
             to_email,
             html_email_template_name,
         )
+
+
+class UMPasswordResetForm(FormSendEmailMixin, PasswordResetForm):
 
     def save(
             self,
@@ -198,7 +201,7 @@ class UMAuthenticationForm(AuthenticationForm):
                 )
 
 
-class CustomChangePasswordForm(PasswordChangeForm):
+class CustomChangePasswordForm(PasswordChangeForm, FormSendEmailMixin):
     old_password = forms.CharField(
         widget=PasswordInput(attrs={"placeholder": "Enter your old password"})
     )
@@ -208,3 +211,39 @@ class CustomChangePasswordForm(PasswordChangeForm):
     new_password2 = forms.CharField(
         widget=PasswordInput(attrs={"placeholder": "Enter your new password (again)"})
     )
+
+    def save(self, domain_override=None,
+             subject_template_name="user_management/password_change_subject.txt",
+             email_template_name="user_management/password_change_email_txt.html",
+             use_https=False,
+             token_generator=default_token_generator,
+             from_email=None,
+             request=None,
+             html_email_template_name="user_management/password_change_email.html",
+             extra_email_context=None,
+             logo_url="https://mapstand-frontend-prod.s3-eu-west-2.amazonaws.com/images/logo-inverted.png",
+             commit=True):
+
+        super().save(commit)
+        if not domain_override:
+            current_site = get_current_site(request)
+            site_name = current_site.name
+            domain = current_site.domain
+        else:
+            site_name = domain = domain_override
+        context = {
+            "site_name": site_name,
+            'domain': domain,
+            "protocol": "https" if use_https else "http",
+            'user': self.user,
+                    ** (extra_email_context or {}),
+        }
+
+        self.send_mail(
+            subject_template_name,
+            email_template_name,
+            context,
+            from_email,
+            self.user.email,
+            html_email_template_name=html_email_template_name,
+        )
