@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.core.exceptions import PermissionDenied
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import resolve_url
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -72,12 +72,10 @@ class AccountEditView(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
         context['fix_error'] = self.request.GET.get('fix_error')
         return context
 
-
-class PasswordAccountEditView(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
-    model = get_user_model()
-    form_class = UserAccountForm
-    template_name = "account/password_change_done.html"
-    pk_url_kwarg = "id"
-
-    def get_success_url(self):
-        return f"/user/account/{self.object.id}"
+    def form_valid(self, form):
+        opts = {
+            'use_https': self.request.is_secure(),
+            'request': self.request,
+        }
+        self.object = form.save(**opts)
+        return HttpResponseRedirect(self.get_success_url())
