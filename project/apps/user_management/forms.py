@@ -127,6 +127,7 @@ class UserAccountForm(FormSendEmailMixin, ModelForm):
              extra_email_context=None,
              logo_url="https://mapstand-frontend-prod.s3-eu-west-2.amazonaws.com/images/logo-inverted.png",
              commit=True):
+        old_email = request.user.email
         obj = super().save(commit)
         if 'email' in self.changed_data:
             if not domain_override:
@@ -151,7 +152,7 @@ class UserAccountForm(FormSendEmailMixin, ModelForm):
                 email_template_name,
                 context,
                 from_email,
-                request.user.email,
+                old_email,
                 html_email_template_name=html_email_template_name,
             )
         return obj
