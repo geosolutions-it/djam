@@ -21,11 +21,11 @@
     </mj-section>
     <mj-section background-color="#fafafa">
       <mj-column width="450px" border="20px solid #ffffff" background-color="#ffffff">
-        <mj-text font-size="21px" color="#626262" align="center" font-weight="bold">MapStand password change confirmation</mj-text>
+        <mj-text font-size="21px" color="#626262" align="center" font-weight="bold">MapStand email change confirmation</mj-text>
         <mj-divider border-color="#609845" width="100px"></mj-divider>
 
         <mj-text color="#525252" font-size="14px" line-height="1.5">Dear {{first_name}} {{last_name}}</mj-text>
-        <mj-text color="#525252" font-size="14px" line-height="1.5"> This is a confirmation that your password has now been successfully updated. </mj-text>
+        <mj-text color="#525252" font-size="14px" line-height="1.5"> This is a confirmation that your email address has now been successfully updated. </mj-text>
         <mj-text color="#525252" font-size="14px" line-height="1.5">If this has been done without your knowledge or consent please contact our support team at <a href="mailto:support@mapstand.com" class="link">support@mapstand.com</a> as soon as possible.</mj-text>
 
         <mj-text color="#525252" font-size="14px" line-height="1.5">Kind Regards, <br></br>

@@ -2,8 +2,7 @@ from django.urls import path, re_path, include
 from apps.user_management.views.account_page import (
     AccountPageView,
     AccountEditView,
-    UMLoginView,
-    PasswordAccountEditView,
+    UMLoginView
 )
 from django.contrib.auth import views as auth_views
 

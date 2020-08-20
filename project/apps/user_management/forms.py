@@ -79,16 +79,6 @@ class ResendActivationEmailForm(forms.Form):
         return data
 
 
-class UserAccountForm(ModelForm):
-    last_name = forms.CharField(max_length=30, required=False)
-    first_name = forms.CharField(max_length=150, required=False)
-    email = forms.CharField(max_length=150, required=False)
-
-    class Meta:
-        model = get_user_model()
-        fields = ("first_name", "last_name", "email")
-
-
 class FormSendEmailMixin:
     def send_mail(
             self,
@@ -115,6 +105,56 @@ class FormSendEmailMixin:
             to_email,
             html_email_template_name,
         )
+
+
+class UserAccountForm(FormSendEmailMixin, ModelForm):
+    last_name = forms.CharField(max_length=30, required=False)
+    first_name = forms.CharField(max_length=150, required=False)
+    email = forms.CharField(max_length=150, required=False)
+
+    class Meta:
+        model = get_user_model()
+        fields = ("first_name", "last_name", "email")
+
+    def save(self, domain_override=None,
+             subject_template_name="user_management/email_change_subject.txt",
+             email_template_name="user_management/email_change_email_txt.html",
+             use_https=False,
+             token_generator=default_token_generator,
+             from_email=None,
+             request=None,
+             html_email_template_name="user_management/email_change_email.html",
+             extra_email_context=None,
+             logo_url="https://mapstand-frontend-prod.s3-eu-west-2.amazonaws.com/images/logo-inverted.png",
+             commit=True):
+        obj = super().save(commit)
+        if 'email' in self.changed_data:
+            if not domain_override:
+                current_site = get_current_site(request)
+                site_name = current_site.name
+                domain = current_site.domain
+            else:
+                site_name = domain = domain_override
+            context = {
+                "site_name": site_name,
+                'domain': domain,
+                "protocol": "https" if use_https else "http",
+                'user': request.user,
+                **(extra_email_context or {}),
+                'first_name': request.user.first_name,
+                'last_name': request.user.last_name,
+                'logo_url': logo_url
+            }
+
+            self.send_mail(
+                subject_template_name,
+                email_template_name,
+                context,
+                from_email,
+                request.user.email,
+                html_email_template_name=html_email_template_name,
+            )
+        return obj
 
 
 class UMPasswordResetForm(FormSendEmailMixin, PasswordResetForm):
@@ -224,7 +264,7 @@ class CustomChangePasswordForm(PasswordChangeForm, FormSendEmailMixin):
              logo_url="https://mapstand-frontend-prod.s3-eu-west-2.amazonaws.com/images/logo-inverted.png",
              commit=True):
 
-        super().save(commit)
+        obj = super().save(commit)
         if not domain_override:
             current_site = get_current_site(request)
             site_name = current_site.name
@@ -236,7 +276,10 @@ class CustomChangePasswordForm(PasswordChangeForm, FormSendEmailMixin):
             'domain': domain,
             "protocol": "https" if use_https else "http",
             'user': self.user,
-                    ** (extra_email_context or {}),
+            **(extra_email_context or {}),
+            'first_name': self.user.first_name,
+            'last_name': self.user.last_name,
+            'logo_url': logo_url
         }
 
         self.send_mail(
@@ -247,3 +290,4 @@ class CustomChangePasswordForm(PasswordChangeForm, FormSendEmailMixin):
             self.user.email,
             html_email_template_name=html_email_template_name,
         )
+        return obj
