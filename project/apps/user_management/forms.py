@@ -1,5 +1,6 @@
 import logging
 from django import forms
+from django.contrib.admin.forms import AdminAuthenticationForm
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth import get_user_model
@@ -9,7 +10,7 @@ from django.contrib.auth.forms import (
     UserChangeForm,
     PasswordResetForm,
     AuthenticationForm,
-    PasswordChangeForm,
+    PasswordChangeForm, UsernameField,
 )
 from django.forms import ModelForm
 from django.utils.encoding import force_bytes
@@ -210,8 +211,25 @@ class UMPasswordResetForm(FormSendEmailMixin, PasswordResetForm):
                 html_email_template_name=html_email_template_name,
             )
 
+class UMAdminAuthenticationForm(AdminAuthenticationForm):
+    username = UsernameField(label='Email', widget=forms.TextInput(attrs={'autofocus': True}))
+    error_messages = {
+        'invalid_login': _(
+            "Please enter a correct email address and password. Note that both "
+            "fields may be case-sensitive."
+        ),
+        'inactive': _("This account is inactive."),
+    }
 
 class UMAuthenticationForm(AuthenticationForm):
+    error_messages = {
+        'invalid_login': _(
+            "Please enter a correct email address and password. Note that both "
+            "fields may be case-sensitive."
+        ),
+        'inactive': _("This account is inactive."),
+    }
+
     def confirm_login_allowed(self, user):
         """
         Controls whether the given User may log in. This is a policy setting,
