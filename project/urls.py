@@ -1,7 +1,6 @@
 from django.contrib import admin
 from django.urls import path, re_path, include
 from django.conf import settings
-
 from apps.user_management.views.account_page import ProfileRedirectView
 
 urlpatterns = [
