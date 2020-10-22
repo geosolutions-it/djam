@@ -68,3 +68,15 @@ class CustomScopeClaims(ScopeClaims):
         }
 
         return dic
+
+    info_email = (
+        _(u"User email"),
+        _(u"Used to update user profile data"),
+    )
+
+    def scope_email(self):
+        dic = {
+            "email": self.user.email
+        }
+
+        return dic

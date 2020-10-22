@@ -23,7 +23,7 @@ class OIDCConfidentialClientFactory(factory.DjangoModelFactory):
 
     @factory.post_generation
     def _scope(self, create, extracted, **kwargs):
-        _scope = "openid profile user_id groups legacy_user_id is_admin is_staff"
+        _scope = "openid profile user_id groups legacy_user_id is_admin is_staff email"
 
     @factory.post_generation
     def response_types(self, create, extracted, **kwargs):
