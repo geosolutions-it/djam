@@ -3,6 +3,12 @@
 {% block header_scripts %}
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'user_management/css/user_edit.css' %}">
+
+    <script>
+        $(document).ready(function(){
+          $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
 {% endblock %}
 
 
@@ -66,7 +72,11 @@
                     {{ form.email.errors }}
                 </div>
                 <div class="form-group">
-                    <label for="secondary_email">Secondary Email</label>
+                    <label for="secondary_email">
+                        Secondary Email
+                        <i class="fas fa-info-circle" style="color:lightgrey;" data-toggle="tooltip"
+                           data-placement="right" title="This email will be used for the account recovery."></i>
+                    </label>
                     <input type="text" class="form-control input-lg" name="secondary_email" id="id_secondary_email"
                            placeholder="" \
                             {% if form.secondary_email.value %}
