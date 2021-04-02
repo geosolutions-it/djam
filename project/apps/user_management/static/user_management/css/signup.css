@@ -43,6 +43,7 @@
 .sign-up-form #id_first_name,
 #id_last_name,
 #id_email,
+#id_secondary_email,
 #id_password1,
 #id_password2 {
     width: 90%;

@@ -33,6 +33,7 @@ class UMUserCreationForm(UserCreationForm):
     email = forms.EmailField(
         max_length=254, help_text="Required. Input a valid email address."
     )
+    secondary_email = forms.EmailField(max_length=254, required=False)
     consent = forms.BooleanField(required=False)
     captcha = ReCaptchaField(widget=ReCaptchaV3())
 
@@ -42,6 +43,7 @@ class UMUserCreationForm(UserCreationForm):
             "first_name",
             "last_name",
             "email",
+            "secondary_email",
             "password1",
             "password2",
             "consent",
@@ -112,10 +114,11 @@ class UserAccountForm(FormSendEmailMixin, ModelForm):
     last_name = forms.CharField(max_length=30, required=False)
     first_name = forms.CharField(max_length=150, required=False)
     email = forms.CharField(max_length=150, required=False)
+    secondary_email = forms.CharField(max_length=150, required=False)
 
     class Meta:
         model = get_user_model()
-        fields = ("first_name", "last_name", "email")
+        fields = ("first_name", "last_name", "email", "secondary_email")
 
     def save(self, domain_override=None,
              subject_template_name="user_management/email_change_subject.txt",

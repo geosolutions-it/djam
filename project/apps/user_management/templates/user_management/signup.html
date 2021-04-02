@@ -62,6 +62,14 @@
                 {% endfor %}
                 </div>
 
+
+                <input type="text" id="id_secondary_email" name="secondary_email" placeholder="Enter your secondary email address">
+                <div class="error-message">
+                    {% for msg in form.secondary_email.errors %}
+                {{ msg }}
+                {% endfor %}
+                </div>
+
                 <input type="password" id="id_password1" name="password1" required placeholder="Enter your password">
                 <div class="error-message">
                     {% for msg in form.password1.errors %}
