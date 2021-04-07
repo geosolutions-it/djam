@@ -42,8 +42,8 @@ def register_user_in_hubspot(sender, instance, **kwargs):
         )
         return
 
-    if instance.email_confirmed:
-        # user gave their consent at registration, and now their email is confirmed
+    if not db_user.email_confirmed and instance.email_confirmed:
+        # user's email is confirmed - register the user in Hubspot, sending their subscription decision
         logging.info(
             f'Hubspot registration: registering user with email "{instance.email}" in Hubspot.'
         )
