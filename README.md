@@ -30,11 +30,11 @@ Clone git repository
 git clone git@github.com:geosolutions-it/djam.git
 ```
 
-Create environment configuration for Djam. Make sure DJAM_PROJECT_ENVIRONMENT is set to 'dev',
+Create environment configuration for Djam. Make sure DJAM_PROJECT_ENVIRONMENT is set to 'local',
  to set DEBUG mode and not to require ALLOWED_HOSTS definitions
 
 ```
-export DJAM_PROJECT_ENVIRONMENT=dev
+export DJAM_PROJECT_ENVIRONMENT=local
 export DJAM_SECRET_KEY=my-super-secret-key
 
 export DJAM_DB_NAME=...
@@ -106,7 +106,7 @@ From now on you can start working with your application. To add OpenID client na
 and in OPENID CONNECT PROVIDER add row to Clients table.
 
 You can also check User registration form at `http://localhost:8000/register`. REMEMBER: to register the User
-you first need update `djam/project/conf/dev/email.py` configuration file with SMTP server credentials.   
+you first need update `djam/project/conf/local/email.py` configuration file with SMTP server credentials.   
 
 ## Side notes
 

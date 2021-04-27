@@ -1,3 +1,4 @@
+import base64
 import logging
 
 from rest_framework import views, permissions, status
@@ -164,8 +165,12 @@ class GeoserverCredentialsIntrospection(GeoserverIntrospection, views.APIView):
                 {"username": None, "groups": None}, status=status.HTTP_400_BAD_REQUEST
             )
 
-        username = request.GET.get("u")
-        password = request.GET.get("p")
+        try:
+            username = base64.b64decode(request.GET.get("u")).decode('ascii')
+            password = base64.b64decode(request.GET.get("p")).decode('ascii')
+        except Exception:
+            logger.debug("GeoserverCredentialsIntrospection: Couldn't decode Base64 encoded credentials")
+            return Response({"username": None, "groups": None})
 
         try:
             user = get_user_model().objects.get(username=username)

@@ -1,7 +1,7 @@
 import logging
 from django import forms
 from django.contrib.admin.forms import AdminAuthenticationForm
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
@@ -160,6 +160,15 @@ class UserAccountForm(FormSendEmailMixin, ModelForm):
 
 
 class UMPasswordResetForm(FormSendEmailMixin, PasswordResetForm):
+    captcha = ReCaptchaField(widget=ReCaptchaV3())
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        try:
+            get_user_model().objects.get(email=cleaned_data['email'])
+        except ObjectDoesNotExist:
+            raise forms.ValidationError(f"No user found with email: {cleaned_data['email']}")
 
     def save(
             self,
@@ -183,8 +192,7 @@ class UMPasswordResetForm(FormSendEmailMixin, PasswordResetForm):
         if not html_email_template_name:
             html_email_template_name = "registration/password_reset_email.html"
 
-        email = self.cleaned_data["email"]
-        for user in self.get_users(email):
+        for user in self.get_users(self.cleaned_data["email"]):
             if not domain_override:
                 current_site = get_current_site(request)
                 site_name = current_site.name
