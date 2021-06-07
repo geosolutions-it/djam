@@ -8,3 +8,4 @@ RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY')
 RECAPTCHA_REQUIRED_SCORE = float(os.getenv('RECAPTCHA_REQUIRED_SCORE'))
 MAPSTAND_URL = 'http://dev-app.mapstand.com'
 MAP_URL = 'http://dev-app.mapstand.com'
+REQUIRE_SECURE_HTTP_FOR_GEOSERVER_INTROSPECTION = False
