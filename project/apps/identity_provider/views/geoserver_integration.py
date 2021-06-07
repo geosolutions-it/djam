@@ -170,16 +170,26 @@ class GeoserverCredentialsIntrospection(GeoserverIntrospection, views.APIView):
             password = base64.b64decode(request.GET.get("p")).decode('ascii')
         except Exception:
             logger.debug("GeoserverCredentialsIntrospection: Couldn't decode Base64 encoded credentials")
-            return Response({"username": None, "groups": None})
+            return Response(
+                {"username": None, "groups": None},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
         try:
             user = get_user_model().objects.get(username=username)
         except ObjectDoesNotExist:
-            return Response({"username": None, "groups": None})
+            return Response(
+                {"username": None, "groups": None},
+                status=status.HTTP_404_NOT_FOUND
+            )
 
         if user.check_password(password):
             user_groups_names = self.user_groups_geoserver_format(user.id)
 
             return Response({"username": user.username, "groups": user_groups_names,})
         else:
-            return Response({"username": None, "groups": None})
+            return Response(
+                {"username": None, "groups": None},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+
