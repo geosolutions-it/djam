@@ -37,3 +37,4 @@ LOGIN_REDIRECT_URL = "/user/account/edit/"
 
 HOME_VIEW = os.getenv("DJAM_HOME_VIEW", "login")
 LOGOUT_REDIRECT_URL = os.getenv("DJAM_LOGOUT_REDIRECT", "login")
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 100000
