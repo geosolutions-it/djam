@@ -35,7 +35,7 @@
 
         <div class="sign-in-form">
             <h1>Sign in to MapStand</h1>
-            <form role="form" method="post" action="{% url 'login' %}?{{ request.GET.urlencode }}">
+            <form role="form" method="post" class="user-login" action="{% url 'login' %}?{{ request.GET.urlencode }}">
                 {% csrf_token %}
 
                 <input type="text" id="username" name="username" required placeholder="Enter your email address">

@@ -45,7 +45,7 @@
         {% endif %}
 
         <div class="user-edit-form-box">
-            <form role="form" method="post" action="{% url 'user_account_edit' id=object.id %}">
+            <form role="form" method="post" class="update-user-account" action="{% url 'user_account_edit' id=object.id %}">
                 {% csrf_token %}
                 <div class="form-group">
                     <label for="first_name">First name</label>
