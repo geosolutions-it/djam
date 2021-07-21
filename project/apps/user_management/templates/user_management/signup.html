@@ -4,6 +4,11 @@
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'user_management/css/signup.css' %}">
 
+    <script>
+        $(document).ready(function(){
+          $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
 {%  endblock %}
 
 
@@ -58,6 +63,15 @@
                 <input type="text" id="id_email" name="email" required placeholder="Enter your email address">
                 <div class="error-message">
                     {% for msg in form.email.errors %}
+                {{ msg }}
+                {% endfor %}
+                </div>
+
+
+                <input type="text" id="id_secondary_email" name="secondary_email" placeholder="Enter your secondary email address"
+                       data-toggle="tooltip" data-placement="top" title="This email will be used for the account recovery.">
+                <div class="error-message">
+                    {% for msg in form.secondary_email.errors %}
                 {{ msg }}
                 {% endfor %}
                 </div>

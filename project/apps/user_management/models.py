@@ -67,6 +67,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         unique=True,
         error_messages={"unique": _("A user with that email already exists."),},
     )
+    secondary_email = CaseInsensitiveEmailField(
+        _("secondary email address"),
+        unique=False, blank=True, null=True
+    )
     email_confirmed = models.BooleanField(default=False)
     uuid = models.UUIDField(default=uuid.uuid4, unique=True)
     is_staff = models.BooleanField(
@@ -90,7 +94,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     EMAIL_FIELD = "email"
     USERNAME_FIELD = "username"
-    REQUIRED_FIELDS = ["email"]
+    REQUIRED_FIELDS = ["email", "first_name", "last_name"]
 
     class Meta:
         verbose_name = _("user")
