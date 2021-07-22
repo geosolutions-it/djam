@@ -1,4 +1,5 @@
 import logging
+from apps.identity_provider.models import ApiKey
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -72,6 +73,7 @@ class AccountEditView(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         context['fix_error'] = self.request.GET.get('fix_error')
         context['group'] = Group.objects.filter(users=context['object']).first()
+        context['api_key'] = ApiKey.objects.filter(user=context['object']).first()
         context['success'] = self.request.GET.get('success')
         return context
 
