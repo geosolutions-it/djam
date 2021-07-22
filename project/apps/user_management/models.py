@@ -89,6 +89,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
     legacy_user_id = models.IntegerField(null=True, blank=False)
     consent = models.BooleanField(blank=True, null=True)
+    marketing_consent = models.BooleanField(blank=True, null=True)
 
     objects = UserManager()
 

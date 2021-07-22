@@ -10,6 +10,7 @@ from apps.hubspot_integration.utils import (
     send_hubspot_notify,
     register_login_in_hubspot,
 )
+from apps.hubspot_integration.utils import send_hubspot_notify
 
 
 logger = logging.getLogger(__name__)

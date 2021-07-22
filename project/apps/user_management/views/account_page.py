@@ -65,11 +65,12 @@ class AccountEditView(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
     pk_url_kwarg = "id"
 
     def get_success_url(self):
-        return f"/user/account/{self.object.id}"
+        return f"/user/account/{self.object.id}?success=true"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['fix_error'] = self.request.GET.get('fix_error')
+        context['success'] = self.request.GET.get('success')
         return context
 
     def form_valid(self, form):

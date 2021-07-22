@@ -1,7 +1,8 @@
 import logging
+from apps.hubspot_integration.utils import send_hubspot_update
 from django import forms
 from django.contrib.admin.forms import AdminAuthenticationForm
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
@@ -115,10 +116,11 @@ class UserAccountForm(FormSendEmailMixin, ModelForm):
     first_name = forms.CharField(max_length=150, required=False)
     email = forms.CharField(max_length=150, required=False)
     secondary_email = forms.CharField(max_length=150, required=False)
-
+    secondary_email = forms.CharField(max_length=150, required=False)
+    marketing_consent = forms.BooleanField(required=False)
     class Meta:
         model = get_user_model()
-        fields = ("first_name", "last_name", "email", "secondary_email")
+        fields = ("first_name", "last_name", "email", "secondary_email", "marketing_consent")
 
     def save(self, domain_override=None,
              subject_template_name="user_management/email_change_subject.txt",
@@ -159,6 +161,9 @@ class UserAccountForm(FormSendEmailMixin, ModelForm):
                 old_email,
                 html_email_template_name=html_email_template_name,
             )
+
+        if 'marketing_consent' in self.changed_data:
+            send_hubspot_update(obj)
         return obj
 
 

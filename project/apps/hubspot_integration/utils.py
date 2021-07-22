@@ -62,3 +62,10 @@ def register_login_in_hubspot(email):
         logger.error(
             f"Hubspot registration: Failed to send a post request to Hubspot url {hubspot_url}: Exception {e}"
         )
+
+
+def send_hubspot_update(instance):
+    logging.debug(
+        f'Hubspot updateing: Updating user information'
+    )
+

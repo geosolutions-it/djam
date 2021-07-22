@@ -219,3 +219,8 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+.custom-link-img {
+  max-width: 35px;
+  margin-right: 1px;
+}
