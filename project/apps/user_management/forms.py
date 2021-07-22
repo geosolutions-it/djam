@@ -117,10 +117,10 @@ class UserAccountForm(FormSendEmailMixin, ModelForm):
     email = forms.CharField(max_length=150, required=False)
     secondary_email = forms.CharField(max_length=150, required=False)
     secondary_email = forms.CharField(max_length=150, required=False)
-    marketing_consent = forms.BooleanField(required=False)
+    consent = forms.BooleanField(required=False)
     class Meta:
         model = get_user_model()
-        fields = ("first_name", "last_name", "email", "secondary_email", "marketing_consent")
+        fields = ("first_name", "last_name", "email", "secondary_email", "consent")
 
     def save(self, domain_override=None,
              subject_template_name="user_management/email_change_subject.txt",
@@ -162,7 +162,7 @@ class UserAccountForm(FormSendEmailMixin, ModelForm):
                 html_email_template_name=html_email_template_name,
             )
 
-        if 'marketing_consent' in self.changed_data:
+        if 'consent' in self.changed_data:
             send_hubspot_update(obj)
         return obj
 
