@@ -11,6 +11,7 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views.generic import UpdateView, DetailView, RedirectView
 from apps.user_management.forms import UserAccountForm
+from apps.privilege_manager.models import Group
 
 logger = logging.getLogger(__name__)
 
@@ -70,6 +71,7 @@ class AccountEditView(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['fix_error'] = self.request.GET.get('fix_error')
+        context['group'] = Group.objects.filter(users=context['object']).first()
         context['success'] = self.request.GET.get('success')
         return context
 

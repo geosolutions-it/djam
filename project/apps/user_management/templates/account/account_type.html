@@ -1,0 +1,65 @@
+{{ block.super }}
+<div class="card border-light">
+    <div class="card-header">Account Type</div>
+    <div class="card-body">
+        <div class="form-group row">
+            <label class="col-sm-4 col-form-label">Account Type</label>
+            <label class="col-sm-8 col-form-label"><b>{{ group.name|upper }}</b></label>
+        </div>
+    </div>
+    <div class="col-sm-12 text-left">
+    {% if group.name == 'free' %}
+        Contact our <a href="#">Support Team</a> to know more how to upgrade your account to Enterprise
+    {% else %}
+        Your {{group.name|upper}} account expires in <b>XXX days</b>, contact our <a href="#">Support Team</a> to help you to RENEW your plan
+    {% endif %}
+    </div>
+</div>
+<br>
+<div class="card border-light">
+    <div class="card-header">API Key</div>
+    <div class="card-body">
+        <div class="form-group row">
+            {% if group.name == 'free' %}
+            <label class="col-sm-12 col-form-label">
+                <h4 class="text-uppercase text-center col-sm-12">no access token to free account</h4>
+            </label>
+            {% else %} 
+                <label class="col-sm-9 col-form-label"><h4>Access Token</h4></label>
+                <div class="col-sm-3 col-form-label">
+                    <input class="btn btn-success" type="submit" value="+ Create a token">
+                </div>
+            {% endif %}
+        </div>
+        <div class="form-group row">
+            {% if group.name == 'free' %}
+                <label class="row-md-12 col-form-label">You need an API Access token to configure <a href="#">MapStand OGC web services</a>. Read more about <a href="">API access token</a> in our documentation.</label>
+                <p class="text-center">TO CREATE A TOKEN YOU NEED TO UPGRADE TO ENTERPRISE. please contact out SUPPORT TEAM</p>
+            {% else %}
+                <label class="row-md-12 col-form-label">You need and API Access token to configure <a href="">MapStand OCG web services</a>. Read more about <a href="">API access token</a> in our documentation.</label>
+            {% endif %}
+        </div>
+        <br>
+        <div class="form-group row">
+            {% if not group.name == 'free' %}
+                <label class="col-sm-12 col-form-label"><h4>Token</h4></label>
+            {% endif %}
+        </div>
+        <div class="form-group row">
+            {% if not group.name == 'free' %}
+                <div class="col-sm-6 col-form-label">
+                    <code>
+                        dGhpcyBpcyBteSBzdXBlci1zZWNyZXQgYXBpIGtleQ==
+                    </code>
+                </div>
+                <div class="col-sm-3 col-form-label">
+                    <small>Last modified: xxxx days ago</small>
+                </div>
+                <div class="col-sm-3 col-form-label">
+                    <i class="fa fa-search" aria-hidden="true"></i> <a href="">Refresh</a><br>
+                    <i class="fa fa-trash" aria-hidden="true"></i> <a href="">Delete</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
