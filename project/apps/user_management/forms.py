@@ -35,7 +35,7 @@ class UMUserCreationForm(UserCreationForm):
         max_length=254, help_text="Required. Input a valid email address."
     )
     secondary_email = forms.EmailField(max_length=254, required=False)
-    consent = forms.BooleanField(required=False)
+    subscription = forms.BooleanField(required=False)
     captcha = ReCaptchaField(widget=ReCaptchaV3())
 
     class Meta:
@@ -47,7 +47,7 @@ class UMUserCreationForm(UserCreationForm):
             "secondary_email",
             "password1",
             "password2",
-            "consent",
+            "subscription",
         )
 
 
@@ -117,10 +117,10 @@ class UserAccountForm(FormSendEmailMixin, ModelForm):
     email = forms.CharField(max_length=150, required=False)
     secondary_email = forms.CharField(max_length=150, required=False)
     secondary_email = forms.CharField(max_length=150, required=False)
-    consent = forms.BooleanField(required=False)
+    subscription = forms.BooleanField(required=False)
     class Meta:
         model = get_user_model()
-        fields = ("first_name", "last_name", "email", "secondary_email", "consent")
+        fields = ("first_name", "last_name", "email", "secondary_email", "subscription")
 
     def save(self, domain_override=None,
              subject_template_name="user_management/email_change_subject.txt",
@@ -162,7 +162,11 @@ class UserAccountForm(FormSendEmailMixin, ModelForm):
                 html_email_template_name=html_email_template_name,
             )
 
-        if 'consent' in self.changed_data:
+        if 'subscription' in self.changed_data:
+            # TODO:
+            # - complete subscription flow see giovanni's mail
+            # - check buttons (non sono più colorati)
+            # - qa varia
             send_hubspot_update(obj)
         return obj
 

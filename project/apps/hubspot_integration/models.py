@@ -52,7 +52,7 @@ def register_user_in_hubspot(sender, instance, **kwargs):
         send_hubspot_notify(
             instance.email,
             instance.username,
-            instance.consent,
+            instance.subscription,
             instance.first_name,
             instance.last_name,
         )
@@ -63,7 +63,7 @@ def register_user_login_in_hubspot(sender, user, request, **kwargs):
     if not is_hubspot_configured():
         return
 
-    if user.consent and user.email_confirmed:
+    if user.subscription and user.email_confirmed:
         # user gave their consent at registration, and now their email is confirmed
         logging.info(
             f'Hubspot user login event: registering a user login with email "{user.email}" in Hubspot.'
