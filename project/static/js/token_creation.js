@@ -22,12 +22,12 @@ $( document ).ready(function() {
                 data = response.data
                 if (verb == 'DELETE') {    
                     $("#token-div-info").hide();
-                    $("#create-token").show();
+                    $("#create-token-container").show();
                     $("#token-value").html("");
                     $("#token-last-modified").html("");
                 } else {
                     $("#token-div-info").show();
-                    $("#create-token").hide();
+                    $("#create-token-container").hide();
                     $("#token-value").html( data.token );
                     $("#token-last-modified").html( "Last modified: 0 minutes ago" );
                 }
