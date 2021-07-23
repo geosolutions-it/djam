@@ -10,6 +10,7 @@ $( document ).ready(function() {
         sendRequest('DELETE')
     });
     function sendRequest(verb) {
+        $("#loading-arrow").show();
         axios({
             method: verb,
             url: '/openid/api/token/',
@@ -30,9 +31,11 @@ $( document ).ready(function() {
                     $("#token-value").html( data.token );
                     $("#token-last-modified").html( "Last modified: 0 minutes ago" );
                 }
+                $("#loading-arrow").hide();
             })
             .catch(function (error) {
                 console.log(JSON.stringify(error))
+                $("#loading-arrow").hide();
             });
     }
 });

@@ -30,7 +30,10 @@
                 <h4 class="text-uppercase text-center col-sm-12">no access token to free account</h4>
             </label>
             {% else %} 
-                <label class="col-sm-9 col-form-label"><h4>Access Token</h4></label>
+                <label class="col-sm-7 col-form-label"><h4>Access Token</h4></label>
+                <div class="col-sm-2 col-form-label">
+                    <img id="loading-arrow" style="display: none;" src="{% static "images/loading_arrow.gif" %}"/>
+                </div>
                 <div class="col-sm-3 col-form-label">
                     <input class="btn btn-success" {% if api_key %}style="display: none;"{% endif %} id="create-token" type="submit" value="+ Create a token">
                 </div>

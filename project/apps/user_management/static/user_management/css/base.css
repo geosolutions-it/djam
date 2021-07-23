@@ -303,3 +303,8 @@ input:-webkit-autofill:active  {
 }
 
 
+
+#loading-arrow {
+  max-width: 78px;
+  max-height: 55px;
+}
