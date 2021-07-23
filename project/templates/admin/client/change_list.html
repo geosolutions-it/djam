@@ -50,7 +50,23 @@
   <td class="field-id nowrap">{{user.id}}</td>
   <td class="field-email nowrap">{{user.email|default:""}}</td>
   <td class="field-company nowrap">{{user.company|default:""}}</td>
-  <td class="field-group nowrap">{{user.group_set.first|default:""|upper}}</td>
+  <td class="field-group nowrap">
+    <div class="container">
+      <div id="group-name" style="float:left;">
+        {{user.group_set.first|default:""|upper}}
+      </div>
+      {% if user.group_set.first.name == 'free' %}
+        <div id="group-name" style="float:right;">
+          <button type="button" style="background-color:lightgreen;">Upgrade</button>
+        </div>
+      {% else %}
+        <div id="group-name" style="float:right;">
+          <button type="button" style="background-color:lightgreen;">Downgrade</button>
+        </div>
+      {% endif %}
+    </div>
+    
+  </td>
   <td class="field-start-date nowrap">{{user.billing_set.first.start_date|default:""}}</td>
   <td class="field-end-date nowrap">{{user.billing_set.first.expiry_date|default:""}}</td>
   <td class="field-remaining nowrap">N/A</td>
