@@ -1,5 +1,4 @@
 import logging
-from apps.hubspot_integration.utils import send_hubspot_update
 from django import forms
 from django.contrib.admin.forms import AdminAuthenticationForm
 from django.core.exceptions import ObjectDoesNotExist
@@ -161,13 +160,6 @@ class UserAccountForm(FormSendEmailMixin, ModelForm):
                 old_email,
                 html_email_template_name=html_email_template_name,
             )
-
-        if 'subscription' in self.changed_data:
-            # TODO:
-            # - complete subscription flow see giovanni's mail
-            # - check buttons (non sono più colorati)
-            # - qa varia
-            send_hubspot_update(obj)
         return obj
 
 

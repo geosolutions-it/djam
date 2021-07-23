@@ -64,18 +64,22 @@ def register_login_in_hubspot(email):
         )
 
 
-def send_hubspot_update(instance):
-    payload = {"subscriptionStatuses": [{"id": 5579305, "subscribed": instance.subscription}]}
-    if instance.subscription:
-        addition_info = {
-            "optState": "OPT_IN",
-            "updatedAt": int(round(time.time() * 1000)),
-            "legalBasis": "CONSENT_WITH_NOTICE",
-            "legalBasisExplanation": "API_SUBMISSION\n<p>By clicking 'Sign Up' below, you agree to the MapStand's <a href='   https://www.mapstand.com/terms/   ' rel='   noopener   '>Terms of Use</a>&nbsp; and <a href='   https://www.mapstand.com/privacy/   ' rel='   noopener   '>Privacy Policy</a></p>",
-        }
-        payload["subscriptionStatuses"][0] = {
-            **payload["subscriptionStatuses"][0],
-            **addition_info,
-        }
-
-    logging.debug(f"Hubspot updateing: Updating user information")
+def get_hubspot_subscription(user):
+    hubspot_url = f"https://api.hubapi.com/email/public/v1/subscriptions/{user.email}?hapikey={settings.HUBSPOT_API_KEY}"
+    try:
+        r = requests.get(url=hubspot_url)
+        if r.status_code != 200:
+            logger.error(
+                f"Impossible to retreive Hubspot status for the selected email"
+            )
+        else:
+            is_subscribed = False
+            subscriptions = r.json().get('subscriptionStatuses', [])
+            for sub in subscriptions:
+                if sub.get('id', 0) == 5579305:
+                    is_subscribed = sub.get('subscribed')
+            return is_subscribed
+    except Exception as e:
+        logger.error(
+            f"Hubspot registration: Failed to send a post request to Hubspot url {hubspot_url}: Exception {e}"
+        )
