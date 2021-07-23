@@ -7,7 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.core.exceptions import PermissionDenied
 from django.http import Http404, HttpResponseRedirect
-from django.shortcuts import resolve_url
+from django.shortcuts import render, resolve_url
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views.generic import UpdateView, DetailView, RedirectView
@@ -67,14 +67,13 @@ class AccountEditView(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
     pk_url_kwarg = "id"
 
     def get_success_url(self):
-        return f"/user/account/{self.object.id}?success=true"
+        return f"/user/account/{self.object.id}"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['fix_error'] = self.request.GET.get('fix_error')
         context['group'] = Group.objects.filter(users=context['object']).first()
         context['api_key'] = ApiKey.objects.filter(user=context['object']).first()
-        context['success'] = self.request.GET.get('success')
         return context
 
     def form_valid(self, form):
@@ -83,4 +82,6 @@ class AccountEditView(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
             'request': self.request,
         }
         self.object = form.save(**opts)
-        return HttpResponseRedirect(self.get_success_url())
+        context = self.get_context_data()
+        context['success'] = True
+        return render(self.request, self.template_name, context)

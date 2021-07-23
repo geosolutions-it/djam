@@ -1,4 +1,9 @@
 {{ block.super }}
+
+{% load static %}
+<script type="text/javascript" src="{% static 'js/token_creation.js' %}"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
 <div class="card border-light">
     <div class="card-header">Account Type</div>
     <div class="card-body">
@@ -27,9 +32,7 @@
             {% else %} 
                 <label class="col-sm-9 col-form-label"><h4>Access Token</h4></label>
                 <div class="col-sm-3 col-form-label">
-                    {% if not api_key %}
-                    <input class="btn btn-success" type="submit" value="+ Create a token">
-                    {% endif %}
+                    <input class="btn btn-success" {% if api_key %}style="display: none;"{% endif %} id="create-token" type="submit" value="+ Create a token">
                 </div>
             {% endif %}
         </div>
@@ -47,23 +50,22 @@
                 <label class="col-sm-12 col-form-label"><h4>Token</h4></label>
             {% endif %}
         </div>
-        <div class="form-group row">
-            {% if not group.name == 'free' %}
-                <div class="col-sm-6 col-form-label">
+        
+        {% if not group.name == 'free' %}
+            <div class="form-group row" id="token-div-info" {% if not api_key %}style="display: none;"{% endif %}>
+                <div class="col-sm-6 col-form-label" >
                     <code>
-                    {% if api_key %}
-                        {{api_key.key}}
-                    {% endif %}
+                        <span id="token-value">{{api_key.key}}</span>
                     </code>
                 </div>
                 <div class="col-sm-3 col-form-label">
-                    <small>Last modified: {{api_key.last_modified|timesince}} ago</small>
+                    <small id="token-last-modified">Last modified: {{api_key.last_modified|timesince}} ago</small>
                 </div>
                 <div class="col-sm-3 col-form-label">
-                    <i class="fa fa-search" aria-hidden="true"></i> <a href="token?action=refresh">Refresh</a><br>
-                    <i class="fa fa-trash" aria-hidden="true"></i> <a href="token?action=delete">Delete</a>
+                    <i class="fa fa-search" aria-hidden="true"></i> <button class="btn btn-sm btn-link" id="refresh-token">Refresh</button><br>
+                    <i class="fa fa-trash" aria-hidden="true"></i> <button class="btn btn-sm btn-link" id="delete-token">Delete</button>
                 </div>
-            {% endif %}
-        </div>
+            </div>
+        {% endif %}
     </div>
 </div>
