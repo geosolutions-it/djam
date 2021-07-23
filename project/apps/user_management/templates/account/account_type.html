@@ -14,9 +14,9 @@
     </div>
     <div class="col-sm-12 text-left">
     {% if group.name == 'free' %}
-        Contact our <a href="#">Support Team</a> to know more how to upgrade your account to Enterprise
+        Contact our <a href="mailto:support@mapstand.com">Support Team</a> to know more how to upgrade your account to Enterprise
     {% else %}
-        Your {{group.name|upper}} account expires in <b>{{ user.billing_set.first.expiry_date|timeuntil }}</b>, contact our <a href="#">Support Team</a> to help you to RENEW your plan
+        Your {{group.name|upper}} account expires in <b>{{ user.billing_set.first.expiry_date|timeuntil }}</b>, contact our <a href="mailto:support@mapstand.com">Support Team</a> to help you to RENEW your plan
     {% endif %}
     </div>
 </div>
