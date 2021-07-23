@@ -1,4 +1,3 @@
-from apps.privilege_manager.models import Group
 from django.contrib.auth import get_user_model
 from apps.administration.models import AccountManagementModel
 from django.contrib import admin
@@ -13,16 +12,15 @@ class AccountManagementAdmin(admin.ModelAdmin):
     object_history_template = []
 
     list_display = [
+        "id",
         "email",
-        "first_name",
-        "last_name",
         "company_name",
     ]
 
     search_fields = ['username']
 
     def get_queryset(self, request):
-        qs = get_user_model().objects.all()
+        qs = get_user_model().objects.all().order_by('id')
         return qs
 
     def get_fieldsets(self, request, obj=None):
@@ -35,9 +33,6 @@ class AccountManagementAdmin(admin.ModelAdmin):
         return {}
 
     def has_add_permission(self, request, obj=None):
-        return False
-
-    def has_delete_permission(self, request, obj=None):
         return False
 
     def has_module_permission(self, request):

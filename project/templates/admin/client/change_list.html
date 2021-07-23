@@ -1,38 +1,61 @@
 {% extends "admin/change_list.html" %}
 {{ block.super }}
 {% block result_list %}
+
 <table id="result_list">
 <thead>
 <tr>
-  <th scope="col" class="sortable column-username">
-    <div class="text"><a href="?o=1.2">username</a></div>
+  <th scope="col" class="sortable column-id">
+    <div class="text"><a href="?o=1.2">id</a></div>
     <div class="clear"></div>
   </th>
-  <th scope="col" class="sortable column-id">
+  <th scope="col" class="sortable column-email">
     <div class="text"><a href="?o=1.2">email</a></div>
     <div class="clear"></div>
   </th>
-  <th scope="col" class="sortable column-user sorted ascending">
-    <div class="sortoptions">
-      <a class="sortremove" href="?o=" title="Remove from sorting"></a>
-      <a href="?o=-2" class="toggle ascending" title="Toggle sorting"></a>
-    </div>
-    <div class="text"><a href="?o=-2">First Name</a></div>
+  <th scope="col" class="sortable column-company">
+    <div class="text"><a href="?o=1.2">Company Name</a></div>
+    <div class="clear"></div>
+  </th>
+  <th scope="col" class="sortable column-group">
+    <div class="text"><a href="?o=-2">Subscription Plan (Djam Groups)</a></div>
+    <div class="clear"></div>
+  </th>
+  <th scope="col" class="sortable column-start_date">   
+    <div class="text"><a href="?o=3.2">Plan - Start Date</a></div>
     <div class="clear"></div>
   </th>
   <th scope="col" class="sortable column-expiry_date">   
-    <div class="text"><a href="?o=3.2">Last Name</a></div>
+    <div class="text"><a href="?o=3.2">Plan - End Date</a></div>
+    <div class="clear"></div>
+  </th>
+  <th scope="col" class="sortable column-time_remaining">   
+    <div class="text"><a href="?o=3.2">Time remaining</a></div>
+    <div class="clear"></div>
+  </th>
+  <th scope="col" class="sortable column-length">   
+    <div class="text"><a href="?o=3.2">Plan Length</a></div>
+    <div class="clear"></div>
+  </th>
+  <th scope="col" class="sortable column-token">   
+    <div class="text"><a href="?o=3.2">API Token</a></div>
     <div class="clear"></div>
   </th>
 </tr>
 </thead>
 <tbody>
-{% for object in cl.result_list %} 
+
+{% for user in cl.result_list %} 
 <tr class="row1">
-  <td class="field-username nowrap">{{object.username}}</td>
-  <td class="field-email nowrap">{{object.email}}</td>
-  <td class="field-first_name nowrap">{{object.first_name}}</td>
-  <td class="field-last_name nowrap">{{object.last_name}}</td>
+  <td class="field-id nowrap">{{user.id}}</td>
+  <td class="field-email nowrap">{{user.email|default:""}}</td>
+  <td class="field-company nowrap">{{user.company|default:""}}</td>
+  <td class="field-group nowrap">{{user.group_set.first|default:""|upper}}</td>
+  <td class="field-start-date nowrap">{{user.billing_set.first.start_date|default:""}}</td>
+  <td class="field-end-date nowrap">{{user.billing_set.first.expiry_date|default:""}}</td>
+  <td class="field-remaining nowrap">N/A</td>
+  <td class="field-length nowrap">N/A</td>
+  <td class="field-token nowrap">{{user.apikey_set.first.key|default:"NO TOKEN FOR FREE ACCOUNT"}}</td>
 </tr>
 {% endfor %}
 </tbody>

@@ -5,6 +5,6 @@ from django.contrib import admin
 
 @admin.register(Billing)
 class BillingAdmin(admin.ModelAdmin):
-    list_display = ("id", "user", "expiry_date")
+    list_display = ("id", "user", "start_date", "expiry_date")
     ordering = ("user",)
     search_fields = ("user",)

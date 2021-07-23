@@ -8,10 +8,8 @@ class AbstractBaseModel(models.Model):
 
 
 class AccountManagementModel(AbstractBaseModel):
+    id = models.IntegerField(primary_key=True)
     email = models.EmailField(_('email address'), blank=True)
-
-    first_name = models.CharField(_('first name'), max_length=30, blank=True)
-    last_name = models.CharField(_('last name'), max_length=150, blank=True)
     company_name = models.CharField(_('company name'), max_length=250, blank=True)
 
     class Meta:
