@@ -1,5 +1,4 @@
 import logging
-from apps.hubspot_integration.utils import send_hubspot_update
 from django import forms
 from django.contrib.admin.forms import AdminAuthenticationForm
 from django.core.exceptions import ObjectDoesNotExist

@@ -62,3 +62,24 @@ def register_login_in_hubspot(email):
         logger.error(
             f"Hubspot registration: Failed to send a post request to Hubspot url {hubspot_url}: Exception {e}"
         )
+
+
+def get_hubspot_subscription(user):
+    hubspot_url = f"https://api.hubapi.com/email/public/v1/subscriptions/{user.email}?hapikey={settings.HUBSPOT_API_KEY}"
+    try:
+        r = requests.get(url=hubspot_url)
+        if r.status_code != 200:
+            logger.error(
+                f"Impossible to retreive Hubspot status for the selected email"
+            )
+        else:
+            is_subscribed = False
+            subscriptions = r.json().get('subscriptionStatuses', [])
+            for sub in subscriptions:
+                if sub.get('id', 0) == 5579305:
+                    is_subscribed = sub.get('subscribed')
+            return is_subscribed
+    except Exception as e:
+        logger.error(
+            f"Hubspot registration: Failed to send a post request to Hubspot url {hubspot_url}: Exception {e}"
+        )

@@ -1,4 +1,5 @@
 import logging
+from apps.hubspot_integration.utils import get_hubspot_subscription
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -71,6 +72,7 @@ class AccountEditView(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         context['fix_error'] = self.request.GET.get('fix_error')
         context['success'] = self.request.GET.get('success')
+        context['subscription'] = get_hubspot_subscription(context['object'])
         return context
 
     def form_valid(self, form):
