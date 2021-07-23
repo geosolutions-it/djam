@@ -62,20 +62,3 @@ def register_login_in_hubspot(email):
         logger.error(
             f"Hubspot registration: Failed to send a post request to Hubspot url {hubspot_url}: Exception {e}"
         )
-
-
-def send_hubspot_update(instance):
-    payload = {"subscriptionStatuses": [{"id": 5579305, "subscribed": instance.subscription}]}
-    if instance.subscription:
-        addition_info = {
-            "optState": "OPT_IN",
-            "updatedAt": int(round(time.time() * 1000)),
-            "legalBasis": "CONSENT_WITH_NOTICE",
-            "legalBasisExplanation": "API_SUBMISSION\n<p>By clicking 'Sign Up' below, you agree to the MapStand's <a href='   https://www.mapstand.com/terms/   ' rel='   noopener   '>Terms of Use</a>&nbsp; and <a href='   https://www.mapstand.com/privacy/   ' rel='   noopener   '>Privacy Policy</a></p>",
-        }
-        payload["subscriptionStatuses"][0] = {
-            **payload["subscriptionStatuses"][0],
-            **addition_info,
-        }
-
-    logging.debug(f"Hubspot updateing: Updating user information")

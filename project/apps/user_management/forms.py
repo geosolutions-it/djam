@@ -161,13 +161,6 @@ class UserAccountForm(FormSendEmailMixin, ModelForm):
                 old_email,
                 html_email_template_name=html_email_template_name,
             )
-
-        if 'subscription' in self.changed_data:
-            # TODO:
-            # - complete subscription flow see giovanni's mail
-            # - check buttons (non sono più colorati)
-            # - qa varia
-            send_hubspot_update(obj)
         return obj
 
 
