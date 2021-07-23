@@ -1,13 +1,14 @@
+from apps.privilege_manager.models import Group
 from django.contrib.auth import get_user_model
-from apps.administration.models import ClientManagementModel
+from apps.administration.models import AccountManagementModel
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
 # Register your models here.
 
-@admin.register(ClientManagementModel)
-class ClientManagementAdmin(admin.ModelAdmin):
-    #change_list_template = 'admin/client/change_list.html'
+@admin.register(AccountManagementModel)
+class AccountManagementAdmin(admin.ModelAdmin):
+    change_list_template = 'admin/client/change_list.html'
 
     object_history_template = []
 
@@ -15,6 +16,7 @@ class ClientManagementAdmin(admin.ModelAdmin):
         "email",
         "first_name",
         "last_name",
+        "company_name",
     ]
 
     search_fields = ['username']
@@ -41,17 +43,6 @@ class ClientManagementAdmin(admin.ModelAdmin):
     def has_module_permission(self, request):
         return request.user.is_superuser
 
-    #def changelist_view(self, request, extra_context=None):
-    #    extra_context = extra_context or {}
-    #    extra_context['some_var'] = 'This is what I want to show'
-    #    return super(ClientManagementAdmin, self).changelist_view(request, extra_context=extra_context)
-#
-    #def get_search_results(self, request, queryset, search_term):
-    #    queryset, use_distinct = super().get_search_results(request, queryset, search_term)
-    #    try:
-    #        search_term_as_int = int(search_term)
-    #    except ValueError:
-    #        pass
-    #    else:
-    #        queryset |= self.model.objects.filter(age=search_term_as_int)
-    #    return queryset, use_distinct
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        return super(AccountManagementAdmin, self).changelist_view(request, extra_context=extra_context)

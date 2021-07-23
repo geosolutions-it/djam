@@ -3,7 +3,7 @@ from django.apps import AppConfig
 
 class AdminConfig(AppConfig):
     name = "apps.administration"
-    verbose_name = "Client Management Module"
+    verbose_name = "Account Management Module"
 
     def ready(self):
         from . import settings as defaults

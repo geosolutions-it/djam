@@ -1,7 +1,40 @@
 {% extends "admin/change_list.html" %}
-{% load i18n admin_static admin_list %}
-{% load myapptags %}
-
+{{ block.super }}
 {% block result_list %}
-  somethign
+<table id="result_list">
+<thead>
+<tr>
+  <th scope="col" class="sortable column-username">
+    <div class="text"><a href="?o=1.2">username</a></div>
+    <div class="clear"></div>
+  </th>
+  <th scope="col" class="sortable column-id">
+    <div class="text"><a href="?o=1.2">email</a></div>
+    <div class="clear"></div>
+  </th>
+  <th scope="col" class="sortable column-user sorted ascending">
+    <div class="sortoptions">
+      <a class="sortremove" href="?o=" title="Remove from sorting"></a>
+      <a href="?o=-2" class="toggle ascending" title="Toggle sorting"></a>
+    </div>
+    <div class="text"><a href="?o=-2">First Name</a></div>
+    <div class="clear"></div>
+  </th>
+  <th scope="col" class="sortable column-expiry_date">   
+    <div class="text"><a href="?o=3.2">Last Name</a></div>
+    <div class="clear"></div>
+  </th>
+</tr>
+</thead>
+<tbody>
+{% for object in cl.result_list %} 
+<tr class="row1">
+  <td class="field-username nowrap">{{object.username}}</td>
+  <td class="field-email nowrap">{{object.email}}</td>
+  <td class="field-first_name nowrap">{{object.first_name}}</td>
+  <td class="field-last_name nowrap">{{object.last_name}}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
 {% endblock %}

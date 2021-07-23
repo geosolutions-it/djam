@@ -90,6 +90,15 @@ class User(AbstractBaseUser, PermissionsMixin):
     legacy_user_id = models.IntegerField(null=True, blank=False)
     subscription = models.BooleanField(blank=True, null=True)
 
+    company_name = models.CharField(
+        max_length=250, 
+        blank=True, 
+        null=True,
+        help_text=_(
+            "Associated company name"
+        )
+    )    
+
     objects = UserManager()
 
     EMAIL_FIELD = "email"

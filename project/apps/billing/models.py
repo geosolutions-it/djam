@@ -4,7 +4,11 @@ from django.db import models
 # Create your models here.
 
 class Billing(models.Model):
+
     expiry_date = models.DateTimeField()
+
+    start_date = models.DateTimeField(null=True)
+
     user = models.ForeignKey(get_user_model(),
         null=False,
         blank=False,

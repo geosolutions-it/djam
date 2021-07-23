@@ -7,15 +7,17 @@ class AbstractBaseModel(models.Model):
         abstract = True
 
 
-class ClientManagementModel(AbstractBaseModel):
+class AccountManagementModel(AbstractBaseModel):
     email = models.EmailField(_('email address'), blank=True)
 
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=150, blank=True)
+    company_name = models.CharField(_('company name'), max_length=250, blank=True)
 
     class Meta:
-        verbose_name = _("Client Management")
-        verbose_name_plural = _("Client Management")
+        verbose_name = _("Account Management")
+        verbose_name_plural = _("Account Management")
+        managed = False
 
     def clean(self):
         super().clean()
