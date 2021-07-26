@@ -38,4 +38,12 @@ $( document ).ready(function() {
                 $("#loading-arrow").hide();
             });
     }
+
+    let tokenclipboard = new ClipboardJS('#copy-token');
+    tokenclipboard.on('success', function(e) {
+        $('#copy-token-result').addClass("shown");
+        setTimeout(function(){
+            $('#copy-token-result').removeClass("shown");
+        },2000);
+    });
 });
