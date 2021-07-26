@@ -1,12 +1,10 @@
+from apps.identity_provider.models import ApiKey
+from apps.privilege_manager.models import Group
 from django.contrib.auth import get_user_model
-import django.http
 from django.shortcuts import redirect
 from django.urls.conf import path
 from apps.administration.models import AccountManagementModel
 from django.contrib import admin, messages
-from django.utils.translation import ugettext_lazy as _
-from django.contrib.admin.views.main import ChangeList
-# Register your models here.
 
 @admin.register(AccountManagementModel)
 class AccountManagementAdmin(admin.ModelAdmin):
@@ -34,12 +32,6 @@ class AccountManagementAdmin(admin.ModelAdmin):
         qs = get_user_model().objects.all().order_by('id')
         return qs
 
-    def get_fieldsets(self, request, obj=None):
-        return super().get_fieldsets(request, obj)
-
-    def get_form(self, request, obj=None, **kwargs):
-        return super().get_form(request, obj, **kwargs)
-
     def get_actions(self, request):
         return {}
 
@@ -49,14 +41,45 @@ class AccountManagementAdmin(admin.ModelAdmin):
     def has_module_permission(self, request):
         return request.user.is_superuser
 
-    def changelist_view(self, request, extra_context=None):
-        extra_context = extra_context or {}
-        return super(AccountManagementAdmin, self).changelist_view(request, extra_context=extra_context)
-
     def account_upgrade(self, request):
-        self.message_user(request, "The Selected account has been upgraded", messages.SUCCESS)
+        if request.user.is_authenticated:
+            try:
+                user_obj = get_user_model().objects.filter(id=int(request.GET.get('account_id')))
+                if user_obj.exists():
+                    user = user_obj.first()
+                    self._asign_group(user, 'enterprise')
+                    self.message_user(request, "The Selected account has been upgraded", messages.SUCCESS)
+                else:
+                    self.message_user(request, "The Selected user is not present in the system", messages.ERROR)
+            except Exception as e:
+                self.message_user(request, e.args[0], messages.ERROR)
         return redirect("..")
 
     def account_downgrade(self, request):
-        self.message_user(request, "The Selected account has been downgraded", messages.SUCCESS)
+        if request.user.is_authenticated:
+            try:
+                user_obj = get_user_model().objects.filter(id=int(request.GET.get('account_id')))
+                if user_obj.exists():
+                    user = user_obj.first()
+                    self._delete_apikey(user)
+                    self._asign_group(user, 'free')
+                    self.message_user(request, "The Selected account has been downgraded", messages.SUCCESS)
+                else:
+                    self.message_user(request, "The Selected user is not present in the system", messages.ERROR)
+            except Exception as e:
+                self.message_user(request, e.args[0], messages.ERROR)
         return redirect("..")
+
+    @staticmethod
+    def _asign_group(user, group_name):
+        user_group = user.group_set.all()
+        if user_group.exists():
+            user_group.first().users.remove(user)
+        new_group = Group.objects.get(name=group_name)
+        new_group.users.add(user)
+
+    @staticmethod
+    def _delete_apikey(user):
+        user_token = ApiKey.objects.filter(user=user)
+        if user_token.exists():
+            user_token.delete()

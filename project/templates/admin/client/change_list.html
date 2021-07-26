@@ -1,14 +1,27 @@
 {% extends "admin/change_list.html" %}
 {{ block.super }}
 {% block result_list %}
+{% load humanize %}
+{% load static %}
 
 <style>
   .billing-button {
     border-color: lightgreen;
     background-color: lightgreen;
+    border-radius: 25px;
+    padding: 8px
+  }
+.token-button {
+    border-color: lightgreen;
+    background-color: lightgreen;
+    border-radius: 25px;
+    padding: 8px
   }
 </style>
-
+    <link rel="stylesheet" type="text/css" href="{% static 'font-awesome/css/font-awesome.css' %}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="{% static 'js/token_creation.js' %}"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 <table id="result_list">
 <thead>
@@ -65,21 +78,41 @@
       </div>
       {% if user.group_set.first.name == 'free' %}
         <div id="group-name" style="float:right;">
-          <a href="{% url 'admin:account_upgrade' %}?account_id={{user.id}}" class="billing-button">Upgrade</button>
+          <a href="{% url 'admin:account_upgrade' %}?account_id={{user.id}}"><p class="billing-button">Upgrade</p></button>
         </div>
       {% else %}
         <div id="group-name" style="float:right;">
-          <a href="{% url 'admin:account_downgrade' %}?account_id={{user.id}}" class="billing-button">Downgrade</button>
+          <a href="{% url 'admin:account_downgrade' %}?account_id={{user.id}}"><p class="billing-button">Downgrade</p></button>
         </div>
       {% endif %}
     </div>
-    
   </td>
-  <td class="field-start-date nowrap">{{user.billing_set.first.start_date|default:""}}</td>
-  <td class="field-end-date nowrap">{{user.billing_set.first.expiry_date|default:""}}</td>
-  <td class="field-remaining nowrap">N/A</td>
-  <td class="field-length nowrap">N/A</td>
-  <td class="field-token nowrap">{{user.apikey_set.first.key|default:"NO TOKEN FOR FREE ACCOUNT"}}</td>
+  <td class="field-start-date nowrap">{{user.billing_set.first.start_date|default:""|date:"d M Y" }}</td>
+  <td class="field-end-date nowrap">{{user.billing_set.first.expiry_date|default:""|date:"d M Y" }}</td>
+  <td class="field-remaining nowrap">{{user.billing_set.first.expiry_date|timeuntil|naturaltime}}</td>
+  {% with user.billing_set.first.expiry_date as expiry_date %}
+  <td class="field-length nowrap">{{user.billing_set.first.start_date|timesince:expiry_date}}</td>
+  {% endwith %}
+  {% if user.group_set.first.name.lower == 'free' %}
+    <td class="field-token nowrap">{{user.apikey_set.first.key|default:"NO TOKEN FOR FREE ACCOUNT"}}</td>
+  {% else %}
+    <td class="field-token nowrap">
+        <p>{{user.apikey_set.first.key}}</p>
+      <div class="container">
+        <div class="token-creation" style="max-width:50%;float:left">
+          <a href="" id="create-token" type="submit" value=""><p class="token-button">Create token</p></a>
+        </div>
+        <div class="actions" style="max-width:50%;float:right">
+          <a id="mode-actions-dots" style="font-size: 30px;cursor: pointer;">&#10247;</a>
+        </div>
+        <div class="more-action-div" style="max-width:100%;display:none;float:right">
+            <i class="fa fa-search" aria-hidden="true"></i><a> Refresh</a><br>
+            <i class="fa fa-undo" aria-hidden="true"></i><a> Revoke</a><br>
+            <i class="fa fa-trash" aria-hidden="true"></i><a> Delete</a>
+        </div>
+      </div>
+    </td>
+  {% endif %}
 </tr>
 {% endfor %}
 </tbody>

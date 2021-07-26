@@ -1,5 +1,9 @@
 
 $( document ).ready(function() {
+    $( "#mode-actions-dots" ).click(function() {
+        console.log("asdhasdjsa")
+        $(".more-action-div").toggle();
+    });
     $( "#create-token" ).click(function() {
         sendRequest('POST')
     });
@@ -37,5 +41,5 @@ $( document ).ready(function() {
                 console.log(JSON.stringify(error))
                 $("#loading-arrow").hide();
             });
-    }
+    };
 });
