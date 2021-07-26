@@ -2,6 +2,14 @@
 {{ block.super }}
 {% block result_list %}
 
+<style>
+  .billing-button {
+    border-color: lightgreen;
+    background-color: lightgreen;
+  }
+</style>
+
+
 <table id="result_list">
 <thead>
 <tr>
@@ -57,11 +65,11 @@
       </div>
       {% if user.group_set.first.name == 'free' %}
         <div id="group-name" style="float:right;">
-          <button type="button" style="background-color:lightgreen;">Upgrade</button>
+          <a href="{% url 'admin:account_upgrade' %}?account_id={{user.id}}" class="billing-button">Upgrade</button>
         </div>
       {% else %}
         <div id="group-name" style="float:right;">
-          <button type="button" style="background-color:lightgreen;">Downgrade</button>
+          <a href="{% url 'admin:account_downgrade' %}?account_id={{user.id}}" class="billing-button">Downgrade</button>
         </div>
       {% endif %}
     </div>
