@@ -48,6 +48,25 @@
   margin-top: 5vh;
 }
 
+.user-edit-form-box #copy-token {
+  margin-left:10px; 
+  cursor: pointer
+}
+
+.user-edit-form-box #copy-token-result {
+  transition: opacity 0.1s ease-out;
+  opacity: 0;
+  margin-left:10px; 
+  color: #212529;
+  font-size: 0.85em;
+  font-weight: 400;
+}
+
+.user-edit-form-box #copy-token-result.shown {
+  opacity: 1;
+  display: inline;
+}
+
 .user-edit-form-box .form-group {
   text-align: left;
   width: 100%;
@@ -55,12 +74,14 @@
   /* border: green 1px solid; */
 
 }
+
+.user-edit-form-box .card {
+  margin-top: 20px;
+  text-align: left;
+}
+
 .user-edit-form-box .card-header {
   text-align: left;
-  background-color: white;
-  
-  /* border: green 1px solid; */
-
 }
 
 .user-edit-form-box .password-form-group {
@@ -69,7 +90,23 @@
   height: 10px;
   margin: 5%;
   /* border: green 1px solid; */
+}
 
+.user-edit-form-box .message {
+  text-align: left;
+}
+
+.user-edit-form-box #token-div-info {
+  margin-top: 10px;
+}
+
+.user-edit-form-box .btn-sm {
+  padding: 0px;
+  margin-right: 5px;
+}
+
+.user-edit-form-box .btn-sm .btn-label {
+  margin-left: 5px;
 }
 
 .form-group label {
@@ -85,6 +122,10 @@
   font-size: 1.1em;
   font-weight: bold;
   color: #739773;
+  display: block;
+  width: 100%;
+  padding: .375rem .75rem;
+  line-height: 1.5;
 }
 
 

@@ -1,6 +1,7 @@
 from django.http.response import JsonResponse
 from apps.identity_provider.models import ApiKey
 from rest_framework import permissions, views
+from django.conf import settings
 from datetime import datetime
 
 
@@ -9,41 +10,57 @@ class ApiKeyManager(permissions.IsAuthenticated, views.APIView):
 
     def post(self, request):
         user = request.user
-        token, created = ApiKey.objects.get_or_create(
-            user=user, last_modified=datetime.utcnow()
-        )
-        return JsonResponse(
-            {
+        if self._user_is_authorized(user):
+            token, created = ApiKey.objects.get_or_create(
+                user=user, last_modified=datetime.utcnow()
+            )
+            data = {
                 "token": token.key,
                 "created": created,
                 "last_modified": token.last_modified,
-            },
-            status=200,
-        )
+            }
+            status=200
+        else:
+            data={}
+            status=403
+        return JsonResponse(data, status=status)
 
     def put(self, request):
         user = request.user
-        token = ApiKey.objects.filter(user=user)
-        if token:
-            token.delete()
-        token, created = ApiKey.objects.get_or_create(
-            user=user, last_modified=datetime.utcnow()
-        )
-        return JsonResponse(
-            {
+        if self._user_is_authorized(user):
+            token = ApiKey.objects.filter(user=user)
+            if token:
+                token.delete()
+            token, created = ApiKey.objects.get_or_create(
+                user=user, last_modified=datetime.utcnow()
+            )
+            data = {
                 "token": token.key,
                 "created": created,
                 "last_modified": token.last_modified,
-            },
-            status=200,
-        )
+            }
+            status=200
+        else:
+            data={}
+            status=403
+        return JsonResponse(data, status=status)
+
 
     def delete(self, request):
         user = request.user
-        token = ApiKey.objects.filter(user=user)
-        if token:
-            token.delete()
-            status = 200
+        if self._user_is_authorized(user):
+            token = ApiKey.objects.filter(user=user)
+            if token:
+                token.delete()
+                status = 200
+            else:
+                status = 500
         else:
-            status = 500
+            status=403
         return JsonResponse(data={}, status=status)
+
+    def _user_is_authorized(self, user):
+        group = user.group_set.all()
+        if group.exists():
+            return group.first().name.lower() in settings.APIKEY_MANAGER_AUTHORIZED_GROUPS
+        return False

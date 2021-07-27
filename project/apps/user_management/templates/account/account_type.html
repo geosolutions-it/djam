@@ -1,73 +1,67 @@
 {{ block.super }}
 
 {% load static %}
+<script type="text/javascript" src="{% static 'js/clipboard.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/token_creation.js' %}"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
-<div class="card border-light">
+<div class="card">
     <div class="card-header">Account Type</div>
     <div class="card-body">
-        <div class="form-group row">
-            <label class="col-4 col-form-label">Account Type</label>
-            <label class="col-8 col-form-label"><b>{{ group.name|upper }}</b></label>
+        <div class="message">
+            Your account is <b>{{ group.name|upper }}</b>.
         </div>
-    </div>
-    <div class="col-12 text-left">
-    {% if group.name == 'free' %}
-        Contact our <a href="mailto:support@mapstand.com">Support Team</a> to know more how to upgrade your account to Enterprise
-    {% else %}
-        Your {{group.name|upper}} account expires in <b>{{ user.billing_set.first.expiry_date|timeuntil }}</b>, contact our <a href="mailto:support@mapstand.com">Support Team</a> to help you to RENEW your plan
-    {% endif %}
+        <div class="message">
+            {% if group.name == 'free' %}
+                Contact our <a href="mailto:support@mapstand.com">Support Team</a> to know more how to upgrade your account to Enterprise
+            {% else %}
+                {% with expiry_date=user.billing_set.first.expiry_date %}
+                {% if expiry_date %}
+                    Your account expires in <b>{{ expiry_date|timeuntil }}</b>. Contact our <a href="mailto:support@mapstand.com">Support Team</a> to help you to RENEW your plan
+                {% endif %}
+                {% endwith %}
+            {% endif %}
+        </div>
     </div>
 </div>
 <br>
-<div class="card border-light">
-    <div class="card-header">API Key</div>
+<div class="card">
+    <div class="card-header">Access token</div>
     <div class="card-body">
-        <div class="form-group row">
-            {% if group.name == 'free' %}
-            <label class="col-12 col-form-label">
-                <h4 class="text-uppercase text-center col-12">no access token to free account</h4>
-            </label>
-            {% else %} 
-                <label class="col-7 col-form-label"><h4>Access Token</h4></label>
-                <div class="col-2 col-form-label">
-                    <img id="loading-arrow" style="display: none;" src="{% static "images/loading_arrow.gif" %}"/>
-                </div>
-                <div class="col-3 col-form-label">
-                    <input class="btn btn-success" {% if api_key %}style="display: none;"{% endif %} id="create-token" type="submit" value="+ Create a token">
-                </div>
-            {% endif %}
-        </div>
-        <div class="form-group row">
-            {% if group.name == 'free' %}
-                <label class="col-12 col-form-label">You need an API Access token to configure <a href="#">MapStand OGC web services</a>. Read more about <a href="">API access token</a> in our documentation.</label>
-                <p class="text-center">TO CREATE A TOKEN YOU NEED TO UPGRADE TO ENTERPRISE. please contact out SUPPORT TEAM</p>
-            {% else %}
-                <label class="col-12 col-form-label">You need and API Access token to configure <a href="">MapStand OCG web services</a>. Read more about <a href="">API access token</a> in our documentation.</label>
-            {% endif %}
-        </div>
-        <br>
-        <div class="form-group row">
-            {% if not group.name == 'free' %}
-                <label class="col-12 col-form-label"><h4>Token</h4></label>
-            {% endif %}
-        </div>
-        {% if not group.name == 'free' %}
-            <div class="form-group row" id="token-div-info" {% if not api_key %}style="display: none;"{% endif %}>
-                <div class="col-5">
-                    <code>
-                        <span id="token-value">{{api_key.key}}</span>
-                    </code>
-                </div>
-                <div class="col-3">
-                    <small id="token-last-modified">Last modified: {{api_key.last_modified|timesince}} ago</small>
-                </div>
-                <div class="col-4">
-                    <i class="fa fa-search" aria-hidden="true"></i> <button class="btn btn-sm btn-link" id="refresh-token">Refresh</button><br>
-                    <i class="fa fa-trash" aria-hidden="true"></i> <button class="btn btn-sm btn-link" id="delete-token">Delete</button>
-                </div>
+        <div>
+            <div class="message">
+                {% if group.name == 'free' %}
+                    <label class="col-12 col-form-label">You need an API Access token to configure <a href="#">MapStand OGC web services</a>. Read more about <a href="">API access token</a> in our documentation.</label>
+                    <p>TO CREATE A TOKEN YOU NEED TO UPGRADE TO ENTERPRISE. Please <a href="mailto:support@mapstand.com">contact our SUPPORT TEAM</a></p>
+                {% else %}
+                    <label class="col-12 col-form-label">You need an API Access token to configure <a href="">MapStand OCG web services</a>. Read more about <a href="">API access token</a> in our documentation.</label>
+                {% endif %}
             </div>
-        {% endif %}
+            {% if group.name != 'free' %}
+                <div class="row" id="token-div-info" {% if not api_key %}style="display: none;"{% endif %}>
+                    <div>
+                        <code>
+                            <span id="token-value">{{api_key.key}}</span><span id="copy-token" class="fa fa-copy" aria-label="Copy token to clipboard" title="Copy token to clipboard" alt="Copy token to clipboard" data-clipboard-text="{{api_key.key}}"></span><span id="copy-token-result" aria-hidden="true">Copied!</span>
+                        </code>
+                        <div>
+                            <small id="token-last-modified">Last modified: {{api_key.last_modified|timesince}} ago</small>
+                        </div>
+                    </div>           
+                    <div>
+                        <button type="button" class="btn btn-sm" aria-label="Left Align" id="refresh-token">
+                            <span class="fa fa-refresh" aria-hidden="true"></span><span class="btn-link btn-label">Regenerate</span>
+                        </button>
+                        <button type="button" class="btn btn-sm" aria-label="Left Align" id="delete-token">
+                            <span class="fa fa-trash" aria-hidden="true"></span><span class="btn-link btn-label">Delete</span>
+                        </button>
+                    </div>
+                </div>
+                    <div id="create-token-container" {% if api_key %}style="display: none;"{% endif %} >
+                        <div>
+                            <input class="btn submit-button" id="create-token" type="submit" value="Create a token"><img id="loading-arrow" style="display: none;" src="{% static "images/loading_arrow.gif" %}"/>
+                        </div>
+                    </div>
+            {% endif %}
+        </div>
     </div>
 </div>

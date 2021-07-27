@@ -25,12 +25,12 @@ $( document ).ready(function() {
                 data = response.data
                 if (verb == 'DELETE') {    
                     $("#token-div-info").hide();
-                    $("#create-token").show();
+                    $("#create-token-container").show();
                     $("#token-value").html("");
                     $("#token-last-modified").html("");
                 } else {
                     $("#token-div-info").show();
-                    $("#create-token").hide();
+                    $("#create-token-container").hide();
                     $("#token-value").html( data.token );
                     $("#token-last-modified").html( "Last modified: 0 minutes ago" );
                 }
@@ -40,5 +40,13 @@ $( document ).ready(function() {
                 console.log(JSON.stringify(error))
                 $("#loading-arrow").hide();
             });
-    };
+    }
+
+    let tokenclipboard = new ClipboardJS('#copy-token');
+    tokenclipboard.on('success', function(e) {
+        $('#copy-token-result').addClass("shown");
+        setTimeout(function(){
+            $('#copy-token-result').removeClass("shown");
+        },2000);
+    });
 });
