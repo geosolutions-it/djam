@@ -5,119 +5,142 @@
 {% load static %}
 
 <style>
-  .billing-button {
+.custom-admin-button {
     border-color: lightgreen;
     background-color: lightgreen;
     border-radius: 25px;
     padding: 8px
   }
-.token-button {
-    border-color: lightgreen;
-    background-color: lightgreen;
-    border-radius: 25px;
-    padding: 8px
-  }
+
+.a-pointer {
+  cursor:pointer;
+}
+#loading-arrow {
+  max-width: 78px;
+  max-height: 55px;
+}
+.additional-actions {
+  max-width:100%;
+  float:right
+}
+.loading-arrow {
+  max-width: 78px;
+  max-height: 55px;
+}
 </style>
     <link rel="stylesheet" type="text/css" href="{% static 'font-awesome/css/font-awesome.css' %}">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="{% static 'js/clipboard.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/token_creation.js' %}"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
-<table id="result_list">
-<thead>
-<tr>
-  <th scope="col" class="sortable column-id">
-    <div class="text"><a href="?o=1.2">id</a></div>
-    <div class="clear"></div>
-  </th>
-  <th scope="col" class="sortable column-email">
-    <div class="text"><a href="?o=1.2">email</a></div>
-    <div class="clear"></div>
-  </th>
-  <th scope="col" class="sortable column-company">
-    <div class="text"><a href="?o=1.2">Company Name</a></div>
-    <div class="clear"></div>
-  </th>
-  <th scope="col" class="sortable column-group">
-    <div class="text"><a href="?o=-2">Subscription Plan (Djam Groups)</a></div>
-    <div class="clear"></div>
-  </th>
-  <th scope="col" class="sortable column-start_date">   
-    <div class="text"><a href="?o=3.2">Plan - Start Date</a></div>
-    <div class="clear"></div>
-  </th>
-  <th scope="col" class="sortable column-expiry_date">   
-    <div class="text"><a href="?o=3.2">Plan - End Date</a></div>
-    <div class="clear"></div>
-  </th>
-  <th scope="col" class="sortable column-time_remaining">   
-    <div class="text"><a href="?o=3.2">Time remaining</a></div>
-    <div class="clear"></div>
-  </th>
-  <th scope="col" class="sortable column-length">   
-    <div class="text"><a href="?o=3.2">Plan Length</a></div>
-    <div class="clear"></div>
-  </th>
-  <th scope="col" class="sortable column-token">   
-    <div class="text"><a href="?o=3.2">API Token</a></div>
-    <div class="clear"></div>
-  </th>
-</tr>
-</thead>
-<tbody>
+<div class="results">
+  <table id="result_list">
+  <thead>
+  <tr>
+    <th scope="col" class="sortable column-id">
+      <div class="text"><a href="?o=1.2">id</a></div>
+      <div class="clear"></div>
+    </th>
+    <th scope="col" class="sortable column-email">
+      <div class="text"><a href="?o=1.2">email</a></div>
+      <div class="clear"></div>
+    </th>
+    <th scope="col" class="sortable column-company">
+      <div class="text"><a href="?o=1.2">Company Name</a></div>
+      <div class="clear"></div>
+    </th>
+    <th scope="col" class="sortable column-group">
+      <div class="text"><a href="?o=-2">Subscription Plan (Djam Groups)</a></div>
+      <div class="clear"></div>
+    </th>
+    <th scope="col" class="sortable column-start_date">   
+      <div class="text"><a href="?o=3.2">Plan - Start Date</a></div>
+      <div class="clear"></div>
+    </th>
+    <th scope="col" class="sortable column-expiry_date">   
+      <div class="text"><a href="?o=3.2">Plan - End Date</a></div>
+      <div class="clear"></div>
+    </th>
+    <th scope="col" class="sortable column-time_remaining">   
+      <div class="text"><a href="?o=3.2">Time remaining</a></div>
+      <div class="clear"></div>
+    </th>
+    <th scope="col" class="sortable column-length">   
+      <div class="text"><a href="?o=3.2">Plan Length</a></div>
+      <div class="clear"></div>
+    </th>
+    <th scope="col" class="sortable column-token">   
+      <div class="text"><a href="?o=3.2">API Token</a></div>
+      <div class="clear"></div>
+    </th>
+  </tr>
+  </thead>
+  <tbody>
 
-{% for user in cl.result_list %} 
-<tr class="row1">
-  <td class="field-id nowrap">{{user.id}}</td>
-  <td class="field-email nowrap">{{user.email|default:""}}</td>
-  <td class="field-company nowrap">{{user.company|default:""}}</td>
-  <td class="field-group nowrap">
-    <div class="container">
-      <div id="group-name" style="float:left;">
-        {{user.group_set.first|default:""|upper}}
-      </div>
-      {% if user.group_set.first.name == 'free' %}
-        <div id="group-name" style="float:right;">
-          <a href="{% url 'admin:account_upgrade' %}?account_id={{user.id}}"><p class="billing-button">Upgrade</p></button>
-        </div>
-      {% else %}
-        <div id="group-name" style="float:right;">
-          <a href="{% url 'admin:account_downgrade' %}?account_id={{user.id}}"><p class="billing-button">Downgrade</p></button>
-        </div>
-      {% endif %}
-    </div>
-  </td>
-  <td class="field-start-date nowrap">{{user.billing_set.first.start_date|default:""|date:"d M Y" }}</td>
-  <td class="field-end-date nowrap">{{user.billing_set.first.expiry_date|default:""|date:"d M Y" }}</td>
-  <td class="field-remaining nowrap">{{user.billing_set.first.expiry_date|timeuntil|naturaltime}}</td>
-  {% with user.billing_set.first.expiry_date as expiry_date %}
-  <td class="field-length nowrap">{{user.billing_set.first.start_date|timesince:expiry_date}}</td>
-  {% endwith %}
-  {% if user.group_set.first.name.lower == 'free' %}
-    <td class="field-token nowrap">{{user.apikey_set.first.key|default:"NO TOKEN FOR FREE ACCOUNT"}}</td>
-  {% else %}
-    <td class="field-token nowrap">
+  {% for user in cl.result_list %} 
+  <tr class="row1">
+    <td class="field-id nowrap">{{user.id}}</td>
+    <td class="field-email nowrap">{{user.email|default:""}}</td>
+    <td class="field-company nowrap">{{user.company|default:""}}</td>
+    <td class="field-group nowrap">
       <div class="container">
-        <div class="token-creation" style="max-width:50%;float:left">
-        {% if user.apikey_set.first.key %}
-          {{user.apikey_set.first.key}}
+        <div id="group-name" style="float:left;">
+          {{user.group_set.first|default:""|upper}}
+        </div>
+        {% if user.group_set.first.name == 'free' %}
+          <div id="group-name" style="float:right;">
+            <a href="{% url 'admin:account_upgrade' %}?account_id={{user.id}}"><p class="custom-admin-button">Upgrade</p></button>
+          </div>
         {% else %}
-          <a href="" id="create-token" value=""><p class="token-button">Create token</p></a>
+          <div id="group-name" style="float:right;">
+            <a href="{% url 'admin:account_downgrade' %}?account_id={{user.id}}"><p class="custom-admin-button">Downgrade</p></button>
+          </div>
         {% endif %}
-        </div>
-        <div class="actions" style="max-width:50%;float:right">
-          <a id="mode-actions-dots" style="font-size: 30px;cursor: pointer;">&#10247;</a>
-        </div>
-        <div class="more-action-div" style="max-width:100%;display:none;float:right">
-            <i class="fa fa-search" aria-hidden="true"></i><a> Refresh</a><br>
-            <i class="fa fa-undo" aria-hidden="true"></i><a> Revoke</a><br>
-            <i class="fa fa-trash" aria-hidden="true"></i><a> Delete</a>
-        </div>
       </div>
     </td>
-  {% endif %}
-</tr>
-{% endfor %}
-</tbody>
-</table>
+    <td class="field-start-date nowrap">{{user.billing_set.first.start_date|default:""|date:"d M Y" }}</td>
+    <td class="field-end-date nowrap">{{user.billing_set.first.expiry_date|default:""|date:"d M Y" }}</td>
+    <td class="field-remaining nowrap">{{user.billing_set.first.expiry_date|timeuntil|naturaltime}}</td>
+    {% with user.billing_set.first.expiry_date as expiry_date %}
+    <td class="field-length nowrap">{{user.billing_set.first.start_date|timesince:expiry_date}}</td>
+    {% endwith %}
+    {% if user.group_set.first.name.lower == 'free' %}
+      <td class="field-token nowrap">{{user.apikey_set.first.key|default:"NO TOKEN FOR FREE ACCOUNT"}}</td>
+    {% else %}
+      <td class="field-token nowrap">
+        <div class="container">
+          <img id="loading-arrow-{{user.id}}" class="loading-arrow" style="display: none;" src="{% static "images/loading_arrow.gif" %}"/>        
+          <div class="token-creation" style="max-width:100%;float:left">
+            <code id="token-value-{{user.id}}" {% if not user.apikey_set.first.key %}style="display:none;"{% endif %}>
+            {% if user.apikey_set.first.revoked %}
+              The API key is revoked
+            {% else %}
+              {{user.apikey_set.first.key}}
+            {% endif %}
+            </code>
+            <div id="create-token-container-{{user.id}}" {% if user.apikey_set.first.key %}style="display: none;"{% endif %} >
+                <div>
+                    <p class="custom-admin-button a-pointer" onclick="sendRequest('POST', {{user.id}})">Create a token</p>
+                </div>
+            </div>
+          </div>
+          <div id="token-div-info-{{user.id}}" {% if not user.apikey_set.first.key %}style="display: none;"{% endif %} class="additional-actions">
+              <i class="fa fa-refresh" aria-hidden="true"></i><a class="a-pointer" onclick="sendRequest('PUT', {{user.id}})"> Refresh</a><br>
+              <i class="fa fa-undo" aria-hidden="true"></i><a class="a-pointer" onclick="sendRequest('PATCH', {{user.id}})"> Revoke</a><br>
+              <i class="fa fa-trash" aria-hidden="true"></i><a class="a-pointer" onclick="sendRequest('DELETE', {{user.id}})"> Delete</a>
+          </div>
+        </div>
+      </td>
+    {% endif %}
+  </tr>
+  {% endfor %}
+  </tbody>
+  </table>
+</div>
+<script>
+if ( window.history.replaceState ) {
+  window.history.replaceState( null, null, window.location.href );
+}
+</script>
 {% endblock %}

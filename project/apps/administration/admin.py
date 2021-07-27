@@ -42,7 +42,7 @@ class AccountManagementAdmin(admin.ModelAdmin):
         return request.user.is_superuser
 
     def account_upgrade(self, request):
-        if request.user.is_authenticated:
+        if request.user.is_authenticated and request.user.is_superuser:
             try:
                 user_obj = get_user_model().objects.filter(id=int(request.GET.get('account_id')))
                 if user_obj.exists():
@@ -56,7 +56,7 @@ class AccountManagementAdmin(admin.ModelAdmin):
         return redirect("..")
 
     def account_downgrade(self, request):
-        if request.user.is_authenticated:
+        if request.user.is_authenticated and request.user.is_superuser:
             try:
                 user_obj = get_user_model().objects.filter(id=int(request.GET.get('account_id')))
                 if user_obj.exists():
