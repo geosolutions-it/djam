@@ -28,7 +28,7 @@
   max-height: 55px;
 }
 </style>
-    <link rel="stylesheet" type="text/css" href="{% static 'font-awesome/css/font-awesome.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'font-awesome/css/font-awesome.css' %}">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript" src="{% static 'js/clipboard.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/token_creation.js' %}"></script>
@@ -112,13 +112,14 @@
         <div class="container">
           <img id="loading-arrow-{{user.id}}" class="loading-arrow" style="display: none;" src="{% static "images/loading_arrow.gif" %}"/>        
           <div class="token-creation" style="max-width:100%;float:left">
-            <code id="token-value-{{user.id}}" {% if not user.apikey_set.first.key %}style="display:none;"{% endif %}>
+            <span id="token-value-{{user.id}}" {% if not user.apikey_set.first.key %}style="display:none;"{% endif %}>
             {% if user.apikey_set.first.revoked %}
               The API key is revoked
             {% else %}
               {{user.apikey_set.first.key}}
             {% endif %}
-            </code>
+            </span>
+
             <div id="create-token-container-{{user.id}}" {% if user.apikey_set.first.key %}style="display: none;"{% endif %} >
                 <div>
                     <p class="custom-admin-button a-pointer" onclick="sendRequest('POST', {{user.id}})">Create a token</p>

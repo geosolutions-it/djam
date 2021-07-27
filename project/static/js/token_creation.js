@@ -37,55 +37,39 @@ function sendRequest(verb, account_id) {
         xsrfHeaderName: "X-CSRFToken",
       })
         .then(function (response) {
-            console.log(verb)
+
             data = response.data
+            
+            // deciding the IDs
+            var token_value_id = "token-value"
+            if (account_id != null){
+                token_value_id = token_value_id + "-" + account_id
+            }
+            var token_div_info = "token-div-info"
+            if (account_id != null){
+                token_div_info = token_div_info + "-" + account_id
+            }
+            var token_container_value = "create-token-container"
+            if (account_id != null){
+                token_container_value = token_container_value + "-" + account_id
+            }
+            var token_value_id = "token-value"
+            if (account_id != null){
+                token_value_id = token_value_id + "-" + account_id
+            }
+
             if (verb == 'PATCH') {
-                var token_value_id = "token-value"
-                if (account_id != null){
-                    token_value_id = token_value_id + "-" + account_id
-                }
+                
                 $("#" + token_value_id).html("The API key has been revoked");
             } else if (verb == 'DELETE') {
-
-                var token_div_info = "token-div-info"
-                if (account_id != null){
-                    token_div_info = token_div_info + "-" + account_id
-                }
                 $("#" + token_div_info).hide();
-
-                var token_container_value = "create-token-container"
-                if (account_id != null){
-                    token_container_value = token_container_value + "-" + account_id
-                }
                 $("#" + token_container_value).show();
-
-                var token_value_id = "token-value"
-                if (account_id != null){
-                    token_value_id = token_value_id + "-" + account_id
-                }
                 $("#" + token_value_id).html("").hide();
-
                 $("#token-last-modified").html("");
             } else {
-
-                var token_div_info = "token-div-info"
-                if (account_id != null){
-                    token_div_info = token_div_info + "-" + account_id
-                }
                 $("#" + token_div_info).show();
-
-                var token_container_value = "create-token-container"
-                if (account_id != null){
-                    token_container_value = token_container_value + "-" + account_id
-                }
                 $("#" + token_container_value).hide();
-                
-                var token_value_id = "token-value"
-                if (account_id != null){
-                    token_value_id = token_value_id + "-" + account_id
-                }
                 $("#" + token_value_id).html( data.token ).show();;
-
                 $("#token-last-modified").html( "Last modified: 0 minutes ago" );
             }
             $("#" + arrow_id).hide();
