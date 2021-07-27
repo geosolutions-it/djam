@@ -128,7 +128,8 @@
           </div>
           <div id="token-div-info-{{user.id}}" {% if not user.apikey_set.first.key %}style="display: none;"{% endif %} class="additional-actions">
               <i class="fa fa-refresh" aria-hidden="true"></i><a class="a-pointer" onclick="sendRequest('PUT', {{user.id}})"> Refresh</a><br>
-              <i class="fa fa-undo" aria-hidden="true"></i><a class="a-pointer" onclick="sendRequest('PATCH', {{user.id}})"> Revoke</a><br>
+              <i class="fa fa-undo" aria-hidden="true"></i><a id="admin-revoke-{{user.id}}" class="a-pointer" onclick="sendRequest('PATCH', {{user.id}})">
+              {% if user.apikey_set.first.revoked %} Re-enable{% else %} Revoke{% endif %}</a><br>
               <i class="fa fa-trash" aria-hidden="true"></i><a class="a-pointer" onclick="sendRequest('DELETE', {{user.id}})"> Delete</a>
           </div>
         </div>

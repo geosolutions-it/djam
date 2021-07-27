@@ -60,7 +60,17 @@ function sendRequest(verb, account_id) {
 
             if (verb == 'PATCH') {
                 
-                $("#" + token_value_id).html("The API key has been revoked");
+                var admin_revoke = "admin-revoke"
+                if (account_id != null){
+                    admin_revoke = admin_revoke + "-" + account_id
+                }
+
+                if (data.token == 'Api has been revoked') {
+                    $("#" + admin_revoke).text(" Re-enable");
+                } else {
+                    $("#" + admin_revoke).text(" Revoke");
+                }
+                $("#" + token_value_id).html(data.token);
             } else if (verb == 'DELETE') {
                 $("#" + token_div_info).hide();
                 $("#" + token_container_value).show();

@@ -5,7 +5,7 @@ from django.db import models
 
 class Billing(models.Model):
 
-    expiry_date = models.DateTimeField()
+    expiry_date = models.DateTimeField(null=True)
 
     start_date = models.DateTimeField(null=True)
 
