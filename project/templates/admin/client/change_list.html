@@ -97,10 +97,13 @@
     <td class="field-token nowrap">{{user.apikey_set.first.key|default:"NO TOKEN FOR FREE ACCOUNT"}}</td>
   {% else %}
     <td class="field-token nowrap">
-        <p>{{user.apikey_set.first.key}}</p>
       <div class="container">
         <div class="token-creation" style="max-width:50%;float:left">
-          <a href="" id="create-token" type="submit" value=""><p class="token-button">Create token</p></a>
+        {% if user.apikey_set.first.key %}
+          {{user.apikey_set.first.key}}
+        {% else %}
+          <a href="" id="create-token" value=""><p class="token-button">Create token</p></a>
+        {% endif %}
         </div>
         <div class="actions" style="max-width:50%;float:right">
           <a id="mode-actions-dots" style="font-size: 30px;cursor: pointer;">&#10247;</a>

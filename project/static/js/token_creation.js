@@ -1,7 +1,6 @@
 
 $( document ).ready(function() {
     $( "#mode-actions-dots" ).click(function() {
-        console.log("asdhasdjsa")
         $(".more-action-div").toggle();
     });
     $( "#create-token" ).click(function() {
