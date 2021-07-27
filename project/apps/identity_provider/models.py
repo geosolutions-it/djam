@@ -34,6 +34,8 @@ class ApiKey(models.Model):
         help_text="If the API key is revoked, clients cannot use it.",
     )
 
+    last_modified = models.DateTimeField(blank=True, null=True)
+
     def save(self, *args, **kwargs):
         if not self.pk and ApiKey.objects.filter(user=self.user, revoked=False).exists():
             # we might create new ApiKey but user already has one valid

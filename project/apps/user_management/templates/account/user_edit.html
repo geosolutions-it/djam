@@ -27,73 +27,44 @@
 {% endblock left_image %}
 
 
+{% block right_action %}
 <!-- Right/ mobile panel -->
 
-{% block right_action %}
-
-
-
     <div class="form-box common-input-form">
-        <div class="mapstand-avatar-box">
-            <img class="mapstand-avatar" src="{% static "user_management/img/default-avatar.png" %}"/>
-        </div>
-
         {% if fix_error %}
             <div id="error_dialog" class="alert alert-danger" role="alert">
                 <strong>User data cannot be empty!</strong> Fill the form and try again!
             </div>
         {% endif %}
+        {% if success %}
+            <div id="success_dialog" class="alert alert-success" role="alert">
+                <strong>Information successfully updated!</strong>
+            </div>
+        {% endif %}
 
-        <div class="user-edit-form-box">
-            <form role="form" method="post" class="update-user-account" action="{% url 'user_account_edit' id=object.id %}">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="first_name">First name</label>
-                    <input type="text" class="form-control input-lg" name="first_name" id="id_first_name" required
-                           placeholder="Enter first name"
-                            {% if form.first_name.value %}
-                           value="{{ form.first_name.value }}" {% endif %}>
-                    {{ form.first_name.errors }}
+        <div class="user-edit-form-box" style="margin-bottom:100px">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation" style="max-width:45%">
+                    <button class="nav-link active" s id="account-tab" data-bs-toggle="tab" data-bs-target="#account" type="button" role="tab" aria-controls="account" aria-selected="true">
+                        <img class="custom-link-img" src="{% static "images/account_and_marketing.png" %}"/>
+                        Account info &amp; marketing</button>
+                </li>
+                <li class="nav-item" role="presentation" style="max-width:45%">
+                    <button class="nav-link" id="api-tab"  data-bs-toggle="tab" data-bs-target="#api" type="button" role="tab" aria-controls="api" aria-selected="false">
+                    <img class="custom-link-img" src="{% static "images/type_and_api.png" %}"/>
+                    Account Type &amp; API key</button>
+                </li>
+            </ul>
+            <div class="tab-content" id="editProfileTabContent">
+                <div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
+                   {% include "account/account_and_marketing.html" %}
                 </div>
-                <div class="form-group">
-                    <label for="last_name">Last name</label>
-                    <input type="text" class="form-control input-lg" name="last_name" id="id_last_name" required
-                           placeholder="Enter last name password" \
-                            {% if form.last_name.value %}
-                           value="{{ form.last_name.value }}" {% endif %}>
-                    {{ form.last_name.errors }}
+                <div class="tab-pane fade" id="api" role="tabpanel" aria-labelledby="api-tab">
+                   {% include "account/account_type.html" %}
                 </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="text" class="form-control input-lg" name="email" id="id_email" required
-                           placeholder="{{ form.email.value }}" \
-                            {% if form.email.value %}
-                           value="{{ form.email.value }}" {% endif %}>
-                    {{ form.email.errors }}
-                </div>
-                <div class="form-group">
-                    <label for="secondary_email">
-                        Secondary Email
-                        <i class="fas fa-info-circle" style="color:lightgrey;" data-toggle="tooltip"
-                           data-placement="right" title="This email will be used for the account recovery."></i>
-                    </label>
-                    <input type="text" class="form-control input-lg" name="secondary_email" id="id_secondary_email"
-                           placeholder="" \
-                            {% if form.secondary_email.value %}
-                           value="{{ form.secondary_email.value }}" {% endif %}>
-                    {{ form.secondary_email.errors }}
-                </div>
-                <div class="form-group password-form-group">
-                    <a href="{% url 'password_change' %}" class="change-password-link">
-                        Change password
-                    </a>
-                </div>
-                <input class="submit-button" type="submit" value="Update Profile">
-            </form>
+            </div>
+            <div class="col-12">
+            </div>
         </div>
-
     </div>
-
-
-
 {% endblock right_action %}

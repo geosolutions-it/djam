@@ -1,4 +1,6 @@
 import logging
+from apps.identity_provider.models import ApiKey
+from apps.hubspot_integration.utils import get_hubspot_subscription
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -6,11 +8,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.core.exceptions import PermissionDenied
 from django.http import Http404, HttpResponseRedirect
-from django.shortcuts import resolve_url
+from django.shortcuts import render, resolve_url
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views.generic import UpdateView, DetailView, RedirectView
 from apps.user_management.forms import UserAccountForm
+from apps.privilege_manager.models import Group
 
 logger = logging.getLogger(__name__)
 
@@ -70,6 +73,10 @@ class AccountEditView(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['fix_error'] = self.request.GET.get('fix_error')
+        context['group'] = Group.objects.filter(users=context['object']).first()
+        context['api_key'] = ApiKey.objects.filter(user=context['object']).first()
+        context['success'] = self.request.GET.get('success')
+        context['subscription'] = get_hubspot_subscription(context['object'])
         return context
 
     def form_valid(self, form):
@@ -78,4 +85,6 @@ class AccountEditView(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
             'request': self.request,
         }
         self.object = form.save(**opts)
-        return HttpResponseRedirect(self.get_success_url())
+        context = self.get_context_data()
+        context['success'] = True
+        return render(self.request, self.template_name, context)

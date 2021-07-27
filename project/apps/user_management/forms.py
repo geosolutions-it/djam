@@ -1,7 +1,7 @@
 import logging
 from django import forms
 from django.contrib.admin.forms import AdminAuthenticationForm
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
@@ -34,7 +34,7 @@ class UMUserCreationForm(UserCreationForm):
         max_length=254, help_text="Required. Input a valid email address."
     )
     secondary_email = forms.EmailField(max_length=254, required=False)
-    consent = forms.BooleanField(required=False)
+    subscription = forms.BooleanField(required=False)
     captcha = ReCaptchaField(widget=ReCaptchaV3())
 
     class Meta:
@@ -46,7 +46,7 @@ class UMUserCreationForm(UserCreationForm):
             "secondary_email",
             "password1",
             "password2",
-            "consent",
+            "subscription",
         )
 
 
@@ -115,10 +115,11 @@ class UserAccountForm(FormSendEmailMixin, ModelForm):
     first_name = forms.CharField(max_length=150, required=False)
     email = forms.CharField(max_length=150, required=False)
     secondary_email = forms.CharField(max_length=150, required=False)
-
+    secondary_email = forms.CharField(max_length=150, required=False)
+    subscription = forms.BooleanField(required=False)
     class Meta:
         model = get_user_model()
-        fields = ("first_name", "last_name", "email", "secondary_email")
+        fields = ("first_name", "last_name", "email", "secondary_email", "subscription")
 
     def save(self, domain_override=None,
              subject_template_name="user_management/email_change_subject.txt",
