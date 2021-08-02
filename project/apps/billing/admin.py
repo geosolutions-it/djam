@@ -1,10 +1,9 @@
-from apps.billing.models import Billing
+from apps.billing.models import Subscription
 from django.contrib import admin
 
 # Register your models here.
 
-@admin.register(Billing)
-class BillingAdmin(admin.ModelAdmin):
-    list_display = ("id", "user", "expiry_date")
-    ordering = ("user",)
-    search_fields = ("user",)
+@admin.register(Subscription)
+class SubscriptionAdmin(admin.ModelAdmin):
+    list_display = ("id", "start_timestamp", "end_timestamp", "subscription_type")
+    ordering = ("end_timestamp",)

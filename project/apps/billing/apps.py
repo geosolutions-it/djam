@@ -1,9 +1,9 @@
 from django.apps import AppConfig
 
 
-class BillingConfig(AppConfig):
+class SubscriptionConfig(AppConfig):
     name = "apps.billing"
-    verbose_name = "Billing Manager"
+    verbose_name = "Subscription Manager"
 
     def ready(self):
         from . import settings as defaults

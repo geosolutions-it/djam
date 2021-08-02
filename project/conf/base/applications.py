@@ -16,7 +16,7 @@ INSTALLED_APPS = [
     "apps.user_management.apps.UserManagementConfig",
     "apps.privilege_manager.apps.PrivilegeManagerConfig",
     "apps.stripe_djam.apps.StripeDjamConfig",
-    "apps.billing.apps.BillingConfig",
+    "apps.billing.apps.SubscriptionConfig",
     "apps.hubspot_integration.apps.HubspotIntegrationConfig",
     "apps.global_configuration.apps.GlobalConfigurationConfig",
     "captcha",
