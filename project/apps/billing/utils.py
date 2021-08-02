@@ -11,42 +11,43 @@ class SubscriptionException(Exception):
 
 
 class SubscriptionManager:
-    def create_individual_subscription(self, groups: Group, start: timezone = None, end: timezone = None) -> Subscription:
+    def create_individual_subscription(self, groups: Group, *args, **kwargs) -> Subscription:
         sub_type = SubscriptionTypeEnum.INDIVIDUAL
         # validation of the subscription
-        return self._create_subscription(sub_type=sub_type, groups=groups, start=start, end=end)
+        return self._create_subscription(sub_type=sub_type, groups=groups, **kwargs)
 
-    def create_company_subscription(self, groups: Group, start: timezone = None, end: timezone = None) -> Subscription:
+    def create_company_subscription(self, groups: Group, *args, **kwargs) -> Subscription:
         sub_type = SubscriptionTypeEnum.COMPANY
         # validation of the subscription
-        return self._create_subscription(sub_type=sub_type, groups=groups, start=start, end=end)
+        return self._create_subscription(sub_type=sub_type, groups=groups, **kwargs)
 
-    def _create_subscription(self, sub_type, groups: Group, start: timezone, end: timezone) -> Subscription:
-        self._validate_subscription(sub_type, groups)
+    def _create_subscription(self, sub_type, groups: Group, **kwargs) -> Subscription:
+        self.validate_subscription(sub_type, groups)
 
         # Creation of the base object
-        sub = Subscription(
+        sub = Subscription.objects.create()
+
+        sub, _ = Subscription.objects.update_or_create(
             subscription_type=getattr(SubscriptionTypeEnum, sub_type),
-            start_timestamp=start,
-            end_timestamp=end,
+            **kwargs
         )
-        sub.save()
         # Assign groups for the subscription
         sub.groups.add(groups)
         return sub
 
-    def _validate_subscription(self, sub_type, groups) -> None:
+    def validate_subscription(self, sub_type, groups) -> None:
         assigned_groups = self._get_groups_name(groups)
         if sub_type == "INDIVIDUAL":
-            self._validate_individual_sub(assigned_groups)
+            return self._validate_individual_sub(assigned_groups)
         elif sub_type == "COMPANY":
-            self._validate_company_sub(assigned_groups)
+            return self._validate_company_sub(assigned_groups)
+        return False
 
     def _get_groups_name(self, groups) -> List[str]:
         if isinstance(groups, Group):
             return [groups.name]
         else:
-            return [g.name for g in groups]
+            return [g.name for g in groups.all()]
 
     @staticmethod
     def _validate_individual_sub(groups) -> bool:

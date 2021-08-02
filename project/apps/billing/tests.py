@@ -2,7 +2,7 @@ from apps.billing.utils import SubscriptionException, SubscriptionManager
 from apps.billing.models import Subscription
 from apps.privilege_manager.models import Group
 from django.test import TestCase
-from datetime import datetime, timedelta
+from datetime import timedelta
 from django.utils import timezone
 
 # Create your tests here.
