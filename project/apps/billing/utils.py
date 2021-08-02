@@ -21,6 +21,17 @@ class SubscriptionManager:
         # validation of the subscription
         return self._create_subscription(sub_type=sub_type, groups=groups, **kwargs)
 
+    def validate_subscription(self, sub_type, groups) -> None:
+        assigned_groups = self._get_groups_name(groups)
+        if sub_type == "INDIVIDUAL":
+            return self._validate_individual_sub(assigned_groups)
+        elif sub_type == "COMPANY":
+            return self._validate_company_sub(assigned_groups)
+        return False
+
+    def get_active_user_subscription(self, user) -> List[Subscription]:
+        return NotImplemented
+
     def _create_subscription(self, sub_type, groups: Group, **kwargs) -> Subscription:
         self.validate_subscription(sub_type, groups)
 
@@ -34,14 +45,6 @@ class SubscriptionManager:
         # Assign groups for the subscription
         sub.groups.add(groups)
         return sub
-
-    def validate_subscription(self, sub_type, groups) -> None:
-        assigned_groups = self._get_groups_name(groups)
-        if sub_type == "INDIVIDUAL":
-            return self._validate_individual_sub(assigned_groups)
-        elif sub_type == "COMPANY":
-            return self._validate_company_sub(assigned_groups)
-        return False
 
     def _get_groups_name(self, groups) -> List[str]:
         if isinstance(groups, Group):

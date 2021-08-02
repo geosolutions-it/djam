@@ -1,9 +1,6 @@
 from apps.billing.utils import SubscriptionException, SubscriptionManager
-from apps.billing.models import Subscription
 from apps.privilege_manager.models import Group
 from django.test import TestCase
-from datetime import timedelta
-from django.utils import timezone
 
 # Create your tests here.
 
@@ -58,36 +55,57 @@ class SubscriptionManagerTest(TestCase):
         with self.assertRaises(SubscriptionException) as e:
             self.sut.create_company_subscription(groups=self.pro_group)
 
+    def test_user1_no_subs(self):
+        """
+        user1 with 0 individual active sub and 0 company active sub -> Valid"""
+        pass
 
-class SubscriptionModelTests(TestCase):
-    def test_subscription_is_active(self):
+    def test_user1_only_1_active_individual_sub(self):
         """
-        Given a subscription, will check if the subscription is still active
-        """
-        sub, _ = Subscription.objects.get_or_create(
-            start_timestamp=timezone.now(),
-            end_timestamp=(timezone.now() + timedelta(days=3))
-        )
-        is_active = sub.is_active()
-        self.assertTrue(is_active)
+        user1 with 1 individual active sub and 0 company active sub -> Valid"""
+        pass
 
-    def test_subscription_is_inactive(self):
+    def test_user1_only_1_active_company_sub(self):
         """
-        Given a subscription, will check if the subscription is still active
-        """
-        sub, _ = Subscription.objects.get_or_create(
-            start_timestamp=timezone.now(),
-            end_timestamp=(timezone.now() - timedelta(days=3))
-        )
-        is_active = sub.is_active()
-        self.assertFalse(is_active)
+        user1 with 0 individual active sub and 1 company active sub -> Valid"""
+        pass
 
-    def test_subscription_is_active_without_end_date(self):
+    def test_user1_with_active_1_individual_1_company_sub(self):
         """
-        Given a subscription without end_date, is considered valid
+        user1 with 1 individual active sub and 1 company active sub -> Valid"""
+        pass
+
+    def test_user1_with_active_1_inactive_individual_1_active_company(self):
         """
-        sub, _ = Subscription.objects.get_or_create(
-            end_timestamp=None
-        )
-        is_active = sub.is_active()
-        self.assertTrue(is_active)
+        user1 with 10 individual inactive sub and 1 company active sub -> Valid"""
+        pass
+
+    def test_user1_with_active_0_individual_1_inactive_active_company(self):
+        """
+        user1 with 0 individual active sub and 10 company inactive sub -> Valid"""
+        pass
+
+    def test_user1_with_1_inactive_individual_and_1_inactive_company_sub(self):
+        """
+        user1 with 0 individual inactive sub and 0 company inactive sub -> Valid"""
+        pass
+
+    def test_user1_with_2_active_individual_and_0_company(self):
+        """
+        user1 with 2 individual active sub and 0 company active sub -> Invalid"""
+        pass
+
+    def test_user1_with_2_active_individual_and_1_active_company(self):
+        """
+        user1 with 2 individual active sub and 1 company active sub -> Invalid"""
+        pass
+
+    def test_user1_0_active_individual_company_and_2_active_company_sub(self):
+        """
+        user1 with 0 individual active sub and 2 company active sub -> Invalid"""
+        pass
+
+    def test_user1_with_1_inactive_individual_and_2_active_company_sub(self):
+        """
+        user1 with 1 individual inactive sub and 2 company active sub -> Invalid"""
+        pass

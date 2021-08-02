@@ -27,8 +27,6 @@ class Subscription(models.Model):
         get_user_model(), blank=True, related_name="subscription_users"
     )
 
-    __previous_group_list = None
-
     def is_active(self) -> bool:
         start = self.start_timestamp
         end = self.end_timestamp or timezone.now() + timedelta(days=100)
