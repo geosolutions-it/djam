@@ -13,13 +13,7 @@ class SubscriptionException(Exception):
 
 
 class SubscriptionManager:
-    def create_individual_subscription(
-        self,
-        groups: Group,
-        start: timezone = None,
-        end: timezone = None,
-    ) -> Subscription:
-
+    def create_individual_subscription(self, groups: Group, start: timezone = None, end: timezone = None) -> Subscription:
         sub_type = SubscriptionTypeEnum.INDIVIDUAL
         # validation of the subscription
         return self._create_subscription(sub_type=sub_type, groups=groups, start=start, end=end)

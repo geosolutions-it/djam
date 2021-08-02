@@ -13,7 +13,7 @@ class SubscriptionManagerTest(TestCase):
         self.free_group = Group.objects.get(name='free')
         self.pro_group = Group.objects.get(name='pro')
         self.enterprise_group = Group.objects.get(name='enterprise')
-    
+
     def test_indivitual_sub_free_group(self):
         """
         Given FREE group CAN create an INDIVIDUAL sub
@@ -57,7 +57,6 @@ class SubscriptionManagerTest(TestCase):
         """
         with self.assertRaises(SubscriptionException) as e:
             self.sut.create_company_subscription(groups=self.pro_group)
-
 
     def test_subscription_is_active(self):
         """
