@@ -58,6 +58,8 @@ class SubscriptionManagerTest(TestCase):
         with self.assertRaises(SubscriptionException) as e:
             self.sut.create_company_subscription(groups=self.pro_group)
 
+
+class SubscriptionModelTests(TestCase):
     def test_subscription_is_active(self):
         """
         Given a subscription, will check if the subscription is still active
@@ -66,7 +68,7 @@ class SubscriptionManagerTest(TestCase):
             start_timestamp=timezone.now(),
             end_timestamp=(timezone.now() + timedelta(days=3))
         )
-        is_active = self.sut.is_active(sub)
+        is_active = sub.is_active()
         self.assertTrue(is_active)
 
     def test_subscription_is_inactive(self):
@@ -77,7 +79,7 @@ class SubscriptionManagerTest(TestCase):
             start_timestamp=timezone.now(),
             end_timestamp=(timezone.now() - timedelta(days=3))
         )
-        is_active = self.sut.is_active(sub)
+        is_active = sub.is_active()
         self.assertFalse(is_active)
 
     def test_subscription_is_active_without_end_date(self):
@@ -87,5 +89,5 @@ class SubscriptionManagerTest(TestCase):
         sub, _ = Subscription.objects.get_or_create(
             end_timestamp=None
         )
-        is_active = self.sut.is_active(sub)
+        is_active = sub.is_active()
         self.assertTrue(is_active)

@@ -1,5 +1,3 @@
-from datetime import timedelta
-from tracemalloc import start
 from typing import List
 from django.conf import settings
 from apps.billing.enums import SubscriptionTypeEnum
@@ -72,9 +70,3 @@ class SubscriptionManager:
                 "One of the selected groups is not valid for Company subscription."
             )
         return check
-
-    @staticmethod
-    def is_active(sub: Subscription) -> bool:
-        start = sub.start_timestamp
-        end = sub.end_timestamp or timezone.now() + timedelta(days=100)
-        return (end - start).days > 0
