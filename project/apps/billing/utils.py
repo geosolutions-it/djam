@@ -1,27 +1,81 @@
-from typing import List
+from operator import sub
+from apps.user_management.models import User
+from typing import List, Optional, Union
 from django.conf import settings
 from apps.billing.enums import SubscriptionTypeEnum
 from apps.privilege_manager.models import Group
 from apps.billing.models import Subscription
-from django.utils import timezone
-
+from django.db.models import QuerySet
 
 class SubscriptionException(Exception):
     pass
 
 
 class SubscriptionManager:
-    def create_individual_subscription(self, groups: Group, *args, **kwargs) -> Subscription:
+    def create_individual_subscription(self, groups: Group, users: User = None, *args, **kwargs) -> Subscription:
+        """
+        Create an individual subscription:
+        - groups: Group object or Queryset of groups
+        """
         sub_type = SubscriptionTypeEnum.INDIVIDUAL
         # validation of the subscription
-        return self._create_subscription(sub_type=sub_type, groups=groups, **kwargs)
+        return self._create_subscription(sub_type=sub_type, groups=groups, users=users, **kwargs)
 
-    def create_company_subscription(self, groups: Group, *args, **kwargs) -> Subscription:
+    def create_company_subscription(self, groups: Group, users: User = None, *args, **kwargs) -> Subscription:
+        """
+        Create a company subscription:
+        - groups: Group object or Queryset of groups
+        """        
         sub_type = SubscriptionTypeEnum.COMPANY
         # validation of the subscription
-        return self._create_subscription(sub_type=sub_type, groups=groups, **kwargs)
+        return self._create_subscription(sub_type=sub_type, groups=groups, users=users, **kwargs)
 
-    def validate_subscription(self, sub_type, groups) -> None:
+    def validate_subscription(self, sub_type: str, groups: List[Group], users: List[User]) -> bool:
+        """
+        Return if the subscrption proposed is valid:
+        - subscription type INDIVIDUAL or COMPANY
+        - groups: list of group names
+        """
+        is_valid_groups = True
+        is_valid_user = True
+        if groups is not None:
+            is_valid_groups = self._validate_groups(sub_type=sub_type, groups=groups)
+        if users is not None:
+            is_valid_user = self.can_add_new_subscription_by_user(users, sub_type=sub_type)
+        return all((is_valid_user, is_valid_groups))
+
+    def can_add_new_subscription_by_user(self, user: User, sub_type: Optional[str] = None) -> bool:
+        """
+        Return true if the selected user have new subscriptions
+        """
+        active_subs = self.get_active_subscription_by_user(user)
+        ind = len(active_subs.get(SubscriptionTypeEnum.INDIVIDUAL))
+        comp = len(active_subs.get(SubscriptionTypeEnum.COMPANY))
+        if ind == 0 and comp == 0:
+            return True
+        elif sub_type is None:
+            if ind + comp >= 2:
+                return False
+            return ind <= 1 and comp <= 1
+        else:
+            if not len(active_subs.get(sub_type)) < 1:
+                raise SubscriptionException(
+                    "One of the selected users is not valid for this Individual subscription."
+                )
+            return True
+
+    def get_active_subscription_by_user(self, user: User) -> List[Subscription]:
+        """
+        Get all the subscription active for a specific user in a dictionary with 
+        information about the subscription type
+        - user: User object
+        """           
+        sub = {}
+        sub['INDIVIDUAL'] = self._get_active_subscription_by_user(user=user, sub_type=SubscriptionTypeEnum.INDIVIDUAL)
+        sub['COMPANY'] = self._get_active_subscription_by_user(user=user, sub_type=SubscriptionTypeEnum.COMPANY)
+        return sub
+
+    def _validate_groups(self, groups, sub_type):
         assigned_groups = self._get_groups_name(groups)
         if sub_type == "INDIVIDUAL":
             return self._validate_individual_sub(assigned_groups)
@@ -29,11 +83,20 @@ class SubscriptionManager:
             return self._validate_company_sub(assigned_groups)
         return False
 
-    def get_active_user_subscription(self, user) -> List[Subscription]:
-        return NotImplemented
+    def _get_active_subscription_by_user(self, user: User, sub_type: str) -> Optional[List]:
+        """
+        Get all the subscription active for a specific user
+        - user: User object
+        - sub_type: INDIVIDUAL or COMPANY
+        """            
+        subs = Subscription.objects.filter(users=user, subscription_type=sub_type)
+        return [sub for sub in subs if sub.is_active()]
 
-    def _create_subscription(self, sub_type, groups: Group, **kwargs) -> Subscription:
-        self.validate_subscription(sub_type, groups)
+    def _create_subscription(self, sub_type, groups: Group, users: User, **kwargs) -> Subscription:
+        """
+        Create the subscription
+        """
+        self.validate_subscription(sub_type, groups, users)
 
         # Creation of the base object
         sub = Subscription.objects.create()
@@ -43,17 +106,20 @@ class SubscriptionManager:
             **kwargs
         )
         # Assign groups for the subscription
-        sub.groups.add(groups)
+        if groups is not None:
+            sub.groups.add(groups)
+        if users is not None:
+            sub.users.add(users)
         return sub
 
-    def _get_groups_name(self, groups) -> List[str]:
+    def _get_groups_name(self, groups: Union[Group, QuerySet]) -> List[str]:
         if isinstance(groups, Group):
             return [groups.name]
         else:
             return [g.name for g in groups.all()]
 
     @staticmethod
-    def _validate_individual_sub(groups) -> bool:
+    def _validate_individual_sub(groups: List[str]) -> bool:
         check = all(
             item.upper() in settings.ACCEPTED_PERMISSIONS_FOR_INDIVIDUALS_SUB
             for item in groups
@@ -65,7 +131,7 @@ class SubscriptionManager:
         return check
 
     @staticmethod
-    def _validate_company_sub(groups) -> bool:
+    def _validate_company_sub(groups: List[str]) -> bool:
         check = all(
             item.upper() in settings.ACCEPTED_PERMISSIONS_FOR_COMPANY_SUB for item in groups
         )
