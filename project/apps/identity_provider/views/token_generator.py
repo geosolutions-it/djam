@@ -1,8 +1,8 @@
-from apps.billing.enums import SubscriptionTypeEnum
 from django.http.response import JsonResponse
 from apps.identity_provider.models import ApiKey
 from rest_framework import permissions, views
 from datetime import datetime
+from apps.user_management.models import User
 
 
 class ApiKeyManager(permissions.IsAuthenticated, views.APIView):
@@ -11,6 +11,7 @@ class ApiKeyManager(permissions.IsAuthenticated, views.APIView):
     def post(self, request):
         user = request.user
         if self._user_is_authorized(user):
+            user = self._select_user(request, user)
             token, created = ApiKey.objects.get_or_create(
                 user=user, last_modified=datetime.utcnow()
             )
@@ -28,6 +29,7 @@ class ApiKeyManager(permissions.IsAuthenticated, views.APIView):
     def put(self, request):
         user = request.user
         if self._user_is_authorized(user):
+            user = self._select_user(request, user)
             token = ApiKey.objects.filter(user=user)
             if token:
                 token.delete()
@@ -49,6 +51,7 @@ class ApiKeyManager(permissions.IsAuthenticated, views.APIView):
     def delete(self, request):
         user = request.user
         if self._user_is_authorized(user):
+            user = self._select_user(request, user)
             token = ApiKey.objects.filter(user=user)
             if token:
                 token.delete()
@@ -59,11 +62,37 @@ class ApiKeyManager(permissions.IsAuthenticated, views.APIView):
             status=403
         return JsonResponse(data={}, status=status)
 
+    def patch(self, request):
+        user = request.user
+        message = "Api has been revoked"
+        if self._user_is_authorized(user):
+            user = self._select_user(request, user)
+            token = ApiKey.objects.filter(user=user)
+            if token:
+                new_value = not token.first().revoked
+                token.update(revoked=new_value)
+                if not new_value:
+                    message = token.first().key
+                status = 200
+            else:
+                status = 500
+        else:
+            status=403
+        return JsonResponse(data={"token": message}, status=status)
+
     def _user_is_authorized(self, user):
         group = user.group_set.all()
         if group.exists():
-            if group.first().name.lower() == 'admin':
+            if group.first().name.lower() == 'admin' or user.is_superuser:
                 return True
             else:
                 return 'ENTERPRISE' in user.get_group()
         return False
+    
+    def _select_user(self, request, user):
+        other_user = request.GET.get('account_id', None)
+        if other_user:
+            founded_user = User.objects.filter(id=other_user)
+            if founded_user.exists():
+                user = founded_user.get()
+        return user

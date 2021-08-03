@@ -9,13 +9,18 @@ from django.contrib import admin
 class SubscriptionAdmin(admin.ModelAdmin):
     readonly_fields = ['start_timestamp']
     fields = ["company_name", "start_timestamp", "end_timestamp", "subscription_type", "groups", "users"]
-    list_display = ("id", "company_name", "start_timestamp", "end_timestamp", "subscription_type", "get_group", "get_users")
-    ordering = ("end_timestamp",)
+    list_display = ("id", "company_name", "is_active", "start_timestamp", "end_timestamp", "subscription_type", "permission_group", "related_user")
+    ordering = ("-id",)
 
     form = SubscriptionForm
 
-    def get_group(self, sub):
+    def permission_group(self, sub):
         return ", ".join([str(p) for p in sub.groups.all()])
 
-    def get_users(self, sub):
+    def related_user(self, sub):
         return ", ".join([str(p) for p in sub.users.all()])
+
+    def is_active(self, sub):
+        return sub.is_active()
+
+    is_active.boolean = True

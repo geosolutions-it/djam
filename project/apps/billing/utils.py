@@ -30,7 +30,7 @@ class SubscriptionManager:
         # validation of the subscription
         return self._create_subscription(sub_type=sub_type, groups=groups, users=users, **kwargs)
 
-    def validate_subscription(self, sub_type: str, groups: List[Group], users: List[User]) -> bool:
+    def validate_subscription(self, sub_type: str, groups: List[Group], users: List[User] = None) -> bool:
         """
         Return if the subscrption proposed is valid:
         - subscription type INDIVIDUAL or COMPANY
@@ -39,7 +39,7 @@ class SubscriptionManager:
         is_valid_groups = True
         is_valid_user = True
         if groups is not None:
-            is_valid_groups = self._validate_groups(sub_type=sub_type, groups=groups)
+            is_valid_groups = self.validate_groups(sub_type=sub_type, groups=groups)
         if users is not None:
             is_valid_user = self.can_add_new_subscription_by_user(users, sub_type=sub_type)
         return all((is_valid_user, is_valid_groups))
@@ -60,22 +60,28 @@ class SubscriptionManager:
         else:
             if not len(active_subs.get(sub_type)) < 1:
                 raise SubscriptionException(
-                    "One of the selected users is not valid for this Individual subscription."
+                    f"The selected users is not valid for this {sub_type} subscription."
                 )
             return True
 
-    def get_active_subscription_by_user(self, user: User) -> List[Subscription]:
+    def get_active_subscription_by_user(self, user: Union[User, QuerySet]) -> List[Subscription]:
         """
         Get all the subscription active for a specific user in a dictionary with 
         information about the subscription type
         - user: User object
         """           
-        sub = {}
-        sub['INDIVIDUAL'] = self._get_active_subscription_by_user(user=user, sub_type=SubscriptionTypeEnum.INDIVIDUAL)
-        sub['COMPANY'] = self._get_active_subscription_by_user(user=user, sub_type=SubscriptionTypeEnum.COMPANY)
-        return sub
+        subs = {
+            'INDIVIDUAL': [],
+            'COMPANY': []
+        }
+        if not isinstance(user, QuerySet):
+            user = [user]
+        for usr in user:
+            subs['INDIVIDUAL'].extend(self._get_active_subscription_by_user(user=usr, sub_type=SubscriptionTypeEnum.INDIVIDUAL))
+            subs['COMPANY'].extend(self._get_active_subscription_by_user(user=usr, sub_type=SubscriptionTypeEnum.COMPANY))
+        return subs
 
-    def _validate_groups(self, groups, sub_type):
+    def validate_groups(self, groups, sub_type):
         assigned_groups = self._get_groups_name(groups)
         if sub_type == "INDIVIDUAL":
             return self._validate_individual_sub(assigned_groups)
