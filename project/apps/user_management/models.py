@@ -125,6 +125,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         return reverse('user_account_edit', kwargs={'id': self.pk})
 
     def get_group(self):
+        """
+        Will return the user group bases on the subscription that the user has.
+        Is weighted, this means that will be returned the highest group related to the user
+        Hierarchy: ENTERPRISE > PRO > FREE
+        """
         groups_hierarchy = (('ENTERPRISE', 2), ('PRO', 1), ('FREE', 0))
         active_subs = [sub.groups.all() for sub in self.subscription_users.all() if sub.is_active()]
         if len(active_subs) > 0:

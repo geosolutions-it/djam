@@ -1,7 +1,7 @@
+from apps.billing.enums import SubscriptionTypeEnum
 from django.http.response import JsonResponse
 from apps.identity_provider.models import ApiKey
 from rest_framework import permissions, views
-from django.conf import settings
 from datetime import datetime
 
 
@@ -62,5 +62,8 @@ class ApiKeyManager(permissions.IsAuthenticated, views.APIView):
     def _user_is_authorized(self, user):
         group = user.group_set.all()
         if group.exists():
-            return group.first().name.lower() in settings.APIKEY_MANAGER_AUTHORIZED_GROUPS
+            if group.first().name.lower() == 'admin':
+                return True
+            else:
+                return 'ENTERPRISE' in user.get_group()
         return False
