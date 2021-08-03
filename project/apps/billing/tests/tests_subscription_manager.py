@@ -105,6 +105,15 @@ class SubscriptionManagerTest(TestCase):
         active_subs = self.sut.can_add_new_subscription_by_user(self.user)
         self.assertTrue(active_subs)
 
+    def test_user1_only_1_active_individual_sub_and_add_another(self):
+        """
+        user1 with 1 individual active sub and 0 company active sub cannot add a new individual sub
+        """
+        subs = self.sut.create_individual_subscription(groups=self.free_group)
+        subs.users.add(self.user)
+        with self.assertRaises(SubscriptionException):
+            self.sut.can_add_new_subscription_by_user(self.user, sub_type="INDIVIDUAL")
+
     def test_user1_only_1_active_company_sub(self):
         """
         user1 with 0 individual active sub and 1 company active sub -> Valid

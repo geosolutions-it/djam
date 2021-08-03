@@ -124,6 +124,16 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_absolute_url(self):
         return reverse('user_account_edit', kwargs={'id': self.pk})
 
+    def get_group(self):
+        groups_hierarchy = (('ENTERPRISE', 2), ('PRO', 1), ('FREE', 0))
+        active_subs = [sub.groups.all() for sub in self.subscription_users.all() if sub.is_active()]
+        if len(active_subs) > 0:
+            groups_name = [s.get().name.upper() for s in active_subs]
+            weighted_list = [g for g in groups_hierarchy if g[0] in groups_name]
+            weighted_list.sort(key=lambda tuple_group: tuple_group[1], reverse=True)
+            return weighted_list[0][0]
+        return active_subs
+
 
 class UserActivationCode(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
