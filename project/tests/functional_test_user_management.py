@@ -172,59 +172,59 @@ class TestGetUserData(APITestCase):
 
     def test_user_not_allowed(self):
         self.client.force_authenticate(self.user)
-        response = self.client.get(reverse('fetch_users'))
+        response = self.client.get(reverse('fetch_users-list'))
         self.assertEquals(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_user_allowed(self):
         users_count = 4
         self.client.force_authenticate(self.admin)
-        response = self.client.get(reverse('fetch_users'))
+        response = self.client.get(reverse('fetch_users-list'))
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         self.assertEquals(response.json().get('count', 0), users_count)
 
     def test_user_allowed_filter_groups(self):
         users_count = 1
         self.client.force_authenticate(self.admin)
-        response = self.client.get(reverse('fetch_users') + '?groups=pro')
+        response = self.client.get(reverse('fetch_users-list') + '?groups=pro')
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         self.assertEquals(response.json().get('count', 0), users_count)
 
     def test_user_allowed_filter_wrong_groups(self):
         users_count = 0
         self.client.force_authenticate(self.admin)
-        response = self.client.get(reverse('fetch_users') + '?groups=test')
+        response = self.client.get(reverse('fetch_users-list') + '?groups=test')
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         self.assertEquals(response.json().get('count', 0), users_count)
 
     def test_user_allowed_filter_mult_groups(self):
         users_count = 2
         self.client.force_authenticate(self.admin)
-        response = self.client.get(reverse('fetch_users') + '?groups=enterprise,pro')
+        response = self.client.get(reverse('fetch_users-list') + '?groups=enterprise,pro')
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         self.assertEquals(response.json().get('count', 0), users_count)
 
     def test_user_allowed_filter_wrong_filter(self):
         users_count = 4
         self.client.force_authenticate(self.admin)
-        response = self.client.get(reverse('fetch_users') + '?not_a_filter=free,pro')
+        response = self.client.get(reverse('fetch_users-list') + '?not_a_filter=free,pro')
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         self.assertEquals(response.json().get('count', 0), users_count)
 
     def test_user_allowed_filter_older_than(self):
         users_count = 2
         self.client.force_authenticate(self.admin)
-        response = self.client.get(reverse('fetch_users') + '?older=2020-05-21T11:19:10Z')
+        response = self.client.get(reverse('fetch_users-list') + '?older=2020-05-21T11:19:10Z')
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         self.assertEquals(response.json().get('count', 0), users_count)
 
     def test_user_allowed_filter_newer_than(self):
         users_count = 0
         self.client.force_authenticate(self.admin)
-        response = self.client.get(reverse('fetch_users') + '?newer=2020-05-21T11:19:10Z')
+        response = self.client.get(reverse('fetch_users-list') + '?newer=2020-05-21T11:19:10Z')
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         self.assertEquals(response.json().get('count', 0), users_count)
 
     def test_user_allowed_filter_wrong_date(self):
         self.client.force_authenticate(self.admin)
-        response = self.client.get(reverse('fetch_users') + '?newer=wrongg_fate')
+        response = self.client.get(reverse('fetch_users-list') + '?newer=wrongg_fate')
         self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
