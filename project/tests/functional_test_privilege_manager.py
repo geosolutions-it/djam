@@ -25,9 +25,10 @@ class TestPrivelegeManager(PrivilegeManagerBaseTestCase):
         web_client.force_login(user)
 
         privilege_response = self.privilege_geoserver_roles(web_client)
-        self.assertEqual(
+        privilege_response.json()['groups'].sort()
+        self.assertDictEqual(
             privilege_response.json(),
-            {"groups": ["free", "pro", "enterprise", "hub", "admin"]},
+            {"groups": ['admin', 'enterprise', 'free', 'hub', 'pro']},
         )
 
     def test_geosever_users_no_permission_response(self):

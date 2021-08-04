@@ -10,6 +10,7 @@ from django.test import TestCase
 class ApiKeyManagerTest(TestCase):
     def setUp(self):
         self.user, _ = get_user_model().objects.get_or_create(username='admin', password="admin", is_superuser=True)
+        self.non_admin_user, _ = get_user_model().objects.get_or_create(username='non-admin', email="test@test.com", password="admin", is_superuser=False)
         self.client = APIClient()
         self.sub_manager = SubscriptionManager()
         self.free_group = Group.objects.get(name='free')
@@ -20,7 +21,7 @@ class ApiKeyManagerTest(TestCase):
         """
         User with ONLY enteprise subscription can create API token
         """
-        self.sub_manager.create_company_subscription(self.enterprise_group, self.user)
+        self.sub_manager.create_company_subscription(self.enterprise_group, self.non_admin_user)
         self.client.force_authenticate(user=self.user)
         resp = self.client.post(reverse('api_key_manager'))
         self.assertEqual(200, resp.status_code)
@@ -30,8 +31,8 @@ class ApiKeyManagerTest(TestCase):
         """
         User with ONLY free subscription cannot create API token
         """
-        self.sub_manager.create_individual_subscription(self.free_group, self.user)
-        self.client.force_authenticate(user=self.user)
+        self.sub_manager.create_individual_subscription(self.free_group, self.non_admin_user)
+        self.client.force_authenticate(user=self.non_admin_user)
         resp = self.client.post(reverse('api_key_manager'))
         self.assertEqual(403, resp.status_code)
 
@@ -39,8 +40,8 @@ class ApiKeyManagerTest(TestCase):
         """
         User with ONLY pro subscription cannot create API token
         """
-        self.sub_manager.create_individual_subscription(self.pro_group, self.user)
-        self.client.force_authenticate(user=self.user)
+        self.sub_manager.create_individual_subscription(self.pro_group, self.non_admin_user)
+        self.client.force_authenticate(user=self.non_admin_user)
         resp = self.client.post(reverse('api_key_manager'))
         self.assertEqual(403, resp.status_code)
 
@@ -48,8 +49,8 @@ class ApiKeyManagerTest(TestCase):
         """
         User with enteprise subscription and free subscription can create API token
         """
-        self.sub_manager.create_individual_subscription(self.free_group, self.user)
-        self.sub_manager.create_company_subscription(self.enterprise_group, self.user)
+        self.sub_manager.create_individual_subscription(self.free_group, self.non_admin_user)
+        self.sub_manager.create_company_subscription(self.enterprise_group, self.non_admin_user)
         self.client.force_authenticate(user=self.user)
         resp = self.client.post(reverse('api_key_manager'))
         self.assertEqual(200, resp.status_code)
@@ -59,8 +60,8 @@ class ApiKeyManagerTest(TestCase):
         """
         User with enteprise subscription and free subscription can create API token
         """
-        self.sub_manager.create_individual_subscription(self.pro_group, self.user)
-        self.sub_manager.create_company_subscription(self.enterprise_group, self.user)
+        self.sub_manager.create_individual_subscription(self.pro_group, self.non_admin_user)
+        self.sub_manager.create_company_subscription(self.enterprise_group, self.non_admin_user)
         self.client.force_authenticate(user=self.user)
         resp = self.client.post(reverse('api_key_manager'))
         self.assertEqual(200, resp.status_code)
