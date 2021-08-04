@@ -94,6 +94,12 @@
 
 .user-edit-form-box .message {
   text-align: left;
+  padding-bottom:10px
+}
+
+.user-edit-form-box .message {
+  text-align: left;
+  padding-bottom:10px
 }
 
 .user-edit-form-box #token-div-info {

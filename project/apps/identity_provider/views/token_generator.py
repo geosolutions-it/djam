@@ -1,13 +1,14 @@
 import apps.user_management.models
 from django.http.response import JsonResponse
 from apps.identity_provider.models import ApiKey
-from rest_framework import permissions, views
+from rest_framework import views
 from datetime import datetime
 from apps.user_management.models import User
+from rest_framework.permissions import IsAuthenticated
 
-
-class ApiKeyManager(permissions.IsAuthenticated, views.APIView):
+class ApiKeyManager(views.APIView):
     queryset = ApiKey.objects.none()
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         user = request.user
