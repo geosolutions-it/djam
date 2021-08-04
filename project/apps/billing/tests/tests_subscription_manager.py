@@ -1,4 +1,5 @@
 from datetime import timedelta
+from apps.billing.models import Subscription
 from django.utils import timezone
 from apps.billing.utils import SubscriptionException, SubscriptionManager
 from apps.privilege_manager.models import Group
@@ -14,6 +15,11 @@ class SubscriptionManagerTest(TestCase):
         self.pro_group = Group.objects.get(name='pro')
         self.enterprise_group = Group.objects.get(name='enterprise')
         self.user, _ = get_user_model().objects.get_or_create(username='admin')
+    
+    def tearDown(self):
+        s = Subscription.objects.all()
+        for x in s:
+            x.delete()
 
     def test_indivitual_sub_free_group(self):
         """

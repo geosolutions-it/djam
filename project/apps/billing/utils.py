@@ -104,10 +104,7 @@ class SubscriptionManager:
         """
         self.validate_subscription(sub_type, groups, users)
 
-        # Creation of the base object
-        sub = Subscription.objects.create()
-
-        sub, _ = Subscription.objects.update_or_create(
+        sub = Subscription.objects.create(
             subscription_type=getattr(SubscriptionTypeEnum, sub_type),
             **kwargs
         )

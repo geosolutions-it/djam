@@ -13,10 +13,11 @@ class SubscriptionForm(forms.ModelForm):
 
         from apps.billing.utils import SubscriptionManager
         manager = SubscriptionManager()
-        if sub_type == "INDIVIDUAL":
-            manager.validate_subscription(getattr(SubscriptionTypeEnum, "INDIVIDUAL"), cleaned_data.get("groups"), cleaned_data.get("users"))
-        elif sub_type == "COMPANY":
-            manager.validate_subscription(getattr(SubscriptionTypeEnum, "COMPANY"), cleaned_data.get("groups"), cleaned_data.get("users"))
+        if 'users' in self.changed_data or 'groups' in self.changed_data:
+            if sub_type == "INDIVIDUAL":
+                manager.validate_subscription(getattr(SubscriptionTypeEnum, "INDIVIDUAL"), cleaned_data.get("groups"), cleaned_data.get("users"))
+            elif sub_type == "COMPANY":
+                manager.validate_subscription(getattr(SubscriptionTypeEnum, "COMPANY"), cleaned_data.get("groups"), cleaned_data.get("users"))
 
         return cleaned_data
 

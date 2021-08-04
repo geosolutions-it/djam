@@ -1,4 +1,5 @@
 import logging
+from apps.billing.models import Subscription
 from apps.identity_provider.models import ApiKey
 from apps.hubspot_integration.utils import get_hubspot_subscription
 
@@ -7,7 +8,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.core.exceptions import PermissionDenied
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404
 from django.shortcuts import render, resolve_url
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -76,7 +77,8 @@ class AccountEditView(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
         context['group'] = Group.objects.filter(users=context['object']).first()
         context['api_key'] = ApiKey.objects.filter(user=context['object']).first()
         context['success'] = self.request.GET.get('success')
-        context['subscription'] = get_hubspot_subscription(context['object'])
+        context['mail_subscription'] = get_hubspot_subscription(context['object'])
+        context['account_subscription'] = Subscription.objects.filter(users=context['object'])
         return context
 
     def form_valid(self, form):
