@@ -21,6 +21,6 @@ class SubscriptionAdmin(admin.ModelAdmin):
         return ", ".join([str(p) for p in sub.users.all()])
 
     def is_active(self, sub):
-        return sub.is_active()
+        return sub.is_active
 
     is_active.boolean = True

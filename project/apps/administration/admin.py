@@ -1,25 +1,23 @@
-from datetime import datetime, timedelta
+from datetime import datetime
+from apps.billing.utils import subscription_manager
+from apps.administration.admin_filters import IsActiveCustomFilter
 from apps.identity_provider.models import ApiKey
 from apps.privilege_manager.models import Group
 from django.contrib.auth import get_user_model
 from django.shortcuts import redirect
 from django.urls.conf import path
 from apps.administration.models import AccountManagementModel
-from apps.billing.models import Billing
+from apps.billing.models import Subscription
 from django.contrib import admin, messages
-
+from apps.billing.enums import SubscriptionTypeEnum
+from django.contrib.admin.helpers import ActionForm
 
 @admin.register(AccountManagementModel)
 class AccountManagementAdmin(admin.ModelAdmin):
-    change_list_template = "admin/client/change_list.html"
 
+    list_filter = (IsActiveCustomFilter,)
+    list_display = ['id', 'company_name', 'users__name']
     object_history_template = []
-
-    list_display = [
-        "id",
-        "email",
-        "company_name",
-    ]
 
     search_fields = ["username"]
 
@@ -32,14 +30,38 @@ class AccountManagementAdmin(admin.ModelAdmin):
         return my_urls + urls
 
     def get_queryset(self, request):
-        qs = get_user_model().objects.all().order_by("id")
+        qs = Subscription.objects.all()
         return qs
+    
+    def get_changelist_instance(self, request):
+        super().get_changelist_instance(request)
+        list_display = self.get_list_display(request)
+        list_display_links = self.get_list_display_links(request, list_display)
+        # Add the action checkboxes if any actions are available.
+        if self.get_actions(request):
+            list_display = ['action_checkbox', *list_display]
+        sortable_by = self.get_sortable_by(request)
+        ChangeList = self.get_changelist(request)
+        return ChangeList(
+            request,
+            self.model,
+            list_display,
+            list_display_links,
+            self.get_list_filter(request),
+            self.date_hierarchy,
+            self.get_search_fields(request),
+            self.get_list_select_related(request),
+            self.list_per_page,
+            self.list_max_show_all,
+            self.list_editable,
+            self,
+            sortable_by,
+        )
 
-    def get_actions(self, request):
-        return {}
 
-    def has_add_permission(self, request, obj=None):
-        return False
+    # This will help you to disable delete functionaliyt
+    def has_delete_permission(self, request, obj=None):
+        return True
 
     def has_module_permission(self, request):
         return request.user.is_superuser
@@ -52,13 +74,21 @@ class AccountManagementAdmin(admin.ModelAdmin):
                 )
                 if user_obj.exists():
                     user = user_obj.first()
-                    self._asign_group(user, "enterprise")
-                    self._start_billing(user)
-                    self.message_user(
-                        request,
-                        "The Selected account has been upgraded",
-                        messages.SUCCESS,
-                    )
+                    try:
+                        subscription_manager.can_add_new_subscription_by_user(user, SubscriptionTypeEnum.COMPANY)
+                        self._asign_group(user, "enterprise")
+                        self._start_billing(user)
+                        self.message_user(
+                            request,
+                            "The Selected account has been upgraded",
+                            messages.SUCCESS,
+                        )
+                    except:
+                        self.message_user(
+                            request,
+                            "Upgrade not done, the Selected account already have a COMPANY subscription",
+                            messages.ERROR
+                        )
                 else:
                     self.message_user(
                         request,
@@ -76,15 +106,23 @@ class AccountManagementAdmin(admin.ModelAdmin):
                     id=int(request.GET.get("account_id"))
                 )
                 if user_obj.exists():
-                    user = user_obj.first()
-                    self._delete_apikey(user)
-                    self._asign_group(user, "free")
-                    self._end_billing(user)
-                    self.message_user(
-                        request,
-                        "The Selected account has been downgraded",
-                        messages.SUCCESS,
-                    )
+                    try:
+                        user = user_obj.first()
+                        subscription_manager.can_add_new_subscription_by_user(user, SubscriptionTypeEnum.COMPANY)
+                        self._delete_apikey(user)
+                        self._asign_group(user, "free")
+                        self._end_billing(user)
+                        self.message_user(
+                            request,
+                            "The Selected account has been downgraded",
+                            messages.SUCCESS,
+                        )
+                    except:
+                        self.message_user(
+                            request,
+                            "Downgrade not done, the Selected account already have an INDIVIDUAL subscription",
+                            messages.ERROR
+                        )
                 else:
                     self.message_user(
                         request,
@@ -112,13 +150,13 @@ class AccountManagementAdmin(admin.ModelAdmin):
     @staticmethod
     def _start_billing(user):
         date = datetime.utcnow()
-        billing, created = Billing.objects.get_or_create(
+        billing, _ = Subscription.objects.get_or_create(
             user=user, defaults={"start_date": date, "expiry_date": None}
         )
         return billing
 
     @staticmethod
     def _end_billing(user):
-        billing = Billing.objects.filter(user=user)
+        billing = Subscription.objects.filter(user=user)
         if billing.exists():
             billing.first().delete()

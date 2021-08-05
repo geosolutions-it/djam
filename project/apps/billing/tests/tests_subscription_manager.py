@@ -1,7 +1,7 @@
 from datetime import timedelta
 from apps.billing.models import Subscription
 from django.utils import timezone
-from apps.billing.utils import SubscriptionException, SubscriptionManager
+from apps.billing.utils import SubscriptionException, subscription_manager
 from apps.privilege_manager.models import Group
 from django.contrib.auth import get_user_model
 from django.test import TestCase
@@ -10,7 +10,7 @@ from django.test import TestCase
 
 class SubscriptionManagerTest(TestCase):
     def setUp(self):
-        self.sut = SubscriptionManager()
+        self.sut = subscription_manager
         self.free_group = Group.objects.get(name='free')
         self.pro_group = Group.objects.get(name='pro')
         self.enterprise_group = Group.objects.get(name='enterprise')

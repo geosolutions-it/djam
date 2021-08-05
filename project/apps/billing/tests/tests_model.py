@@ -25,7 +25,7 @@ class SubscriptionModelTests(TestCase):
             start_timestamp=timezone.now(),
             end_timestamp=(timezone.now() - timedelta(days=3))
         )
-        is_active = sub.is_active()
+        is_active = sub.is_active
         self.assertFalse(is_active)
 
     def test_subscription_is_active_without_end_date(self):
@@ -35,5 +35,5 @@ class SubscriptionModelTests(TestCase):
         sub, _ = Subscription.objects.get_or_create(
             end_timestamp=None
         )
-        is_active = sub.is_active()
+        is_active = sub.is_active
         self.assertTrue(is_active)

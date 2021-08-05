@@ -96,7 +96,7 @@ class SubscriptionManager:
         - sub_type: INDIVIDUAL or COMPANY
         """            
         subs = Subscription.objects.filter(users=user, subscription_type=sub_type)
-        return [sub for sub in subs if sub.is_active()]
+        return [sub for sub in subs if sub.is_active]
 
     def _create_subscription(self, sub_type, groups: Group, users: User, **kwargs) -> Subscription:
         """
@@ -143,3 +143,5 @@ class SubscriptionManager:
                 "One of the selected groups is not valid for Company subscription."
             )
         return check
+
+subscription_manager = SubscriptionManager()

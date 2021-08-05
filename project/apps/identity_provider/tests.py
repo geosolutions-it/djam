@@ -1,7 +1,7 @@
 from django.urls import reverse
 from apps.privilege_manager.models import Group
 from django.contrib.auth import get_user_model
-from apps.billing.utils import SubscriptionManager
+from apps.billing.utils import subscription_manager
 from rest_framework.test import APIClient
 from django.test import TestCase
 
@@ -12,7 +12,7 @@ class ApiKeyManagerTest(TestCase):
         self.user, _ = get_user_model().objects.get_or_create(username='admin', password="admin", is_superuser=True)
         self.non_admin_user, _ = get_user_model().objects.get_or_create(username='non-admin', email="test@test.com", password="admin", is_superuser=False)
         self.client = APIClient()
-        self.sub_manager = SubscriptionManager()
+        self.sub_manager = subscription_manager
         self.free_group = Group.objects.get(name='free')
         self.pro_group = Group.objects.get(name='pro')
         self.enterprise_group = Group.objects.get(name='enterprise')

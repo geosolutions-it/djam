@@ -140,7 +140,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         Hierarchy: ENTERPRISE > PRO > FREE
         """
         groups_hierarchy = (('ENTERPRISE', 2), ('PRO', 1), ('FREE', 0))
-        active_subs = [sub.groups.all() for sub in self.subscription_users.all() if sub.is_active()]
+        active_subs = [sub.groups.all() for sub in self.subscription_users.all() if sub.is_active]
         if len(active_subs) > 0:
             groups_name = [s.get().name.upper() for s in active_subs]
             weighted_list = [g for g in groups_hierarchy if g[0] in groups_name]

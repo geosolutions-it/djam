@@ -34,12 +34,17 @@
 <script type="text/javascript" src="{% static 'js/token_creation.js' %}"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
+{% result_list cl %}
 <div class="results">
   <table id="result_list">
   <thead>
   <tr>
     <th scope="col" class="sortable column-id">
       <div class="text"><a href="?o=1.2">id</a></div>
+      <div class="clear"></div>
+    </th>
+    <th scope="col" class="sortable column-active">
+      <div class="text"><a href="?o=1.2">Is active</a></div>
       <div class="clear"></div>
     </th>
     <th scope="col" class="sortable column-email">
@@ -51,7 +56,7 @@
       <div class="clear"></div>
     </th>
     <th scope="col" class="sortable column-group">
-      <div class="text"><a href="?o=-2">Subscription Plan (Djam Groups)</a></div>
+      <div class="text"><a href="?o=-2">Subscription Plan (Subs Groups)</a></div>
       <div class="clear"></div>
     </th>
     <th scope="col" class="sortable column-start_date">   
@@ -78,59 +83,55 @@
   </thead>
   <tbody>
 
-  {% for user in cl.result_list %} 
+  {% for subscription in cl.result_list %} 
   <tr class="row1">
-    <td class="field-id nowrap">{{user.id}}</td>
-    <td class="field-email nowrap">{{user.email|default:""}}</td>
-    <td class="field-company nowrap">{{user.company|default:""}}</td>
+    <td class="field-id nowrap">{{subscription.id}}</td>
+    <td class="field-active nowrap">
+    {% if subscription.is_active %}
+      <img src="/static/admin/img/icon-yes.svg" alt="True">
+    {% else %}
+      <img src="/static/admin/img/icon-no.svg" alt="False">
+    {% endif %}</td>
+    <td class="field-email nowrap">{{subscription.users.first.email|default:""}}</td>
+    <td class="field-company nowrap">{{subscription.company_name|default:""}}</td>
     <td class="field-group nowrap">
       <div class="container">
         <div id="group-name" style="float:left;">
-          {{user.group_set.first|default:""|upper}}
+          {{subscription.groups.first|default:""|upper}}
         </div>
-        {% if user.group_set.first.name == 'free' %}
-          <div id="group-name" style="float:right;">
-            <a href="{% url 'admin:account_upgrade' %}?account_id={{user.id}}"><p class="custom-admin-button">Upgrade</p></button>
-          </div>
-        {% else %}
-          <div id="group-name" style="float:right;">
-            <a href="{% url 'admin:account_downgrade' %}?account_id={{user.id}}"><p class="custom-admin-button">Downgrade</p></button>
-          </div>
-        {% endif %}
       </div>
     </td>
-    <td class="field-start-date nowrap">{{user.billing_set.first.start_date|default:""|date:"d M Y" }}</td>
-    <td class="field-end-date nowrap">{{user.billing_set.first.expiry_date|default:""|date:"d M Y" }}</td>
-    <td class="field-remaining nowrap">{{user.billing_set.first.expiry_date|timeuntil|naturaltime}}</td>
-    {% with user.billing_set.first.expiry_date as expiry_date %}
-    <td class="field-length nowrap">{{user.billing_set.first.start_date|timesince:expiry_date}}</td>
+    <td class="field-start-date nowrap">{{subscription.start_timestamp|default:""|date:"d M Y" }}</td>
+    <td class="field-end-date nowrap">{{subscription.end_timestamp|default:""|date:"d M Y" }}</td>
+    <td class="field-remaining nowrap">{{subscription.end_timestamp|timeuntil|naturaltime}}</td>
+    {% with subscription.end_timestamp as expiry_date %}
+    <td class="field-length nowrap">{% if expiry_date %}{{subscription.start_timestamp|timesince:expiry_date}}{% endif %}</td>
     {% endwith %}
-    {% if user.group_set.first.name.lower == 'free' %}
-      <td class="field-token nowrap">{{user.apikey_set.first.key|default:"NO TOKEN FOR FREE ACCOUNT"}}</td>
+    {% if subscription.groups.first.name|lower == 'free' %}
+      <td class="field-token nowrap">{{subscription.users.first.apikey_set.first.key|default:"NO TOKEN FOR FREE ACCOUNT"}}</td>
     {% else %}
       <td class="field-token nowrap">
         <div class="container">
-          <img id="loading-arrow-{{user.id}}" class="loading-arrow" style="display: none;" src="{% static "images/loading_arrow.gif" %}"/>        
+          <img id="loading-arrow-{{subscription.id}}" class="loading-arrow" style="display: none;" src="{% static "images/loading_arrow.gif" %}"/>        
           <div class="token-creation" style="max-width:100%;float:left">
-            <span id="token-value-{{user.id}}" {% if not user.apikey_set.first.key %}style="display:none;"{% endif %}>
-            {% if user.apikey_set.first.revoked %}
+            <span id="token-value-{{subscription.id}}" {% if not subscription.users.first.apikey_set.first.key %}style="display:none;"{% endif %}>
+            {% if subscription.users.first.apikey_set.first.revoked %}
               The API key is revoked
             {% else %}
-              {{user.apikey_set.first.key}}
+              {{subscription.users.first.apikey_set.first.key}}
             {% endif %}
             </span>
-
-            <div id="create-token-container-{{user.id}}" {% if user.apikey_set.first.key %}style="display: none;"{% endif %} >
+            <div id="create-token-container-{{subscription.id}}" {% if subscription.users.first.apikey_set.first.key or not subscription.is_active %}style="display: none;"{% endif %} >
                 <div>
-                    <p class="custom-admin-button a-pointer" onclick="sendRequest('POST', {{user.id}})">Create a token</p>
+                    <p class="custom-admin-button a-pointer" onclick="sendRequest('POST', {{subscription.id}})">{{subscription.is_active}}Create a token</p>
                 </div>
             </div>
           </div>
-          <div id="token-div-info-{{user.id}}" {% if not user.apikey_set.first.key %}style="display: none;"{% endif %} class="additional-actions">
-              <i class="fa fa-refresh" aria-hidden="true"></i><a class="a-pointer" onclick="sendRequest('PUT', {{user.id}})"> Refresh</a><br>
-              <i class="fa fa-undo" aria-hidden="true"></i><a id="admin-revoke-{{user.id}}" class="a-pointer" onclick="sendRequest('PATCH', {{user.id}})">
-              {% if user.apikey_set.first.revoked %} Re-enable{% else %} Revoke{% endif %}</a><br>
-              <i class="fa fa-trash" aria-hidden="true"></i><a class="a-pointer" onclick="sendRequest('DELETE', {{user.id}})"> Delete</a>
+          <div id="token-div-info-{{subscription.id}}" {% if not subscription.users.first.apikey_set.first.key %}style="display: none;"{% endif %} class="additional-actions">
+              <i class="fa fa-refresh" aria-hidden="true"></i><a class="a-pointer" onclick="sendRequest('PUT', {{subscription.id}})"> Refresh</a><br>
+              <i class="fa fa-undo" aria-hidden="true"></i><a id="admin-revoke-{{subscription.id}}" class="a-pointer" onclick="sendRequest('PATCH', {{subscription.id}})">
+              {% if subscription.users.first.apikey_set.first.revoked %} Re-enable{% else %} Revoke{% endif %}</a><br>
+              <i class="fa fa-trash" aria-hidden="true"></i><a class="a-pointer" onclick="sendRequest('DELETE', {{subscription.id}})"> Delete</a>
           </div>
         </div>
       </td>

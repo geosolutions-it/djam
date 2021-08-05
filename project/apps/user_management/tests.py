@@ -1,5 +1,5 @@
 from apps.privilege_manager.models import Group
-from apps.billing.utils import SubscriptionManager
+from apps.billing.utils import subscription_manager
 from django.test import TestCase
 from apps.user_management.models import User, UserActivationCode
 
@@ -60,7 +60,7 @@ class UserPreSaveActivationEmail(TestCase):
 class UsersGroup(TestCase):
     def setUp(self):
         self.user = create_user()
-        self.sub_manager = SubscriptionManager()
+        self.sub_manager = subscription_manager
         self.free_group = Group.objects.get(name='free')
         self.pro_group = Group.objects.get(name='pro')
         self.enterprise_group = Group.objects.get(name='enterprise')

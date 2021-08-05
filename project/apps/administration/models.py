@@ -11,6 +11,7 @@ class AccountManagementModel(AbstractBaseModel):
     id = models.IntegerField(primary_key=True)
     email = models.EmailField(_('email address'), blank=True)
     company_name = models.CharField(_('company name'), max_length=250, blank=True)
+    is_active = models.BooleanField()
 
     class Meta:
         verbose_name = _("Account Management")

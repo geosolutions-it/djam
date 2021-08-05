@@ -27,6 +27,7 @@ class Subscription(models.Model):
         get_user_model(), blank=True, related_name="subscription_users",
     )
 
+    @property
     def is_active(self) -> bool:
         start = self.start_timestamp
         end = self.end_timestamp or timezone.now() + timedelta(days=100)
@@ -35,11 +36,11 @@ class Subscription(models.Model):
 
 @receiver(post_save, sender=get_user_model())
 def create_default_subscription(sender, instance, created, **kwargs):
-    from apps.billing.utils import SubscriptionManager
+    from apps.billing.utils import subscription_manager
     if created and settings.DEFAULT_SUBSCRIPTION_TYPE is not None:
         _, group_name = settings.DEFAULT_SUBSCRIPTION_TYPE
         try:
-            sub = SubscriptionManager().create_individual_subscription(
+            sub = subscription_manager.create_individual_subscription(
                 groups=Group.objects.get(name=group_name),
                 users=instance
             )
