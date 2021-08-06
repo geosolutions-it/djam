@@ -1,6 +1,6 @@
 from datetime import datetime
 from apps.billing.utils import subscription_manager
-from apps.administration.admin_filters import IsActiveCustomFilter
+from apps.administration.admin_filters import IsActiveCustomFilter, SubscriptionTypeFilter
 from apps.identity_provider.models import ApiKey
 from apps.privilege_manager.models import Group
 from django.contrib.auth import get_user_model
@@ -10,16 +10,14 @@ from apps.administration.models import AccountManagementModel
 from apps.billing.models import Subscription
 from django.contrib import admin, messages
 from apps.billing.enums import SubscriptionTypeEnum
-from django.contrib.admin.helpers import ActionForm
 
 @admin.register(AccountManagementModel)
 class AccountManagementAdmin(admin.ModelAdmin):
-
-    list_filter = (IsActiveCustomFilter,)
-    list_display = ['id', 'company_name', 'users__name']
+    change_list_template = "admin/client/change_list.html"
+    list_filter = (IsActiveCustomFilter, SubscriptionTypeFilter)
     object_history_template = []
 
-    search_fields = ["username"]
+    search_fields = ["users__email"]
 
     def get_urls(self):
         urls = super().get_urls()
@@ -32,36 +30,6 @@ class AccountManagementAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         qs = Subscription.objects.all()
         return qs
-    
-    def get_changelist_instance(self, request):
-        super().get_changelist_instance(request)
-        list_display = self.get_list_display(request)
-        list_display_links = self.get_list_display_links(request, list_display)
-        # Add the action checkboxes if any actions are available.
-        if self.get_actions(request):
-            list_display = ['action_checkbox', *list_display]
-        sortable_by = self.get_sortable_by(request)
-        ChangeList = self.get_changelist(request)
-        return ChangeList(
-            request,
-            self.model,
-            list_display,
-            list_display_links,
-            self.get_list_filter(request),
-            self.date_hierarchy,
-            self.get_search_fields(request),
-            self.get_list_select_related(request),
-            self.list_per_page,
-            self.list_max_show_all,
-            self.list_editable,
-            self,
-            sortable_by,
-        )
-
-
-    # This will help you to disable delete functionaliyt
-    def has_delete_permission(self, request, obj=None):
-        return True
 
     def has_module_permission(self, request):
         return request.user.is_superuser

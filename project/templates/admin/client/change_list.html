@@ -1,9 +1,9 @@
 {% extends "admin/change_list.html" %}
 {{ block.super }}
-{% block result_list %}
-{% load humanize %}
+{% load humanize admin_list%}
 {% load static %}
 
+{% block result_list %}
 <style>
 .custom-admin-button {
     border-color: lightgreen;
@@ -34,11 +34,16 @@
 <script type="text/javascript" src="{% static 'js/token_creation.js' %}"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
-{% result_list cl %}
+{% if action_form and actions_on_top and cl.show_admin_actions %}{% admin_actions %}{% endif %}
+{% if action_form and actions_on_bottom and cl.show_admin_actions %}{% admin_actions %}{% endif %}
 <div class="results">
   <table id="result_list">
   <thead>
   <tr>
+    <th scope="col" class="sortable column-check">
+      <div class="text"><a href="?o=1.2">Action</a></div>
+      <div class="clear"></div>
+    </th>
     <th scope="col" class="sortable column-id">
       <div class="text"><a href="?o=1.2">id</a></div>
       <div class="clear"></div>
@@ -48,23 +53,23 @@
       <div class="clear"></div>
     </th>
     <th scope="col" class="sortable column-email">
-      <div class="text"><a href="?o=1.2">email</a></div>
+      <div class="text"><a href="?o=1.2">COMPANY NAME</a></div>
       <div class="clear"></div>
     </th>
     <th scope="col" class="sortable column-company">
-      <div class="text"><a href="?o=1.2">Company Name</a></div>
+      <div class="text"><a href="?o=1.2">Subscription Type</a></div>
       <div class="clear"></div>
     </th>
     <th scope="col" class="sortable column-group">
-      <div class="text"><a href="?o=-2">Subscription Plan (Subs Groups)</a></div>
+      <div class="text"><a href="?o=-2">Plan - Start Date</a></div>
       <div class="clear"></div>
     </th>
     <th scope="col" class="sortable column-start_date">   
-      <div class="text"><a href="?o=3.2">Plan - Start Date</a></div>
+      <div class="text"><a href="?o=3.2">Plan - Start Enddate</a></div>
       <div class="clear"></div>
     </th>
     <th scope="col" class="sortable column-expiry_date">   
-      <div class="text"><a href="?o=3.2">Plan - End Date</a></div>
+      <div class="text"><a href="?o=3.2">Subscription Plan (Subs Groups)</a></div>
       <div class="clear"></div>
     </th>
     <th scope="col" class="sortable column-time_remaining">   
@@ -73,6 +78,10 @@
     </th>
     <th scope="col" class="sortable column-length">   
       <div class="text"><a href="?o=3.2">Plan Length</a></div>
+      <div class="clear"></div>
+    </th>
+    <th scope="col" class="sortable column-token">   
+      <div class="text"><a href="?o=3.2">Users</a></div>
       <div class="clear"></div>
     </th>
     <th scope="col" class="sortable column-token">   
@@ -85,28 +94,26 @@
 
   {% for subscription in cl.result_list %} 
   <tr class="row1">
-    <td class="field-id nowrap">{{subscription.id}}</td>
-    <td class="field-active nowrap">
-    {% if subscription.is_active %}
-      <img src="/static/admin/img/icon-yes.svg" alt="True">
-    {% else %}
-      <img src="/static/admin/img/icon-no.svg" alt="False">
-    {% endif %}</td>
-    <td class="field-email nowrap">{{subscription.users.first.email|default:""}}</td>
+    <td><input type="checkbox" name="_selected_action" value={{subscription.id}} class="action-select"> </td>
+    <td class="field-id nowrap"><a href="{% url 'admin:administration_accountmanagementmodel_change' subscription.id %}">{{subscription.id}}</a></td>
+    <td class="field-isactive nowrap">
+      {% if subscription.is_active %}
+        <img src="/static/admin/img/icon-yes.svg" alt="True">
+      {% else %}
+        <img src="/static/admin/img/icon-no.svg" alt="False">
+      {% endif %}
+    </td>    
     <td class="field-company nowrap">{{subscription.company_name|default:""}}</td>
-    <td class="field-group nowrap">
-      <div class="container">
-        <div id="group-name" style="float:left;">
-          {{subscription.groups.first|default:""|upper}}
-        </div>
-      </div>
-    </td>
+    
+    <td class="field-subtype nowrap">{{subscription.subscription_type|default:""}}</td>
     <td class="field-start-date nowrap">{{subscription.start_timestamp|default:""|date:"d M Y" }}</td>
     <td class="field-end-date nowrap">{{subscription.end_timestamp|default:""|date:"d M Y" }}</td>
+    <td class="field-permissions nowrap">{{subscription.groups.first|default:""|upper}}</td>
     <td class="field-remaining nowrap">{{subscription.end_timestamp|timeuntil|naturaltime}}</td>
     {% with subscription.end_timestamp as expiry_date %}
-    <td class="field-length nowrap">{% if expiry_date %}{{subscription.start_timestamp|timesince:expiry_date}}{% endif %}</td>
+    <td class="field-length nowrap">{% if subscription.end_timestamp %}{{subscription.start_timestamp|timesince:subscription.end_timestamp}}{% endif %}</td>
     {% endwith %}
+    <td class="field-user nowrap">{% for usr in subscription.users.all %}{{usr.email}}<br>{% endfor %}</td>
     {% if subscription.groups.first.name|lower == 'free' %}
       <td class="field-token nowrap">{{subscription.users.first.apikey_set.first.key|default:"NO TOKEN FOR FREE ACCOUNT"}}</td>
     {% else %}
