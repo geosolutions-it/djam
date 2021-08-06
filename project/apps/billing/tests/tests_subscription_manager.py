@@ -201,3 +201,19 @@ class SubscriptionManagerTest(TestCase):
 
         active_subs = self.sut.can_add_new_subscription_by_user(self.user)
         self.assertTrue(active_subs)
+
+
+    def test_subscription_update(self):
+        """
+        A Subscription can be updated
+        """
+        subs = self.sut.create_company_subscription(
+            groups=self.enterprise_group,
+            end_timestamp=timezone.now() -timedelta(days=10)
+        )
+        
+        self.sut.update_subscription(subs, company_name='New Fantastic Company')
+        subs.refresh_from_db()
+
+        self.assertEqual('New Fantastic Company', subs.company_name)
+

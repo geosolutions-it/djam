@@ -16,6 +16,7 @@ class SubscriptionManager:
         """
         Create an individual subscription:
         - groups: Group object or Queryset of groups
+        - users: User object or Queryset of users
         """
         sub_type = SubscriptionTypeEnum.INDIVIDUAL
         # validation of the subscription
@@ -25,10 +26,56 @@ class SubscriptionManager:
         """
         Create a company subscription:
         - groups: Group object or Queryset of groups
+        - users: User object or Queryset of users
         """        
         sub_type = SubscriptionTypeEnum.COMPANY
         # validation of the subscription
         return self._create_subscription(sub_type=sub_type, groups=groups, users=users, **kwargs)
+
+    def update_subscription(self, subscription: Subscription, users: User = [], *args, **kwargs) -> Subscription:
+        """
+        Update an existing subscription, GROUPS cannot be updated ATM:
+        - groups: Group object or Queryset of groups
+        - users: User object or Queryset of users
+        """
+        for k, v in kwargs.items():
+            setattr(subscription, k, v)
+        new_user = []
+        not_added = []
+        user_to_remove = []
+        for user in users:
+            # check if the user selected is already associated with the subscription
+            if subscription.users.filter(username=user).exists():
+                # if yes, we skip it
+                continue
+            else:
+                # if is not already assigned to the subscription, we check if a new subscription can be added for the user
+                can_be_added = (
+                    subscription_manager.can_add_new_subscription_by_user(
+                        user=user,
+                        sub_type=subscription.subscription_type,
+                    )
+                )
+                if can_be_added:
+                    new_user.append(user)
+                else:
+                    not_added.append(user)
+
+        usernames = [x.username for x in users]
+        for usr in subscription.users.all():
+            if usr.username not in usernames:
+                user_to_remove.append(usr)
+
+        if new_user:
+            subscription.users.add(*new_user)
+
+        if new_user:
+            subscription.users.remove(*user_to_remove)
+        subscription.save()
+        return ({
+            "user_already_present": not_added,
+            "user_removed": user_to_remove
+        }, True)
 
     def validate_subscription(self, sub_type: str, groups: List[Group], users: List[User] = None) -> bool:
         """

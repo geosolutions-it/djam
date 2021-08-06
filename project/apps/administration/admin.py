@@ -47,32 +47,16 @@ class AccountManagementAdmin(admin.ModelAdmin):
                     obj.id = new_sub.id
 
             else:
-                new_user = []
-                not_added = []
-                user_to_remove = []
-                group = Group.objects.get(
-                    name=form.cleaned_data.get("subscription_plan").lower()
+                updated_value, _ = subscription_manager.update_subscription(
+                    subscription=obj, users=form.cleaned_data.get("user"),
+                    company_name=form.cleaned_data.get("company_name"),
+                    end_timestamp=form.cleaned_data.get("end_timestamp")
                 )
-                for user in form.cleaned_data.get("user"):
-                    # check if the user selected is already associated with the subscription
-                    if obj.users.filter(username=user).exists():
-                        # if yes, we skip it
-                        continue
-                    else:
-                        # if is not already assigned to the subscription, we check if a new subscription can be added for the user
-                        can_be_added = (
-                            subscription_manager.can_add_new_subscription_by_user(
-                                user=user,
-                                sub_type=form.cleaned_data.get("subscription_type"),
-                            )
-                        )
-                        if can_be_added:
-                            new_user.append(user)
-                        else:
-                            not_added.append(user)
+                new_user = updated_value.get('new_users', [])
+                not_added = updated_value.get('user_already_present', [])
+                user_to_remove = updated_value.get('user_to_remove', [])
                 # Successfuly message for the users added to the subscription
                 if new_user:
-                    obj.users.add(*new_user)
                     messages.success(
                         request,
                         f"New users added to the subscription: {', '.join([u.username for u in new_user])}",
@@ -82,15 +66,9 @@ class AccountManagementAdmin(admin.ModelAdmin):
                     messages.error(
                         request,
                         f"The following users cannot be added to the selected subscription: {', '.join([u.username for u in not_added])}"
-                    )
-                
+                    )                
                 # Warning message for the users that has been removed from the subscription:
-                usernames = [x.username for x in form.cleaned_data.get("user")]
-                for usr in obj.users.all():
-                    if usr.username not in usernames:
-                        user_to_remove.append(usr)
                 if user_to_remove:
-                    obj.users.remove(*user_to_remove)
                     messages.warning(
                         request,
                         f"Users removed: {', '.join([u.username for u in user_to_remove])}",
