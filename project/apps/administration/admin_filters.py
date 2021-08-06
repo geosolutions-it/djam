@@ -1,3 +1,4 @@
+import ast
 from django.contrib.admin import SimpleListFilter
 
 class IsActiveCustomFilter(SimpleListFilter):
@@ -9,7 +10,7 @@ class IsActiveCustomFilter(SimpleListFilter):
 
     def queryset(self, request, queryset):
         if request.GET.get('is_active', None):
-            ids = [s.id for s in queryset if s.is_active is bool(request.GET.get('is_active', None))]
+            ids = [s.id for s in queryset if s.is_active is ast.literal_eval(request.GET.get('is_active', None))]
             queryset = queryset.filter(id__in=ids)
         return queryset
 

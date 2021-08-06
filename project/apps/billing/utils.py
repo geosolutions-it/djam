@@ -112,7 +112,10 @@ class SubscriptionManager:
         if groups is not None:
             sub.groups.add(groups)
         if users is not None:
-            sub.users.add(users)
+            if isinstance(users, QuerySet):
+                sub.users.add(*users)
+            else:
+                sub.users.add(users)
         return sub
 
     def _get_groups_name(self, groups: Union[Group, QuerySet]) -> List[str]:

@@ -8,13 +8,14 @@ class AccountManagementForm(forms.ModelForm):
         # We can't assume that kwargs['initial'] exists! 
         if 'instance' in kwargs and kwargs.get('instance'):
             instance = kwargs.get('instance')
+            token = instance.users.first().apikey_set.filter(revoked=False)
             kwargs['initial'] = {
                 "company_name": instance.company_name,
                 "end_timestamp": instance.end_timestamp,
                 "subscription_type": instance.subscription_type,
                 "subscription_plan": instance.groups.first().name.upper(),
                 "user": instance.users.all(),
-                "api_token": instance.users.first().apikey_set.filter(revoked=False).first().key
+                "api_token": token.first().key if token.exists() else "NO TOKEN AVAILABLE"
             }
         
         if args:
