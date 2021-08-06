@@ -69,7 +69,7 @@
       <div class="clear"></div>
     </th>
     <th scope="col" class="sortable column-expiry_date">   
-      <div class="text"><a href="?o=3.2">Subscription Plan (Subs Groups)</a></div>
+      <div class="text"><a href="?o=3.2">Subscription Plan</a></div>
       <div class="clear"></div>
     </th>
     <th scope="col" class="sortable column-time_remaining">   
@@ -93,7 +93,7 @@
   <tbody>
 
   {% for subscription in cl.result_list %} 
-  <tr class="row1">
+  <tr class="row{{subscription.id}}">
     <td><input type="checkbox" name="_selected_action" value={{subscription.id}} class="action-select"> </td>
     <td class="field-id nowrap"><a href="{% url 'admin:administration_accountmanagementmodel_change' subscription.id %}">{{subscription.id}}</a></td>
     <td class="field-isactive nowrap">
@@ -115,8 +115,8 @@
     {% endwith %}
     <td class="field-user nowrap">{% for usr in subscription.users.all %}{{usr.email}}<br>{% endfor %}</td>
     {% if subscription.groups.first.name|lower == 'free' %}
-      <td class="field-token nowrap">{{subscription.users.first.apikey_set.first.key|default:"NO TOKEN FOR FREE ACCOUNT"}}</td>
-    {% else %}
+      <td class="field-token nowrap">NO TOKEN FOR FREE ACCOUNT</td>
+    {% elif subscription.is_active %}
       <td class="field-token nowrap">
         <div class="container">
           <img id="loading-arrow-{{subscription.id}}" class="loading-arrow" style="display: none;" src="{% static "images/loading_arrow.gif" %}"/>        
@@ -128,9 +128,9 @@
               {{subscription.users.first.apikey_set.first.key}}
             {% endif %}
             </span>
-            <div id="create-token-container-{{subscription.id}}" {% if subscription.users.first.apikey_set.first.key or not subscription.is_active %}style="display: none;"{% endif %} >
+            <div id="create-token-container-{{subscription.id}}" {% if subscription.users.first.apikey_set.first.key %}style="display: none;"{% endif %} >
                 <div>
-                    <p class="custom-admin-button a-pointer" onclick="sendRequest('POST', {{subscription.id}})">{{subscription.is_active}}Create a token</p>
+                    <p class="custom-admin-button a-pointer" onclick="sendRequest('POST', {{subscription.id}})">Create a token</p>
                 </div>
             </div>
           </div>
@@ -142,6 +142,8 @@
           </div>
         </div>
       </td>
+    {% else %}
+      <td></td>
     {% endif %}
   </tr>
   {% endfor %}

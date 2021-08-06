@@ -1,27 +1,36 @@
+from apps.privilege_manager.models import Group
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 # Create your models here.
+
+def _get_users_as_choices():
+    users = get_user_model().objects.all()
+    return [(u.username, u.username) for u in users]
+
 class AbstractBaseModel(models.Model):
     class Meta:
         abstract = True
 
-
 class AccountManagementModel(AbstractBaseModel):
-    email = models.EmailField(_('email address'), blank=True)
+    SUBSCRIPTION_TYPE = [("INDIVIDUAL", "INDIVIDUAL"), ("COMPANY", "COMPANY")]
+
     company_name = models.CharField(_('company name'), max_length=250, blank=True)
-    is_active = models.BooleanField()
+
+    start_timestamp = models.DateTimeField(null=True, auto_now_add=True)
+    end_timestamp = models.DateTimeField(blank=True, null=True)
+    subscription_type = models.CharField(
+        max_length=50, choices=SUBSCRIPTION_TYPE, null=True
+    )    
+    subscription_plan = models.CharField(max_length=250, choices=[('FREE', 'FREE'), ('ENTERPRISE', 'ENTERPRISE')])
+    user = models.CharField(_('user'), max_length=250, choices=_get_users_as_choices())
+    api_token = models.CharField(_('Api token'), max_length=250, blank=True, editable=True)
 
     class Meta:
         verbose_name = _("Account Management")
         verbose_name_plural = _("Account Management")
         managed = False
-
-    def clean(self):
-        super().clean()
-        self.email = self.__class__.objects.normalize_email(self.email)
-        # Assign unique user email to username field - for django integrity, since Djam is not to use usernames
-        self.username = self.email
 
     def get_full_name(self):
         """
