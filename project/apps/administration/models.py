@@ -1,13 +1,10 @@
+from django import forms
 from apps.privilege_manager.models import Group
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 # Create your models here.
-
-def _get_users_as_choices():
-    users = get_user_model().objects.all()
-    return [(u.username, u.username) for u in users]
 
 class AbstractBaseModel(models.Model):
     class Meta:
@@ -24,7 +21,9 @@ class AccountManagementModel(AbstractBaseModel):
         max_length=50, choices=SUBSCRIPTION_TYPE, null=True
     )    
     subscription_plan = models.CharField(max_length=250, choices=[('FREE', 'FREE'), ('ENTERPRISE', 'ENTERPRISE')])
-    user = models.CharField(_('user'), max_length=250, choices=_get_users_as_choices())
+    user = models.ManyToManyField(
+        get_user_model(), blank=True, related_name="accountmodel_users",
+    )
     api_token = models.CharField(_('Api token'), max_length=250, blank=True, editable=True)
 
     class Meta:

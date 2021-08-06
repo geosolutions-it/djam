@@ -46,7 +46,7 @@ class SubscriptionManager:
 
     def can_add_new_subscription_by_user(self, user: User, sub_type: Optional[str] = None) -> bool:
         """
-        Return true if the selected user have new subscriptions
+        Return true if the selected user can have new subscriptions with the selected subtype
         """
         active_subs = self.get_active_subscription_by_user(user)
         ind = len(active_subs.get(SubscriptionTypeEnum.INDIVIDUAL))
