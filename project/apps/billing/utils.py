@@ -51,7 +51,7 @@ class SubscriptionManager:
             else:
                 # if is not already assigned to the subscription, we check if a new subscription can be added for the user
                 can_be_added = (
-                    subscription_manager.can_add_new_subscription_by_user(
+                    self.can_add_new_subscription_by_user(
                         user=user,
                         sub_type=subscription.subscription_type,
                     )

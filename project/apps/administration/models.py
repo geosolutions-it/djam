@@ -1,3 +1,4 @@
+from apps.billing.models import Company
 from django import forms
 from apps.privilege_manager.models import Group
 from django.contrib.auth import get_user_model
@@ -13,17 +14,19 @@ class AbstractBaseModel(models.Model):
 class AccountManagementModel(AbstractBaseModel):
     SUBSCRIPTION_TYPE = [("INDIVIDUAL", "INDIVIDUAL"), ("COMPANY", "COMPANY")]
 
-    company_name = models.CharField(_('company name'), max_length=250, blank=True)
-
-    start_timestamp = models.DateTimeField(null=True, auto_now_add=True)
+    start_timestamp = models.DateTimeField(null=True)
     end_timestamp = models.DateTimeField(blank=True, null=True)
     subscription_type = models.CharField(
         max_length=50, choices=SUBSCRIPTION_TYPE, null=True
-    )    
+    )
+  
     subscription_plan = models.CharField(max_length=250, choices=[('FREE', 'FREE'), ('ENTERPRISE', 'ENTERPRISE')])
+    company = models.ForeignKey(Company, max_length=250, blank=True, null=True, on_delete=models.CASCADE,)
+
     user = models.ManyToManyField(
         get_user_model(), blank=True, related_name="accountmodel_users",
     )
+
     api_token = models.CharField(_('Api token'), max_length=250, blank=True, editable=True)
 
     class Meta:

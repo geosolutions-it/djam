@@ -10,11 +10,21 @@ from django.db.models.signals import post_save
 # Create your models here.
 
 
+class Company(models.Model):
+    company_name = models.CharField(max_length=250, null=True, blank=True)
+
+    users = models.ManyToManyField(
+        get_user_model(), blank=True, related_name="company_users",
+    )
+
+    def __str__(self) -> str:
+        return self.company_name
+
+
 class Subscription(models.Model):
 
     SUBSCRIPTION_TYPE = [("INDIVIDUAL", "INDIVIDUAL"), ("COMPANY", "COMPANY")]
 
-    company_name = models.CharField(max_length=250, null=True, blank=True)
     start_timestamp = models.DateTimeField(null=True, auto_now_add=True, editable=True)
     end_timestamp = models.DateTimeField(null=True, blank=True)
     subscription_type = models.CharField(
@@ -23,15 +33,24 @@ class Subscription(models.Model):
     groups = models.ManyToManyField(
         Group, blank=True, related_name="subscription_groups"
     )
+
     users = models.ManyToManyField(
         get_user_model(), blank=True, related_name="subscription_users",
     )
 
+    company = models.ForeignKey(
+        Company,
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        help_text="API key will have the same privilege groups as it's owner.",
+    )
+
     @property
     def is_active(self) -> bool:
-        start = self.start_timestamp
+        start = timezone.now()
         end = self.end_timestamp or timezone.now() + timedelta(days=100)
-        return (end - start).days > 0
+        return end > start
 
 
 @receiver(post_save, sender=get_user_model())

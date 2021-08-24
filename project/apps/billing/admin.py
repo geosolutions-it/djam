@@ -1,5 +1,5 @@
 from apps.billing.forms import SubscriptionForm
-from apps.billing.models import Subscription
+from apps.billing.models import Company, Subscription
 from django.contrib import admin
 
 
@@ -8,8 +8,8 @@ from django.contrib import admin
 @admin.register(Subscription)
 class SubscriptionAdmin(admin.ModelAdmin):
     readonly_fields = ['start_timestamp']
-    fields = ["company_name", "start_timestamp", "end_timestamp", "subscription_type", "groups", "users"]
-    list_display = ("id", "company_name", "is_active", "start_timestamp", "end_timestamp", "subscription_type", "permission_group", "related_user")
+    fields = ["company", "start_timestamp", "end_timestamp", "subscription_type", "groups", "users"]
+    list_display = ("id", "company", "is_active", "start_timestamp", "end_timestamp", "subscription_type", "permission_group", "related_user")
     ordering = ("-id",)
 
     form = SubscriptionForm
@@ -24,3 +24,7 @@ class SubscriptionAdmin(admin.ModelAdmin):
         return sub.is_active
 
     is_active.boolean = True
+
+@admin.register(Company)
+class CompanyAdmin(admin.ModelAdmin):
+    fields = ["company_name", "users"]

@@ -50,7 +50,8 @@ class AccountManagementAdmin(admin.ModelAdmin):
                 updated_value, _ = subscription_manager.update_subscription(
                     subscription=obj, users=form.cleaned_data.get("user"),
                     company_name=form.cleaned_data.get("company_name"),
-                    end_timestamp=form.cleaned_data.get("end_timestamp")
+                    end_timestamp=form.cleaned_data.get("end_timestamp"),
+                    start_timestamp=form.cleaned_data.get("start_timestamp")
                 )
                 new_user = updated_value.get('new_users', [])
                 not_added = updated_value.get('user_already_present', [])
