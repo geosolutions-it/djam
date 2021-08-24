@@ -7,8 +7,6 @@ from apps.privilege_manager.models import Group
 from django.utils import timezone
 from django.db.models.signals import post_save
 
-# Create your models here.
-
 
 class Company(models.Model):
     company_name = models.CharField(max_length=250, null=True, blank=True)

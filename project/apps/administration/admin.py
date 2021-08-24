@@ -1,27 +1,16 @@
-from apps.administration.forms import AccountManagementForm
+from apps.administration.forms import AccountManagementForm, CompanyManagementForm, IndividualManagementForm
 from apps.privilege_manager.models import Group
 from apps.billing.utils import subscription_manager
 from apps.administration.admin_filters import (
     IsActiveCustomFilter,
     SubscriptionTypeFilter,
 )
-from apps.administration.models import AccountManagementModel
+from apps.administration.models import CompanyManagementModel, IndividualManagementModel, AccountManagementModel
 from apps.billing.models import Subscription
 from django.contrib import admin, messages
-from django.contrib.auth import get_user_model
-from django.db import transaction
 
-
-@admin.register(AccountManagementModel)
 class AccountManagementAdmin(admin.ModelAdmin):
-    form = AccountManagementForm
-
-    change_list_template = "admin/client/change_list.html"
-    list_filter = (IsActiveCustomFilter, SubscriptionTypeFilter)
-    object_history_template = []
-
-    search_fields = ["users__email"]
-
+  
     def get_queryset(self, request):
         qs = Subscription.objects.all()
         return qs
@@ -36,7 +25,7 @@ class AccountManagementAdmin(admin.ModelAdmin):
             if not change:
                 group = Group.objects.get(name=obj.subscription_plan.lower())
                 user = form.cleaned_data.get("user")
-                if obj.subscription_type == "INDIVIDUAL":
+                if obj.subscription_plan != "ENTERPRISE":
                     subscription_manager.create_individual_subscription(
                         groups=group, users=user
                     )
@@ -89,3 +78,29 @@ class AccountManagementAdmin(admin.ModelAdmin):
         else:
              change_message.append({'updated': []})
         return change_message        
+
+
+@admin.register(CompanyManagementModel)
+class CompanyAccountManagementAdmin(AccountManagementAdmin):
+    form = CompanyManagementForm
+    search_fields = ["users__email"]
+
+@admin.register(IndividualManagementModel)
+class IndividualManagementAdmin(AccountManagementAdmin):
+    form = IndividualManagementForm
+    search_fields = ["users__email"]
+
+@admin.register(AccountManagementModel)
+class ReportAccountManagement(AccountManagementAdmin):
+    form = AccountManagementForm
+    change_list_template = "admin/client/change_list.html"
+    list_filter = (IsActiveCustomFilter, SubscriptionTypeFilter)
+    object_history_template = []
+
+    search_fields = ["users__email"]  
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False

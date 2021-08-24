@@ -4,7 +4,7 @@ from typing import List, Optional, Union
 from django.conf import settings
 from apps.billing.enums import SubscriptionTypeEnum
 from apps.privilege_manager.models import Group
-from apps.billing.models import Subscription
+from apps.billing.models import Company, Subscription
 from django.db.models import QuerySet
 
 class SubscriptionException(Exception):
@@ -22,15 +22,15 @@ class SubscriptionManager:
         # validation of the subscription
         return self._create_subscription(sub_type=sub_type, groups=groups, users=users, **kwargs)
 
-    def create_company_subscription(self, groups: Group, users: User = None, *args, **kwargs) -> Subscription:
+    def create_company_subscription(self, groups: Group, company: Company = None, *args, **kwargs) -> Subscription:
         """
         Create a company subscription:
         - groups: Group object or Queryset of groups
-        - users: User object or Queryset of users
+        - company: Company object or Queryset of users
         """        
         sub_type = SubscriptionTypeEnum.COMPANY
         # validation of the subscription
-        return self._create_subscription(sub_type=sub_type, groups=groups, users=users, **kwargs)
+        return self._create_subscription(sub_type=sub_type, groups=groups, users=None, company=company, **kwargs)
 
     def update_subscription(self, subscription: Subscription, users: User = [], *args, **kwargs) -> Subscription:
         """
@@ -145,7 +145,7 @@ class SubscriptionManager:
         subs = Subscription.objects.filter(users=user, subscription_type=sub_type)
         return [sub for sub in subs if sub.is_active]
 
-    def _create_subscription(self, sub_type, groups: Group, users: User, **kwargs) -> Subscription:
+    def _create_subscription(self, sub_type, groups: Group, users: User, company: Company = None, **kwargs) -> Subscription:
         """
         Create the subscription
         """
