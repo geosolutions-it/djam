@@ -6,7 +6,7 @@ from django.dispatch import receiver
 from apps.privilege_manager.models import Group
 from django.utils import timezone
 from django.db.models.signals import post_save
-
+from django.utils.translation import ugettext_lazy as _
 
 class Company(models.Model):
     company_name = models.CharField(max_length=250, null=True, blank=True)
@@ -14,11 +14,12 @@ class Company(models.Model):
     users = models.ManyToManyField(
         get_user_model(), blank=True, related_name="company_users"
     )
+    class Meta:
+        verbose_name = _("Company")
+        verbose_name_plural = _("Companies")
+
     def __str__(self) -> str:
         return self.company_name
-
-    def save(self, *args, **kwargs):
-        super(Company, self).save(*args, **kwargs)
 
 class Subscription(models.Model):
 

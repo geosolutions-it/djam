@@ -1,5 +1,4 @@
-from apps.privilege_manager.models import Group
-from apps.administration.forms import AccountManagementForm
+from apps.administration.forms import AccountManagementForm, CompanySubsForm
 from apps.administration.admin_filters import (
     IsActiveCustomFilter,
 )
@@ -12,6 +11,7 @@ from django.contrib import admin
 class CompanyAccountManagementAdmin(admin.ModelAdmin):
     list_display = ('company', 'start_timestamp', 'end_timestamp', 'groups')
     search_fields = ["users__email"]
+    form = CompanySubsForm
 
 @admin.register(IndividualSubscription)
 class IndividualManagementAdmin(admin.ModelAdmin):
