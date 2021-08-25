@@ -12,11 +12,13 @@ class Company(models.Model):
     company_name = models.CharField(max_length=250, null=True, blank=True)
 
     users = models.ManyToManyField(
-        get_user_model(), blank=True, related_name="company_users",
+        get_user_model(), blank=True, related_name="company_users"
     )
     def __str__(self) -> str:
         return self.company_name
 
+    def save(self, *args, **kwargs):
+        super(Company, self).save(*args, **kwargs)
 
 class Subscription(models.Model):
 
@@ -24,7 +26,7 @@ class Subscription(models.Model):
     end_timestamp = models.DateTimeField(blank=True, null=True)
 
     groups = models.ForeignKey(
-        Group, blank=True, null=True, on_delete=models.CASCADE
+        Group, blank=False, null=True, on_delete=models.CASCADE
     )
 
     @property
@@ -42,7 +44,8 @@ def create_default_subscription(sender, instance, created, **kwargs):
         try:
             sub = subscription_manager.create_individual_subscription(
                 groups=Group.objects.get(name=group_name),
-                users=instance
+                users=instance,
+                start_timestamp=timezone.now()
             )
         except models.ObjectDoesNotExist:
             return

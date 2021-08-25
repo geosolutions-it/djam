@@ -1,4 +1,4 @@
-from operator import sub
+from apps.administration.models import CompanySubscription, IndividualSubscription
 from apps.user_management.models import User
 from typing import List, Optional, Union
 from django.conf import settings
@@ -20,7 +20,15 @@ class SubscriptionManager:
         """
         sub_type = SubscriptionTypeEnum.INDIVIDUAL
         # validation of the subscription
-        return self._create_subscription(sub_type=sub_type, groups=groups, users=users, **kwargs)
+        self.validate_subscription(sub_type, groups, users)
+        sub = IndividualSubscription(
+            groups=groups,
+            user=users,
+            **kwargs
+        )
+        sub.save()
+        sub.refresh_from_db()
+        return sub
 
     def create_company_subscription(self, groups: Group, company: Company = None, *args, **kwargs) -> Subscription:
         """
@@ -30,7 +38,15 @@ class SubscriptionManager:
         """        
         sub_type = SubscriptionTypeEnum.COMPANY
         # validation of the subscription
-        return self._create_subscription(sub_type=sub_type, groups=groups, users=None, company=company, **kwargs)
+        self.validate_subscription(sub_type, groups, company.users.all())
+        sub = CompanySubscription(
+            groups=groups,
+            company=company,
+            **kwargs
+        )
+        sub.save()
+        sub.refresh_from_db()
+        return sub
 
     def update_subscription(self, subscription: Subscription, users: User = [], *args, **kwargs) -> Subscription:
         """
@@ -141,32 +157,13 @@ class SubscriptionManager:
         Get all the subscription active for a specific user
         - user: User object
         - sub_type: INDIVIDUAL or COMPANY
-        """            
-        subs = Subscription.objects.filter(users=user, subscription_type=sub_type)
+        """
+        if sub_type == 'INDIVIDUAL':
+            subs = Subscription.objects.filter(individualsubscription__user=user)
+        else:
+            subs = Subscription.objects.filter(companysubscription__company__users=user)
+
         return [sub for sub in subs if sub.is_active]
-
-    def _create_subscription(self, sub_type, groups: Group, users: User, company: Company = None, **kwargs) -> Subscription:
-        """
-        Create the subscription
-        """
-        self.validate_subscription(sub_type, groups, users)
-
-        sub = Subscription.objects.create(
-            subscription_type=getattr(SubscriptionTypeEnum, sub_type),
-            **kwargs
-        )
-        # Assign groups for the subscription
-        if groups is not None:
-            sub.groups.add(groups)
-        if users is not None:
-            if isinstance(users, QuerySet):
-                sub.users.add(*users)
-            else:
-                sub.users.add(users)
-        if company is not None:
-            sub.company = company
-        sub.save()
-        return sub
 
     def _get_groups_name(self, groups: Union[Group, QuerySet]) -> List[str]:
         if isinstance(groups, Group):

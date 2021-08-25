@@ -26,14 +26,19 @@ class AccountManagementModel(AbstractBaseModel):
 
 
 class CompanySubscription(Subscription):
-    company = models.ForeignKey(Company, max_length=250, blank=True, null=True, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, max_length=250, blank=False, null=True, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return self.company.company_name
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['company'], name="unique_company_per_subscription")
+        ]
+
 
 class IndividualSubscription(Subscription):
     user = models.ForeignKey(
-        get_user_model(), blank=True, related_name="individual_users", on_delete=models.CASCADE
+        get_user_model(), blank=False, related_name="individual_users", on_delete=models.CASCADE
     )
     class Meta:
         constraints = [

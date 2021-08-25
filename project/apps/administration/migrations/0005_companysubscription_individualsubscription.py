@@ -19,7 +19,6 @@ class Migration(migrations.Migration):
             name='IndividualSubscription',
             fields=[
                 ('subscription_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='billing.Subscription')),
-                ('groups', models.ForeignKey(blank=True, on_delete=django.db.models.deletion.CASCADE, related_name='individual_sub_groups', to='privilege_manager.Group')),
                 ('user', models.ForeignKey(blank=True, on_delete=django.db.models.deletion.CASCADE, related_name='individual_users', to=settings.AUTH_USER_MODEL)),
             ],
             bases=('billing.subscription',),
@@ -29,7 +28,6 @@ class Migration(migrations.Migration):
             fields=[
                 ('subscription_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='billing.Subscription')),
                 ('company', models.ForeignKey(blank=True, max_length=250, null=True, on_delete=django.db.models.deletion.CASCADE, to='billing.Company')),
-                ('groups', models.ForeignKey(blank=True, on_delete=django.db.models.deletion.CASCADE, related_name='company_sub_groups', to='privilege_manager.Group')),
             ],
             bases=('billing.subscription',),
         ),

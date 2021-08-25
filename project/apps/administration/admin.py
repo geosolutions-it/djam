@@ -1,3 +1,4 @@
+from apps.privilege_manager.models import Group
 from apps.administration.forms import AccountManagementForm
 from apps.administration.admin_filters import (
     IsActiveCustomFilter,
@@ -6,29 +7,19 @@ from apps.administration.models import AccountManagementModel
 from apps.administration.models import CompanySubscription, IndividualSubscription
 from django.contrib import admin
 
-class AccountManagementAdmin(admin.ModelAdmin):
-  
-    def get_queryset(self, request):
-        qs = IndividualSubscription.objects.all()
-        return qs
-
-    def has_module_permission(self, request):
-        return request.user.is_superuser
 
 @admin.register(CompanySubscription)
 class CompanyAccountManagementAdmin(admin.ModelAdmin):
     list_display = ('company', 'start_timestamp', 'end_timestamp', 'groups')
     search_fields = ["users__email"]
 
-
 @admin.register(IndividualSubscription)
 class IndividualManagementAdmin(admin.ModelAdmin):
     list_display = ('user', 'start_timestamp', 'end_timestamp', 'groups')
     search_fields = ["users__email"]
 
-
 @admin.register(AccountManagementModel)
-class ReportAccountManagement(AccountManagementAdmin):
+class ReportAccountManagement(admin.ModelAdmin):
     form = AccountManagementForm
     change_list_template = "admin/client/change_list.html"
     list_filter = (IsActiveCustomFilter,)
@@ -41,3 +32,10 @@ class ReportAccountManagement(AccountManagementAdmin):
 
     def has_change_permission(self, request, obj=None):
         return False
+
+    def get_queryset(self, request):
+        qs = IndividualSubscription.objects.all()
+        return qs
+
+    def has_module_permission(self, request):
+        return request.user.is_superuser
