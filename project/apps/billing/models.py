@@ -14,34 +14,17 @@ class Company(models.Model):
     users = models.ManyToManyField(
         get_user_model(), blank=True, related_name="company_users",
     )
-
     def __str__(self) -> str:
         return self.company_name
 
 
 class Subscription(models.Model):
 
-    SUBSCRIPTION_TYPE = [("INDIVIDUAL", "INDIVIDUAL"), ("COMPANY", "COMPANY")]
+    start_timestamp = models.DateTimeField(null=True)
+    end_timestamp = models.DateTimeField(blank=True, null=True)
 
-    start_timestamp = models.DateTimeField(null=True, auto_now_add=True, editable=True)
-    end_timestamp = models.DateTimeField(null=True, blank=True)
-    subscription_type = models.CharField(
-        max_length=50, choices=SUBSCRIPTION_TYPE, null=True
-    )
-    groups = models.ManyToManyField(
-        Group, blank=True, related_name="subscription_groups"
-    )
-
-    users = models.ManyToManyField(
-        get_user_model(), blank=True, related_name="subscription_users",
-    )
-
-    company = models.ForeignKey(
-        Company,
-        null=True,
-        blank=True,
-        on_delete=models.CASCADE,
-        help_text="API key will have the same privilege groups as it's owner.",
+    groups = models.ForeignKey(
+        Group, blank=True, null=True, on_delete=models.CASCADE
     )
 
     @property

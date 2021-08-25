@@ -2,6 +2,7 @@
 {{ block.super }}
 {% load humanize admin_list%}
 {% load static %}
+{% load tag_extras %}
 
 {% block result_list %}
 <style>
@@ -34,26 +35,16 @@
 <script type="text/javascript" src="{% static 'js/token_creation.js' %}"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
-{% if action_form and actions_on_top and cl.show_admin_actions %}{% admin_actions %}{% endif %}
-{% if action_form and actions_on_bottom and cl.show_admin_actions %}{% admin_actions %}{% endif %}
 <div class="results">
   <table id="result_list">
   <thead>
   <tr>
-    <th scope="col" class="sortable column-check">
-      <div class="text"><a href="?o=1.2">Action</a></div>
-      <div class="clear"></div>
-    </th>
     <th scope="col" class="sortable column-id">
       <div class="text"><a href="?o=1.2">id</a></div>
       <div class="clear"></div>
     </th>
     <th scope="col" class="sortable column-active">
       <div class="text"><a href="?o=1.2">Is active</a></div>
-      <div class="clear"></div>
-    </th>
-    <th scope="col" class="sortable column-email">
-      <div class="text"><a href="?o=1.2">COMPANY NAME</a></div>
       <div class="clear"></div>
     </th>
     <th scope="col" class="sortable column-company">
@@ -93,61 +84,95 @@
   <tbody>
 
   {% for subscription in cl.result_list %} 
-  <tr class="row{{subscription.id}}">
-    <td><input type="checkbox" name="_selected_action" value={{subscription.id}} class="action-select"> </td>
-    <td class="field-id nowrap"><a href="{% url 'admin:administration_accountmanagementmodel_change' subscription.id %}">{{subscription.id}}</a></td>
-    <td class="field-isactive nowrap">
-      {% if subscription.is_active %}
-        <img src="/static/admin/img/icon-yes.svg" alt="True">
-      {% else %}
-        <img src="/static/admin/img/icon-no.svg" alt="False">
-      {% endif %}
-    </td>    
-    <td class="field-company nowrap">{{subscription.company_name|default:""}}</td>
-    
-    <td class="field-subtype nowrap">{{subscription.subscription_type|default:""}}</td>
-    <td class="field-start-date nowrap">{{subscription.start_timestamp|default:""|date:"d M Y" }}</td>
-    <td class="field-end-date nowrap">{{subscription.end_timestamp|default:""|date:"d M Y" }}</td>
-    <td class="field-permissions nowrap">{{subscription.groups.first|default:""|upper}}</td>
-    <td class="field-remaining nowrap">{{subscription.end_timestamp|timeuntil|naturaltime}}</td>
-    {% with subscription.end_timestamp as expiry_date %}
-    <td class="field-length nowrap">{% if subscription.end_timestamp %}{{subscription.start_timestamp|timesince:subscription.end_timestamp}}{% endif %}</td>
-    {% endwith %}
-    <td class="field-user nowrap">{% for usr in subscription.users.all %}{{usr.email}}<br>{% endfor %}</td>
-    {% if subscription.groups.first.name|lower == 'free' %}
-      <td class="field-token nowrap">NO TOKEN FOR FREE ACCOUNT</td>
-    {% elif subscription.is_active %}
-      <td class="field-token nowrap">
-      {% with subscription.users.first.id as user_id %}
-        <div class="container">
-          <img id="loading-arrow-{{user_id}}" class="loading-arrow" style="display: none;" src="{% static "images/loading_arrow.gif" %}"/>        
-          <div class="token-creation" style="max-width:100%;float:left">
-            <span id="token-value-{{user_id}}" {% if not subscription.users.first.apikey_set.first.key %}style="display:none;"{% endif %}>
-            {% if subscription.users.first.apikey_set.first.revoked %}
-              The API key is revoked
+    {% with subscription|get_company_sub as company_sub %}   
+      <tr class="row{{subscription.id}}">
+        <td class="field-id nowrap">{{subscription.id}}</td>
+        <td class="field-isactive nowrap">
+          {% if subscription.is_active %}
+            <img src="/static/admin/img/icon-yes.svg" alt="True">
+          {% else %}
+            <img src="/static/admin/img/icon-no.svg" alt="False">
+          {% endif %}
+          {% if company_sub %}
+            <br><br>
+            {% if company_sub.is_active %}
+              <img src="/static/admin/img/icon-yes.svg" alt="True">
             {% else %}
-              {{subscription.users.first.apikey_set.first.key}}
+              <img src="/static/admin/img/icon-no.svg" alt="False">
             {% endif %}
-            </span>
-            <div id="create-token-container-{{user_id}}" {% if subscription.users.first.apikey_set.first.key %}style="display: none;"{% endif %} >
-                <div>
-                    <p class="custom-admin-button a-pointer" onclick="sendRequest('POST', {{user_id}})">Create a token</p>
+          {% endif %}
+        </td>    
+        <td class="field-subtype nowrap">
+          INDIVIDUAL
+          {% if company_sub %}
+            <br><br>COMPANY
+          {% endif %}
+        </td>
+        <td class="field-start-date nowrap">
+          {{subscription.start_timestamp|default:""|date:"d M Y" }}
+          {% if company_sub %}
+            <br><br>{{company_sub.start_timestamp|default:""|date:"d M Y" }}
+          {% endif %}
+        </td>
+        <td class="field-end-date nowrap">{{subscription.end_timestamp|default:""|date:"d M Y" }}
+          {% if company_sub %}
+            <br><br>{{company_sub.end_timestamp|default:""|date:"d M Y" }}
+          {% endif %}
+        </td>
+        <td class="field-permissions nowrap">{{subscription.groups|default:""|upper}}
+          {% if company_sub %}
+            <br><br>{{company_sub.groups|default:""|upper }}
+          {% endif %}
+        </td>
+        <td class="field-remaining nowrap">{{subscription.end_timestamp|timeuntil|naturaltime}}
+          {% if company_sub %}
+            <br><br>{{company_sub.end_timestamp|timeuntil|naturaltime }}
+          {% endif %}
+        </td>
+        {% with subscription.end_timestamp as expiry_date %}
+        <td class="field-length nowrap">{% if subscription.end_timestamp %}{{subscription.start_timestamp|timesince:subscription.end_timestamp}}{% endif %}
+          {% if company_sub and company_sub.end_timestamp %}
+            <br><br>{{company_sub.start_timestamp|timesince:company_sub.end_timestamp}}
+          {% endif %}
+        </td>
+        {% endwith %}
+        <td class="field-user nowrap">{{subscription.user.email}}
+          {% if company_sub %}
+            <br><br>{{company_sub.company.company_name }}
+          {% endif %}
+        </td>
+        <td class="field-token nowrap">NO TOKEN FOR FREE ACCOUNT
+          {% if company_sub and company_sub.is_active %}
+          <br><br>
+            {% with subscription.user.id as user_id %}
+              <div class="container">
+                <img id="loading-arrow-{{user_id}}" class="loading-arrow" style="display: none;" src="{% static "images/loading_arrow.gif" %}"/>        
+                <div class="token-creation" style="max-width:100%;float:left">
+                  <span id="token-value-{{user_id}}" {% if not subscription.user.apikey_set.first.key %}style="display:none;"{% endif %}>
+                  {% if subscription.user.apikey_set.first.revoked %}
+                    The API key is revoked
+                  {% else %}
+                    {{subscription.user.apikey_set.first.key}}
+                  {% endif %}
+                  </span>
+                  <div id="create-token-container-{{user_id}}" {% if subscription.user.apikey_set.first.key %}style="display: none;"{% endif %} >
+                      <div>
+                          <p class="custom-admin-button a-pointer" onclick="sendRequest('POST', {{user_id}})">Create a token</p>
+                      </div>
+                  </div>
                 </div>
-            </div>
-          </div>
-          <div id="token-div-info-{{user_id}}" {% if not subscription.users.first.apikey_set.first.key %}style="display: none;"{% endif %} class="additional-actions">
-              <i class="fa fa-refresh" aria-hidden="true"></i><a class="a-pointer" onclick="sendRequest('PUT', {{user_id}})"> Refresh</a><br>
-              <i class="fa fa-undo" aria-hidden="true"></i><a id="admin-revoke-{{user_id}}" class="a-pointer" onclick="sendRequest('PATCH', {{user_id}})">
-              {% if subscription.users.first.apikey_set.first.revoked %} Re-enable{% else %} Revoke{% endif %}</a><br>
-              <i class="fa fa-trash" aria-hidden="true"></i><a class="a-pointer" onclick="sendRequest('DELETE', {{user_id}})"> Delete</a>
-          </div>
-        </div>
-      {% endwith %}
-      </td>
-    {% else %}
-      <td></td>
-    {% endif %}
-  </tr>
+                <div id="token-div-info-{{user_id}}" {% if not subscription.user.apikey_set.first.key %}style="display: none;"{% endif %} class="additional-actions">
+                    <i class="fa fa-refresh" aria-hidden="true"></i><a class="a-pointer" onclick="sendRequest('PUT', {{user_id}})"> Refresh</a><br>
+                    <i class="fa fa-undo" aria-hidden="true"></i><a id="admin-revoke-{{user_id}}" class="a-pointer" onclick="sendRequest('PATCH', {{user_id}})">
+                    {% if subscription.user.first.apikey_set.first.revoked %} Re-enable{% else %} Revoke{% endif %}</a><br>
+                    <i class="fa fa-trash" aria-hidden="true"></i><a class="a-pointer" onclick="sendRequest('DELETE', {{user_id}})"> Delete</a>
+                </div>
+              </div>
+            {% endwith %}
+          {% endif %}
+        </td>
+      </tr>
+    {% endwith %}
   {% endfor %}
   </tbody>
   </table>

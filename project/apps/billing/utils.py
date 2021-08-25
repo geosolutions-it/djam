@@ -43,7 +43,7 @@ class SubscriptionManager:
         new_user = []
         not_added = []
         user_to_remove = []
-        for user in users:
+        for user in [users]:
             # check if the user selected is already associated with the subscription
             if subscription.users.filter(username=user).exists():
                 # if yes, we skip it
@@ -61,7 +61,7 @@ class SubscriptionManager:
                 else:
                     not_added.append(user)
 
-        usernames = [x.username for x in users]
+        usernames = [x.username for x in [users]]
         for usr in subscription.users.all():
             if usr.username not in usernames:
                 user_to_remove.append(usr)
@@ -163,6 +163,9 @@ class SubscriptionManager:
                 sub.users.add(*users)
             else:
                 sub.users.add(users)
+        if company is not None:
+            sub.company = company
+        sub.save()
         return sub
 
     def _get_groups_name(self, groups: Union[Group, QuerySet]) -> List[str]:

@@ -15,6 +15,7 @@ from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.utils import timezone
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
+from django.db.models import Q
 
 from apps.user_management.utils import random_string
 from apps.user_management.model_managers import UserManager
@@ -139,10 +140,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         Is weighted, this means that will be returned the highest group related to the user
         Hierarchy: ENTERPRISE > PRO > FREE
         """
+        from apps.billing.models import Subscription
         groups_hierarchy = (('ENTERPRISE', 2), ('PRO', 1), ('FREE', 0))
-        active_subs = [sub.groups.all() for sub in self.subscription_users.all() if sub.is_active]
+        subcriptions = Subscription.objects.filter(Q(individualsubscription__user=self) | Q(companysubscription__company__users=self))
+        active_subs = [sub.groups for sub in subcriptions.all() if sub.is_active]
         if len(active_subs) > 0:
-            groups_name = [s.get().name.upper() for s in active_subs]
+            groups_name = [s.name.upper() for s in active_subs]
             weighted_list = [g for g in groups_hierarchy if g[0] in groups_name]
             weighted_list.sort(key=lambda tuple_group: tuple_group[1], reverse=True)
             return weighted_list[0][0]

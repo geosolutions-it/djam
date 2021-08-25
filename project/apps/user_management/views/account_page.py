@@ -15,6 +15,7 @@ from django.utils.translation import gettext as _
 from django.views.generic import UpdateView, DetailView, RedirectView
 from apps.user_management.forms import UserAccountForm
 from apps.privilege_manager.models import Group
+from django.db.models import Q
 
 logger = logging.getLogger(__name__)
 
@@ -78,7 +79,7 @@ class AccountEditView(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
         context['api_key'] = ApiKey.objects.filter(user=context['object']).first()
         context['success'] = self.request.GET.get('success')
         context['mail_subscription'] = get_hubspot_subscription(context['object'])
-        context['account_subscription'] = Subscription.objects.filter(users=context['object'])
+        context['account_subscription'] = Subscription.objects.filter(Q(individualsubscription__user=context['object']) | Q(companysubscription__company__users=context['object']))
         return context
 
     def form_valid(self, form):
