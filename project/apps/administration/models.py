@@ -1,4 +1,4 @@
-from apps.privilege_manager.models import Group
+from apps.billing.enums import SubscriptionPermissions
 from apps.billing.models import Company, Subscription
 from django.contrib.auth import get_user_model
 from django.db import models
@@ -18,7 +18,7 @@ class AccountManagementModel(AbstractBaseModel):
     )
     company = models.ForeignKey(Company, max_length=250, blank=True, null=True, on_delete=models.CASCADE)
 
-    subscription_plan = models.CharField(max_length=250, choices=[('FREE', 'FREE'), ('PRO', 'PRO'), ('ENTERPRISE', 'ENTERPRISE')])
+    subscription_plan = models.CharField(max_length=250, choices=[(x, x) for x in SubscriptionPermissions.ALL])
     class Meta:
         verbose_name = _("Account Management")
         verbose_name_plural = _("Account Management")
@@ -40,10 +40,6 @@ class IndividualSubscription(Subscription):
     user = models.ForeignKey(
         get_user_model(), blank=False, related_name="individual_users", on_delete=models.CASCADE
     )
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['user'], name="unique_user_per_subscription")
-        ]
     
     def __str__(self) -> str:
         return self.user.email

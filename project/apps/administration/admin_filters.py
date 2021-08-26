@@ -14,6 +14,7 @@ class IsActiveCustomFilter(SimpleListFilter):
             queryset = queryset.filter(id__in=ids)
         return queryset
 
+
 class SubscriptionTypeFilter(SimpleListFilter):
     title = 'subscription type'
     parameter_name = 'sub_type'
