@@ -43,6 +43,10 @@
       <div class="text"><a href="?o=1.2">id</a></div>
       <div class="clear"></div>
     </th>
+    <th scope="col" class="sortable column-user">
+      <div class="text"><a href="?o=1.2">user</a></div>
+      <div class="clear"></div>
+    </th>
     <th scope="col" class="sortable column-active">
       <div class="text"><a href="?o=1.2">Is active</a></div>
       <div class="clear"></div>
@@ -76,10 +80,6 @@
       <div class="clear"></div>
     </th>
     <th scope="col" class="sortable column-token">   
-      <div class="text"><a href="?o=3.2">Users</a></div>
-      <div class="clear"></div>
-    </th>
-    <th scope="col" class="sortable column-token">   
       <div class="text"><a href="?o=3.2">API Token</a></div>
       <div class="clear"></div>
     </th>
@@ -92,6 +92,12 @@
       {% with subscription|get_company_sub as company_sub %}   
         <tr class="row{{subscription.id}}">
           <td class="field-id nowrap">{{subscription.id}}</td>
+          <td class="field-user nowrap">
+              {{subscription.user.email}}
+              {% if company_sub %}
+              <br><br>{{subscription.user.email}}
+              {% endif %}
+          </td>
           <td class="field-isactive nowrap">
             {% if subscription.is_active %}
               <img src="/static/admin/img/icon-yes.svg" alt="True">
@@ -117,7 +123,7 @@
           <td class="field-subtype nowrap">
             INDIVIDUAL
             {% if company_sub %}
-              <br><br>COMPANY
+              <br><br>COMPANY ({{company_sub.company.company_name }})
             {% endif %}
           </td>
           <td class="field-start-date nowrap">
@@ -148,11 +154,6 @@
             {% endif %}
           </td>
           {% endwith %}
-          <td class="field-user nowrap">{{subscription.user.email}}
-            {% if company_sub %}
-              <br><br>{{company_sub.company.company_name }}
-            {% endif %}
-          </td>
           <td class="field-token nowrap">NO TOKEN FOR FREE ACCOUNT
             {% if company_sub and company_sub.is_active %}
             <br><br>
