@@ -77,5 +77,5 @@ class TestPrivelegeManager(PrivilegeManagerBaseTestCase):
         privilege_response = self.privilege_geoserver_users(web_client)
         self.assertEqual(
             privilege_response.json(),
-            {"users": [{"groups": ["free", "pro"], "username": user.username}]},
+            {"users": [{"groups": ["pro", "free"], "username": user.username}]},
         )

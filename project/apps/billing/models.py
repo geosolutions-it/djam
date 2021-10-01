@@ -53,7 +53,7 @@ def create_default_subscription(sender, instance, created, **kwargs):
                 users=instance,
                 start_timestamp=timezone.now()
             )
-        except models.ObjectDoesNotExist:
+        except Exception:
             return
 
 @receiver(post_delete, sender=Subscription)
