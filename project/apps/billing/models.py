@@ -45,7 +45,7 @@ class Subscription(models.Model):
 @receiver(post_save, sender=get_user_model())
 def create_default_subscription(sender, instance, created, **kwargs):
     from apps.billing.utils import subscription_manager
-    if created and settings.DEFAULT_SUBSCRIPTION_TYPE is not None:
+    if instance.email_confirmed and settings.DEFAULT_SUBSCRIPTION_TYPE is not None:
         _, group_name = settings.DEFAULT_SUBSCRIPTION_TYPE
         try:
             sub = subscription_manager.create_individual_subscription(
