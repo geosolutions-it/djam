@@ -35,6 +35,9 @@ class CompanySubscription(Subscription):
             models.UniqueConstraint(fields=['company'], name="unique_company_per_subscription")
         ]
 
+    @property
+    def subscription_type(self):
+        return "company"
 
 class IndividualSubscription(Subscription):
     user = models.ForeignKey(
@@ -43,3 +46,7 @@ class IndividualSubscription(Subscription):
     
     def __str__(self) -> str:
         return self.user.email
+
+    @property
+    def subscription_type(self):
+        return "individual"

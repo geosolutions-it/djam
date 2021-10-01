@@ -1,5 +1,6 @@
 import logging
 from apps.billing.models import Subscription
+from apps.administration.models import CompanySubscription, IndividualSubscription
 from apps.identity_provider.models import ApiKey
 from apps.hubspot_integration.utils import get_hubspot_subscription
 
@@ -79,7 +80,8 @@ class AccountEditView(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
         context['api_key'] = ApiKey.objects.filter(user=context['object']).first()
         context['success'] = self.request.GET.get('success')
         context['mail_subscription'] = get_hubspot_subscription(context['object'])
-        context['account_subscription'] = Subscription.objects.filter(Q(individualsubscription__user=context['object']) | Q(companysubscription__company__users=context['object']))
+        context['individual_subscriptions'] = IndividualSubscription.objects.get(user=context['object'])
+        context['company_subscriptions'] = CompanySubscription.objects.filter(company__users=context['object'])
         return context
 
     def form_valid(self, form):
