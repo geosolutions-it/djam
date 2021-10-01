@@ -37,6 +37,10 @@ class Subscription(models.Model):
         end = self.end_timestamp or timezone.now() + timedelta(days=100)
         return end > start
 
+    @property
+    def subscription_type(self):
+        pass
+
 
 @receiver(post_save, sender=get_user_model())
 def create_default_subscription(sender, instance, created, **kwargs):

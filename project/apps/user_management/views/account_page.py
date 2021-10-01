@@ -80,7 +80,7 @@ class AccountEditView(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
         context['api_key'] = ApiKey.objects.filter(user=context['object']).first()
         context['success'] = self.request.GET.get('success')
         context['mail_subscription'] = get_hubspot_subscription(context['object'])
-        context['individual_subscriptions'] = IndividualSubscription.objects.get(user=context['object'])
+        context['individual_subscriptions'] = IndividualSubscription.objects.filter(user=context['object']).first()
         context['company_subscriptions'] = CompanySubscription.objects.filter(company__users=context['object'])
         return context
 
