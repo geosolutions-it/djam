@@ -5,7 +5,7 @@ from apps.user_management.api.views import UserViewSet
 
 router = DefaultRouter()
 
-router.register('users', UserViewSet, base_name='fetch_users')
+router.register('users', UserViewSet, basename='fetch_users')
 
 urlpatterns = [
     path('', include(router.urls))

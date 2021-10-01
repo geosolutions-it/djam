@@ -9,17 +9,37 @@
     <div class="card-header">Account Type</div>
     <div class="card-body">
         <div class="message">
-            Your account is <b>{{ group.name|upper }}</b>.
+            Your account is <b>{{ user.get_group }}</b>.
         </div>
         <div class="message">
-            {% if group.name == 'free' %}
+            {% if user.get_group|lower == 'free' %}
                 Contact our <a href="mailto:support@mapstand.com">Support Team</a> to know more how to upgrade your account to Enterprise
             {% else %}
-                {% with expiry_date=user.billing_set.first.expiry_date %}
-                {% if expiry_date %}
-                    Your account expires in <b>{{ expiry_date|timeuntil }}</b>. Contact our <a href="mailto:support@mapstand.com">Support Team</a> to help you to RENEW your plan
+                {% if company_subscriptions %}
+                    {% for sub in company_subscriptions %}
+                        {% if sub.is_active %}
+                            {% if sub.groups.first.name|lower == 'free' %}
+                            <label>You have a {{sub.subscription_type}} subscription</b>.
+                            {% else %}
+                            <br><label>Your {{sub.subscription_type}} subscription (<b>{{sub.company.company_name}}</b>), will expire in <b>{{ sub.end_timestamp|timeuntil }}</b>. 
+                            Contact our <a href="mailto:support@mapstand.com">Support Team</a> to help you to renew your plan.
+                            {% endif %}
+                            </label>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    {% if individual_subscriptions and individual_subscriptions.is_active %}
+                        {% with sub=individual_subscriptions  %}
+                            {% if sub.groups.first.name|lower == 'free' %}
+                            <label>You have a {{sub.subscription_type}} subscription</b>.
+                            {% else %}
+                            <br><label>Your {{sub.subscription_type}} subscription, will expire in <b>{{ sub.end_timestamp|timeuntil }}</b>. 
+                            Contact our <a href="mailto:support@mapstand.com">Support Team</a> to help you to renew your plan.
+                            {% endif %}
+                            </label>
+                        {% endwith %}
+                    {% endif %}
                 {% endif %}
-                {% endwith %}
             {% endif %}
         </div>
     </div>
@@ -29,15 +49,18 @@
     <div class="card-header">Access token</div>
     <div class="card-body">
         <div>
-            <div class="message">
-                {% if group.name == 'free' %}
+            {% if user.get_group|lower == 'free' %}
+                <div class="message">
                     <label class="col-12 col-form-label">You need an API Access token to configure <a href="#">MapStand OGC web services</a>. Read more about <a href="">API access token</a> in our documentation.</label>
                     <p>TO CREATE A TOKEN YOU NEED TO UPGRADE TO ENTERPRISE. Please <a href="mailto:support@mapstand.com">contact our SUPPORT TEAM</a></p>
-                {% else %}
+                </div>
+            {% endif %}
+            {% if user.get_group|lower == 'enterprise' or user.is_superuser %}
+                {% if not api_key %}
+                <div class="message">
                     <label class="col-12 col-form-label">You need an API Access token to configure <a href="">MapStand OCG web services</a>. Read more about <a href="">API access token</a> in our documentation.</label>
+                </div>
                 {% endif %}
-            </div>
-            {% if group.name != 'free' %}
                 <div class="row" id="token-div-info" {% if not api_key %}style="display: none;"{% endif %}>
                     <div>
                         <code>

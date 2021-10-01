@@ -15,6 +15,7 @@ from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.utils import timezone
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
+from django.db.models import Q
 
 from apps.user_management.utils import random_string
 from apps.user_management.model_managers import UserManager
@@ -90,6 +91,15 @@ class User(AbstractBaseUser, PermissionsMixin):
     legacy_user_id = models.IntegerField(null=True, blank=False)
     subscription = models.BooleanField(blank=True, null=True)
 
+    company_name = models.CharField(
+        max_length=250, 
+        blank=True, 
+        null=True,
+        help_text=_(
+            "Associated company name"
+        )
+    )    
+
     objects = UserManager()
 
     EMAIL_FIELD = "email"
@@ -123,6 +133,23 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_absolute_url(self):
         return reverse('user_account_edit', kwargs={'id': self.pk})
+
+    def get_group(self):
+        """
+        Will return the user group bases on the subscription that the user has.
+        Is weighted, this means that will be returned the highest group related to the user
+        Hierarchy: ENTERPRISE > PRO > FREE
+        """
+        from apps.billing.models import Subscription
+        groups_hierarchy = (('ENTERPRISE', 2), ('PRO', 1), ('FREE', 0))
+        subcriptions = Subscription.objects.filter(Q(individualsubscription__user=self) | Q(companysubscription__company__users=self))
+        active_subs = [sub.groups for sub in subcriptions.all() if sub.is_active]
+        if len(active_subs) > 0:
+            groups_name = [s.name.upper() for s in active_subs]
+            weighted_list = [g for g in groups_hierarchy if g[0] in groups_name]
+            weighted_list.sort(key=lambda tuple_group: tuple_group[1], reverse=True)
+            return weighted_list[0][0]
+        return active_subs
 
 
 class UserActivationCode(models.Model):
