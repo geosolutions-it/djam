@@ -16,7 +16,7 @@ class SubscriptionManagerTest(TestCase):
         self.free_group = Group.objects.get(name='free')
         self.pro_group = Group.objects.get(name='pro')
         self.enterprise_group = Group.objects.get(name='enterprise')
-        self.user, _ = get_user_model().objects.get_or_create(username='admin',)
+        self.user, _ = get_user_model().objects.get_or_create(username='admin', email_confirmed=True)
         self.company, _ = Company.objects.get_or_create(company_name='Foo')
         self.company.users.add(self.user)
 
