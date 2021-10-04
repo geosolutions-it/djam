@@ -2,6 +2,7 @@ from apps.privilege_manager.models import Group
 from apps.billing.utils import subscription_manager
 from django.test import TestCase
 from apps.user_management.models import User, UserActivationCode
+from apps.billing.models import Company
 
 
 def create_user(username="test_user", email="johnsmith@example.net", **kwargs):
@@ -59,11 +60,13 @@ class UserPreSaveActivationEmail(TestCase):
 
 class UsersGroup(TestCase):
     def setUp(self):
-        self.user = create_user()
+        self.user = create_user(email_confirmed=True)
         self.sub_manager = subscription_manager
         self.free_group = Group.objects.get(name='free')
         self.pro_group = Group.objects.get(name='pro')
         self.enterprise_group = Group.objects.get(name='enterprise')
+        self.company, _ = Company.objects.get_or_create(company_name='Foo')
+        self.company.users.add(self.user)
 
     def test_get_highest_user_sub_free(self):
         """
@@ -84,14 +87,14 @@ class UsersGroup(TestCase):
         User with only free subscription and an Enterprise subscription will return ENTERPRISE as group perm
         """
         self.sub_manager.create_individual_subscription(self.free_group, self.user)
-        self.sub_manager.create_company_subscription(self.enterprise_group, self.user)
+        self.sub_manager.create_company_subscription(self.enterprise_group, self.company)
         self.assertEqual('ENTERPRISE', self.user.get_group())
 
     def test_get_highest_user_sub_pro_with_company_sub(self):
         """
         User with only free subscription and an Enterprise subscription will return ENTERPRISE as group perm
         """
-        self.sub_manager.create_company_subscription(self.enterprise_group, self.user)
+        self.sub_manager.create_company_subscription(self.enterprise_group, self.company)
         self.sub_manager.create_individual_subscription(self.pro_group, self.user)
         self.assertEqual('ENTERPRISE', self.user.get_group())
 
@@ -99,5 +102,5 @@ class UsersGroup(TestCase):
         """
         User with only free subscription and an Enterprise subscription will return ENTERPRISE as group perm
         """
-        self.sub_manager.create_company_subscription(self.enterprise_group, self.user)
+        self.sub_manager.create_company_subscription(self.enterprise_group, self.company)
         self.assertEqual('ENTERPRISE', self.user.get_group())

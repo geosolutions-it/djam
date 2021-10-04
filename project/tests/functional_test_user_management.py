@@ -142,30 +142,17 @@ class TestUserManagement(TestCase):
 
 class TestGetUserData(APITestCase):
 
-    @classmethod
-    def setUpClass(cls):
-        cls.admin = UserFactory(username='admin', is_staff=True, is_superuser=True)
-        cls.user = UserFactory(username='test_user')
-        cls.u1 = UserFactory(username='u1', last_login='2020-05-21T07:59:26.324Z')
-        cls.u2 = UserFactory(username='u2', last_login='2020-05-11T07:59:26.342Z')
-        cls.pro_group = GroupFactory(name='pro')
-        cls.ent_group = GroupFactory(name='enterprise')
-        cls.free_group = GroupFactory(name='free')
-        cls.free_group.users.add(*[cls.user, cls.u1, cls.u2, cls.admin])
-        cls.pro_group.users.add(cls.admin)
-        cls.ent_group.users.add(cls.u1)
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.admin.delete()
-        cls.user.delete()
-        cls.u1.delete()
-        cls.u2.delete()
-        cls.pro_group.delete()
-        cls.ent_group.delete()
-        cls.free_group.delete()
-
     def setUp(self):
+        self.admin = UserFactory(username='admin', is_staff=True, is_superuser=True)
+        self.user = UserFactory(username='test_user')
+        self.u1 = UserFactory(username='u1', last_login='2020-05-21T07:59:26.324Z')
+        self.u2 = UserFactory(username='u2', last_login='2020-05-11T07:59:26.342Z')
+        self.pro_group = GroupFactory(name='pro')
+        self.ent_group = GroupFactory(name='enterprise')
+        self.free_group = GroupFactory(name='free')
+        self.free_group.users.add(*[self.user, self.u1, self.u2, self.admin])
+        self.pro_group.users.add(self.admin)
+        self.ent_group.users.add(self.u1)
         User = get_user_model()
         self.admin = User.objects.get(username='admin')
         self.user = User.objects.get(username='test_user')
