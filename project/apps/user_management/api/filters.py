@@ -1,6 +1,8 @@
 import django_filters
 from django.contrib.auth import get_user_model
 
+from apps.billing.models import Subscription
+
 
 class UsersFilterSet(django_filters.FilterSet):
     older = django_filters.IsoDateTimeFilter(lookup_expr='lt', field_name='last_login')
@@ -16,5 +18,14 @@ class UsersFilterSet(django_filters.FilterSet):
 
     def get_by_group(self, queryset, field_name, value):
         if value:
-            return queryset.filter(group__name__in=value).distinct()
+            sub = Subscription.objects.filter(groups__name__in=value).first()
+            c_users = []
+            i_users = []
+            if sub:
+                if hasattr(sub, "companysubscription"):
+                    c_users = list(sub.companysubscription.company.users.values_list("id", flat=True))
+                else:
+                    i_users = [sub.individualsubscription.user.id] if sub.individualsubscription.is_active else []
+            
+            return queryset.filter(id__in=c_users+i_users).distinct()
         return queryset

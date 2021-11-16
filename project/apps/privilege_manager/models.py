@@ -26,33 +26,9 @@ class Group(models.Model):
         HUB = 'hub'
 
     name = models.CharField(max_length=30)
-    users = models.ManyToManyField(get_user_model(), blank=True)
 
     def __str__(self):
         return self.name
-
-
-@receiver(post_save, sender=get_user_model())
-def assign_user_to_default_permission_group(sender, instance, created, **kwargs):
-
-    if created and settings.DEFAULT_USER_PERMISSION_GROUP_NAME is not None:
-        logging.info(
-            f'User Creation: Trying to assign user "{instance.username}" to default permission group "{settings.DEFAULT_USER_PERMISSION_GROUP_NAME}"'
-        )
-
-        try:
-            default_group = Group.objects.get(
-                name=settings.DEFAULT_USER_PERMISSION_GROUP_NAME
-            )
-        except models.ObjectDoesNotExist:
-            logging.info(
-                f'User Creation: No "{settings.DEFAULT_USER_PERMISSION_GROUP_NAME}" group found. '
-                f'User "{instance.username}" assignment to the default group failed.'
-            )
-            return
-
-        default_group.users.add(instance)
-        default_group.save()
 
 
 class OpenIdLoginPrevention(models.Model):

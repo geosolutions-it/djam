@@ -16,6 +16,7 @@ from oidc_provider.views import TokenIntrospectionView
 from oidc_provider.lib.endpoints.introspection import TokenIntrospectionEndpoint
 from apps.identity_provider.models import Session, ApiKey
 from apps.privilege_manager.models import Group
+from apps.user_management.models import User
 
 
 logger = logging.getLogger(__name__)
@@ -63,23 +64,6 @@ class GeoserverTokenIntrospectionView(TokenIntrospectionView):
 class GeoserverIntrospection(views.APIView):
     renderer_classes = [JSONRenderer]
 
-    def user_groups_geoserver_format(self, user_id):
-        user_groups = Group.objects.filter(Q(users__id=user_id))
-
-        # Geoserver expects User Groups' names in the form of a string with comma separated values.
-        # In order to keep the compatibility with default Geoserver regex, the string is enclosed in a list.
-        user_groups_names = [
-            "".join(
-                [
-                    user_group.name + ","
-                    if i + 1 != len(user_groups)
-                    else user_group.name
-                    for i, user_group in enumerate(user_groups)
-                ]
-            )
-        ]
-        return user_groups_names
-
 
 class GeoserverAuthKeyAndApiKeyIntrospection(GeoserverIntrospection, views.APIView):
     """
@@ -98,13 +82,13 @@ class GeoserverAuthKeyAndApiKeyIntrospection(GeoserverIntrospection, views.APIVi
 
     def get(self, request, format=None):
 
-        if (
-            settings.REQUIRE_SECURE_HTTP_FOR_GEOSERVER_INTROSPECTION
-            and not request.is_secure()
-        ):
-            return Response(
-                {"username": None, "groups": None}, status=status.HTTP_400_BAD_REQUEST
-            )
+        #if (
+        #    settings.REQUIRE_SECURE_HTTP_FOR_GEOSERVER_INTROSPECTION
+        #    and not request.is_secure()
+        #):
+        #    return Response(
+        #        {"username": None, "groups": None}, status=status.HTTP_400_BAD_REQUEST
+        #    )
 
         api_key = request.GET.get("authkey")
 
@@ -136,7 +120,7 @@ class GeoserverAuthKeyAndApiKeyIntrospection(GeoserverIntrospection, views.APIVi
             )
 
         user = get_user_model().objects.get(id=user_id)
-        user_groups_names = self.user_groups_geoserver_format(user.id)
+        user_groups_names = [user.get_group()]
 
         return Response({"username": user.username, "groups": user_groups_names,})
 

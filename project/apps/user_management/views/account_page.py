@@ -76,7 +76,6 @@ class AccountEditView(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['fix_error'] = self.request.GET.get('fix_error')
-        context['group'] = Group.objects.filter(users=context['object']).first()
         context['api_key'] = ApiKey.objects.filter(user=context['object']).first()
         context['success'] = self.request.GET.get('success')
         context['mail_subscription'] = get_hubspot_subscription(context['object'])

@@ -1,6 +1,7 @@
 import apps.user_management.models
 from django.http.response import JsonResponse
 from apps.identity_provider.models import ApiKey
+from apps.privilege_manager.models import Group
 from rest_framework import views
 from datetime import datetime
 from apps.user_management.models import User
@@ -82,12 +83,12 @@ class ApiKeyManager(views.APIView):
         return JsonResponse(data={"token": message}, status=status)
 
     def _user_is_authorized(self, user):
-        group = user.group_set.all()
-        if group.exists():
-            if group.first().name.lower() == 'admin' or user.is_superuser:
+        group = user.get_group()
+        if group:
+            if group == 'admin' or user.is_superuser:
                 return True
             else:
-                return 'ENTERPRISE' in user.get_group()
+                return 'enterprise' == group
         return False
     
     def _select_user(self, request, user):
