@@ -41,7 +41,7 @@ def create_company_subscriptions(apps, schema_editor):
                             _group_instance,
                             _company.get(),
                             start_timestamp=datetime.utcnow(),
-                            end_timestamp=datetime.utcnow() + timedelta(days=30)
+                            end_timestamp=datetime.utcnow()
                         )
             except SubscriptionException:
                 pass
