@@ -82,13 +82,13 @@ class GeoserverAuthKeyAndApiKeyIntrospection(GeoserverIntrospection, views.APIVi
 
     def get(self, request, format=None):
 
-        #if (
-        #    settings.REQUIRE_SECURE_HTTP_FOR_GEOSERVER_INTROSPECTION
-        #    and not request.is_secure()
-        #):
-        #    return Response(
-        #        {"username": None, "groups": None}, status=status.HTTP_400_BAD_REQUEST
-        #    )
+        if (
+            settings.REQUIRE_SECURE_HTTP_FOR_GEOSERVER_INTROSPECTION
+            and not request.is_secure()
+        ):
+            return Response(
+                {"username": None, "groups": None}, status=status.HTTP_400_BAD_REQUEST
+            )
 
         api_key = request.GET.get("authkey")
 

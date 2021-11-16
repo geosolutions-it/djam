@@ -8,12 +8,15 @@ from oidc_provider import models as oidc_models
 
 from apps.identity_provider import models
 from apps.privilege_manager.models import Group
+from apps.billing.models import Company
+from apps.administration.models import IndividualSubscription
 
 from tests.factories.identity_provider_factory import (
     OIDCConfidentialClientFactory,
     ApiKeyFactory,
 )
 from tests.factories.user_management_factory import UserFactory
+from apps.billing.utils import subscription_manager
 
 
 class IdentityProviderBaseTestCase(TestCase):
@@ -375,9 +378,17 @@ class TestAuthKey(IdentityProviderBaseTestCase):
         user = UserFactory()
 
         # assign user to multiple groups
-        Group.objects.get(name="pro").users.add(user)
-        Group.objects.get(name="enterprise").users.add(user)
+        pro = Group.objects.get(name="pro")
+        ent = Group.objects.get(name="enterprise")
 
+        IndividualSubscription.objects.filter(user=user).update(groups=pro)
+        _company, _ = Company.objects.get_or_create(company_name="Foo")
+        _company.users.add(user)
+
+        subscription_manager.create_company_subscription(
+            groups=ent,
+            company=_company
+        )
         # OIDC login
         session_token = self.openid_login(web_client, user)
         # Introspect AuthKey
@@ -404,16 +415,7 @@ class TestAuthKey(IdentityProviderBaseTestCase):
             "/authkey/introspect: returned username is not equal user's email",
         )
         # Watch out! Geoserver does not understand a list in classic approach, so it will be in ['free,pro,enterprise'] format!!
-        self.assertIn(
-            "free",
-            authkey_response.json().get("groups")[0],
-            "/authkey/introspect: 'free' not in user's groups",
-        )
-        self.assertIn(
-            "pro",
-            authkey_response.json().get("groups")[0],
-            "/authkey/introspect: 'pro' not in user's groups",
-        )
+        # 20211116 - endpoint will return only the hight value group
         self.assertIn(
             "enterprise",
             authkey_response.json().get("groups")[0],

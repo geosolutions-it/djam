@@ -67,8 +67,6 @@ class TestPrivelegeManager(PrivilegeManagerBaseTestCase):
         user.is_staff = True
         user.save()
 
-        Group.objects.get(name="pro").users.add(user)
-
         web_client = Client()
 
         # force web client's login
@@ -77,5 +75,5 @@ class TestPrivelegeManager(PrivilegeManagerBaseTestCase):
         privilege_response = self.privilege_geoserver_users(web_client)
         self.assertAlmostEqual(
             privilege_response.json(),
-            {"users": [{"groups": ["free", "pro"], "username": user.username}]},
+            {"users": [{"groups": ["free"], "username": user.username}]},
         )
