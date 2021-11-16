@@ -131,7 +131,7 @@ class GeoserverAuthKeyAndApiKeyIntrospection(GeoserverIntrospection, views.APIVi
             raise ValidationError(f"API key {api_key.key} is revoked.")
 
         user = api_key.user
-        user_groups_names = self.user_groups_geoserver_format(user.id)
+        user_groups_names = [user.get_group()]
 
         return Response({"username": user.username, "groups": user_groups_names,})
 
