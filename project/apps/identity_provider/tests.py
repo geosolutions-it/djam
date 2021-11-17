@@ -56,18 +56,18 @@ class ApiKeyManagerTest(TestCase):
         """
         self.sub_manager.create_individual_subscription(self.free_group, self.non_admin_user)
         self.sub_manager.create_company_subscription(self.enterprise_group, self.company_bar)
-        self.client.force_authenticate(user=self.user)
+        self.client.force_authenticate(user=self.non_admin_user)
         resp = self.client.post(reverse('api_key_manager'))
         self.assertEqual(200, resp.status_code)
         self.assertTrue(resp.json().get('created'))
 
     def test_user_with_enterprise_pro_sub(self):
         """
-        User with enteprise subscription and free subscription can create API token
+        User with enteprise subscription and pro subscription can create API token
         """
         self.sub_manager.create_individual_subscription(self.pro_group, self.non_admin_user)
         self.sub_manager.create_company_subscription(self.enterprise_group, self.company_bar)
-        self.client.force_authenticate(user=self.user)
+        self.client.force_authenticate(user=self.non_admin_user)
         resp = self.client.post(reverse('api_key_manager'))
         self.assertEqual(200, resp.status_code)
         self.assertTrue(resp.json().get('created'))

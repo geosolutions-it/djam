@@ -1,5 +1,8 @@
+import itertools
 import django_filters
 from django.contrib.auth import get_user_model
+
+from apps.billing.models import Subscription
 
 
 class UsersFilterSet(django_filters.FilterSet):
@@ -16,5 +19,16 @@ class UsersFilterSet(django_filters.FilterSet):
 
     def get_by_group(self, queryset, field_name, value):
         if value:
-            return queryset.filter(group__name__in=value).distinct()
+            subs = Subscription.objects.filter(groups__name__in=value)
+            c_users = []
+            i_users = []
+            for sub in subs:
+                if hasattr(sub, "companysubscription"):
+                    c_users.extend(list(sub.companysubscription.company.users.values_list("id", flat=True)))
+                else:
+                    if not sub.individualsubscription.is_active:
+                        continue
+                    i_users.append(sub.individualsubscription.user.id)
+
+            return queryset.filter(id__in=c_users+i_users).distinct()
         return queryset
