@@ -4,6 +4,7 @@ from django.db.models import Q
 from oidc_provider.lib.claims import ScopeClaims
 
 from apps.privilege_manager.models import Group
+from apps.billing.models import Subscription
 
 
 class CustomScopeClaims(ScopeClaims):
@@ -27,10 +28,7 @@ class CustomScopeClaims(ScopeClaims):
 
     def scope_groups(self):
         dic = {
-            "groups": [
-                user_group.name
-                for user_group in Group.objects.filter(Q(users__id=self.user.id))
-            ]
+            "groups": [self.user.get_group()]
         }
 
         return dic
