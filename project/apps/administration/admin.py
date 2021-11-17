@@ -10,7 +10,7 @@ from django.contrib import admin
 @admin.register(CompanySubscription)
 class CompanyAccountManagementAdmin(admin.ModelAdmin):
     list_display = ('id', 'is_active', 'company', 'start_timestamp', 'end_timestamp', 'groups')
-    search_fields = ["users__email"]
+    search_fields = ["company"]
     form = CompanySubsForm
 
     def is_active(self, sub):
@@ -22,7 +22,7 @@ class CompanyAccountManagementAdmin(admin.ModelAdmin):
 @admin.register(IndividualSubscription)
 class IndividualManagementAdmin(admin.ModelAdmin):
     list_display = ('id', 'is_active', 'user', 'start_timestamp', 'end_timestamp', 'groups')
-    search_fields = ["users__email"]
+    search_fields = ["user__email"]
     form = IndividualSubsForm
 
     def is_active(self, sub):
