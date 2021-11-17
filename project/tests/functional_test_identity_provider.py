@@ -1,5 +1,5 @@
+import base64
 import re
-from unittest import skip
 
 from django.test import TestCase, Client
 from django.core.management import call_command
@@ -640,13 +640,15 @@ class TestUserCredentialsValidation(TestCase):
     def test_user_credentials_validation_with_correct_credentials(self):
         web_client = Client()
 
-        user_psw = "some_password"
-        user = UserFactory()
-        user.set_password(user_psw)
+        user = UserFactory(username="foo@bar.com")
+        user.set_password("some_password")
         user.save()
 
+        base64_username = base64.b64encode(b"foo@bar.com")
+        base_64_pwd = base64.b64encode(b"some_password")
+
         user_credentials_response = self.validate_user_credentials(
-            web_client, user.username, user_psw
+            web_client, base64_username, base_64_pwd
         )
 
         self.assertEqual(
@@ -681,19 +683,21 @@ class TestUserCredentialsValidation(TestCase):
     def test_user_credentials_validation_with_wrong_credentials(self):
         web_client = Client()
 
-        user_psw = "some_password"
-        user = UserFactory()
-        user.set_password(user_psw)
+        user = UserFactory(username="foo@bar.com")
+        user.set_password("some_password")
         user.save()
 
+        base64_username = base64.b64encode(b"foo@bar.com")
+        base_64_pwd = base64.b64encode(b"some-wrong-password")
+
         user_credentials_response = self.validate_user_credentials(
-            web_client, user.username, "some-wrong-password"
+            web_client, base64_username, base_64_pwd
         )
 
         self.assertEqual(
             user_credentials_response.status_code,
-            200,
-            "User credentials response: response status code is not 200",
+            401,
+            "User credentials response: response status code is not 401",
         )
         self.assertIn(
             "username",
