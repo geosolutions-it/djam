@@ -10,7 +10,7 @@ from django.contrib import admin
 @admin.register(CompanySubscription)
 class CompanyAccountManagementAdmin(admin.ModelAdmin):
     list_display = ('id', 'is_active', 'company', 'start_timestamp', 'end_timestamp', 'groups')
-    search_fields = ["company"]
+    search_fields = ["company__company_name"]
     form = CompanySubsForm
 
     def is_active(self, sub):
