@@ -19,7 +19,7 @@ These instructions will get you a copy of the project up and running on your loc
 The environment dependencies can be installed in dockerized version, e.g for RabbitMQ:
 
 ```
-docker run -d -p 15672:15672 -p 5672:5672 -p 5671:5671 --hostname my-rabbitmq rabbitmq:3-management
+docker run -d -p 15672:15672 -p 5672:5672 -p 5671:5671 --hostname localhost rabbitmq:3-management
 ```
 
 ### Installing
