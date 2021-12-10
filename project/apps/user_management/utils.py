@@ -37,7 +37,7 @@ def generate_activation_link(username: str, request: request):
         activation_code = user.useractivationcode
 
         activation_code.activation_code = random_string()
-        activation_code.created_at = datetime.now()
+        activation_code.creation_date = datetime.now()
         activation_code.save()
         logger.info(
             f'Activation link generator: Activation code for "{username}" was regenerated.'
