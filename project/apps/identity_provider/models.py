@@ -28,6 +28,7 @@ class ApiKey(models.Model):
         help_text="API key will have the same privilege groups as it's owner.",
     )
     key = models.UUIDField(null=False, blank=False, default=uuid4)
+    wms_key = models.UUIDField(null=False, blank=False, default=uuid4)
     revoked = models.BooleanField(
         null=False,
         default=False,
