@@ -20,6 +20,7 @@ class ApiKeyManager(views.APIView):
             )
             data = {
                 "token": token.key,
+                "wms_token": token.wms_key,
                 "created": created,
                 "last_modified": token.last_modified,
             }
@@ -41,6 +42,7 @@ class ApiKeyManager(views.APIView):
             )
             data = {
                 "token": token.key,
+                "wms_token": token.wms_key,
                 "created": created,
                 "last_modified": token.last_modified,
             }
@@ -67,20 +69,22 @@ class ApiKeyManager(views.APIView):
     def patch(self, request):
         user = request.user
         message = "Api has been revoked"
+        wms_token = ""
         if self._user_is_authorized(user):
             user = self._select_user(request, user)
-            token = ApiKey.objects.filter(user=user)
+            token = ApiKey.objects.filter(user=user).first()
             if token:
-                new_value = not token.first().revoked
+                new_value = not token.revoked
                 token.update(revoked=new_value)
                 if not new_value:
-                    message = token.first().key
+                    message = token.key
+                    wms_token = token.wms_key,
                 status = 200
             else:
                 status = 500
         else:
             status=403
-        return JsonResponse(data={"token": message}, status=status)
+        return JsonResponse(data={"token": message, "wms_token": wms_token}, status=status)
 
     def _user_is_authorized(self, user):
         group = user.get_group()
