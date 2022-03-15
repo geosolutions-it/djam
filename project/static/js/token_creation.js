@@ -16,6 +16,13 @@ $( document ).ready(function() {
             $('#copy-token-result').removeClass("shown");
         },2000);
     });
+    let tokenclipboard_wms = new ClipboardJS('#copy-token_wms');
+    tokenclipboard_wms.on('success', function(e) {
+        $('#copy-token-result_wms').addClass("shown");
+        setTimeout(function(){
+            $('#copy-token-result_wms').removeClass("shown");
+        },2000);
+    });
 });
 
 function sendRequest(verb, account_id) {
@@ -71,15 +78,18 @@ function sendRequest(verb, account_id) {
                     $("#" + admin_revoke).text(" Revoke");
                 }
                 $("#" + token_value_id).html(data.token);
+                $("#wms-token-value").html( data.wms_token )
             } else if (verb == 'DELETE') {
                 $("#" + token_div_info).hide();
                 $("#" + token_container_value).show();
                 $("#" + token_value_id).html("").hide();
+                $("#wms-token-value").html("").hide();
                 $("#token-last-modified").html("");
             } else {
                 $("#" + token_div_info).show();
                 $("#" + token_container_value).hide();
-                $("#" + token_value_id).html( data.token ).show();;
+                $("#" + token_value_id).html( data.token ).show();
+                $("#wms-token-value").html( data.wms_token ).show();
                 $("#token-last-modified").html( "Last modified: 0 minutes ago" );
             }
             $("#" + arrow_id).hide();
