@@ -1,11 +1,11 @@
-import re
-from unittest import skip
-
 from django.test import TestCase, Client
 
-from apps.privilege_manager.models import Group
+from apps.privilege_manager.utils import has_login_permission
 
-from tests.factories.user_management_factory import UserFactory
+from tests.factories.user_management_factory import UserFactory, GroupFactory
+from tests.factories.identity_provider_factory import (
+    OIDCConfidentialClientFactory, OpenIdLoginPreventionFactory
+    )
 
 
 class PrivilegeManagerBaseTestCase(TestCase):
@@ -16,7 +16,7 @@ class PrivilegeManagerBaseTestCase(TestCase):
         return web_client.get("/api/privilege/geoserver/users",)
 
 
-class TestPrivelegeManager(PrivilegeManagerBaseTestCase):
+class TestPrivilegeManager(PrivilegeManagerBaseTestCase, ):
     def test_geosever_roles_response(self):
         user = UserFactory()
         web_client = Client()
@@ -77,3 +77,26 @@ class TestPrivelegeManager(PrivilegeManagerBaseTestCase):
             privilege_response.json(),
             {"users": [{"groups": ["free"], "username": user.username}]},
         )
+
+    def test_has_login_permission(self):
+        user = UserFactory()
+        oidc_client = OIDCConfidentialClientFactory.create()
+        web_client = Client()
+
+        # force web client's login
+        web_client.force_login(user)
+
+        # test when the Client has no preventions registered
+        has_perm, message = has_login_permission(user, oidc_client.id)
+        self.assertIsNone(message)
+        self.assertTrue(has_perm)
+
+        # test when the Client has preventions of user subscription
+        prevention = OpenIdLoginPreventionFactory.create(oidc_client=oidc_client)
+        prevention.groups.set([GroupFactory(name=user.get_group()).id])
+        has_perm, message = has_login_permission(user, oidc_client.client_id)
+        self.assertEqual(
+            message,
+            "Your subscription does not allow this login. You need to upgrade your subscription to continue."
+        )
+        self.assertFalse(has_perm)
