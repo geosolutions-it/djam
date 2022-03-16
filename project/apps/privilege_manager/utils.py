@@ -24,10 +24,10 @@ def has_login_permission(user, oidc_client_id):
     all_permission_groups = Group.objects.all()
 
     groups_allowed = all_permission_groups.difference(preventions.groups.all())
-    user_groups = user.group_set.all()
+    user_group = user.get_group()
 
     has_permission = False
-    if groups_allowed.intersection(user_groups):
+    if user_group in groups_allowed.values_list('name', flat=True):
         has_permission = True
 
     message = (

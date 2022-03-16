@@ -34,6 +34,7 @@
         </div>
 
         <div class="sign-in-form">
+             <span class=error-message>{{ error|safe }}</span>
             <h1>Sign in to MapStand</h1>
             <form role="form" method="post" action="{% url 'login' %}?{{ request.GET.urlencode }}">
                 {% csrf_token %}

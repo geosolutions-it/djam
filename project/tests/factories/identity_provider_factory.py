@@ -2,6 +2,7 @@ import random
 import factory
 from oidc_provider import models as oidc_models
 from apps.identity_provider import models as identity_provider_models
+from apps.privilege_manager.models import OpenIdLoginPrevention
 
 from tests.factories.user_management_factory import AdminFactory
 
@@ -33,6 +34,12 @@ class OIDCConfidentialClientFactory(factory.DjangoModelFactory):
 
         # When creating an instance (saving to the DB), assign default 'code' value to available response_types
         self.response_types.add(oidc_models.ResponseType.objects.get(value="code"))
+
+
+
+class OpenIdLoginPreventionFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = OpenIdLoginPrevention
 
 
 class ApiKeyFactory(factory.DjangoModelFactory):
