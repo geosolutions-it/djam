@@ -9,8 +9,8 @@ from django.forms import ModelForm, ModelMultipleChoiceField
 class CompanyAdminForm(ModelForm):
     users = ModelMultipleChoiceField(
         queryset=get_user_model().objects.all(),
-        widget=FilteredSelectMultiple("users__username", is_stacked=False),
-        required=True
+        widget=FilteredSelectMultiple("users__email", is_stacked=False),
+        required=False
     )
 
     class Meta:

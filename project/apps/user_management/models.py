@@ -151,6 +151,9 @@ class User(AbstractBaseUser, PermissionsMixin):
             return weighted_list[0][0]
         return None
 
+    def __str__(self):
+        return self.email
+
 
 class UserActivationCode(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
