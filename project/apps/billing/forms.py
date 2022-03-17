@@ -1,10 +1,11 @@
+from django.contrib.admin.widgets import FilteredSelectMultiple
+from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
+from django.forms import ModelForm, ModelMultipleChoiceField
 
-from django.forms import ModelForm
+
 from apps.billing.models import Company
 
-from django.contrib.admin.widgets import FilteredSelectMultiple    
-from django.contrib.auth import get_user_model
-from django.forms import ModelForm, ModelMultipleChoiceField
 
 class CompanyAdminForm(ModelForm):
     users = ModelMultipleChoiceField(
@@ -17,4 +18,13 @@ class CompanyAdminForm(ModelForm):
         model = Company
         fields = ("company_name", "users")
 
-    
+    def clean(self):
+        invalid_users = []
+        users = self.cleaned_data['users']
+        for user in users:
+            if not user in self.instance.users.all() and user.company_users.exists():
+                invalid_users.append(user.email)
+        if invalid_users:
+            raise ValidationError(
+                f"The following users already belong to another company, Select users who are not connected to any company yet: {invalid_users}")
+        super(CompanyAdminForm, self).clean()
