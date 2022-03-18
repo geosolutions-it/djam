@@ -34,3 +34,26 @@ class TestCompanyAdminForm(TestCase):
             form.errors['__all__'][0],
             f"The following users already belong to another company, Select users who are not connected to any company yet: {[user1.email]}"
         )
+
+    def test_create_company_without_users(self):
+        form = CompanyAdminForm(
+            data={
+                "company_name": "Test create"
+            })
+        self.assertEqual(form.errors, {})
+
+    def test_create_company_with_users(self):
+        user1 = UserFactory()
+        user2 = UserFactory()
+        company = CompanyFactory()
+        company.users.add(user1)
+        form = CompanyAdminForm(
+            data={
+                "company_name": "Test",
+                "users": [user1, user2]
+            })
+
+        self.assertEqual(
+            form.errors['__all__'][0],
+            f"The following users already belong to another company, Select users who are not connected to any company yet: {[user1.email]}"
+        )
