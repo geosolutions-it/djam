@@ -21,10 +21,11 @@ class CompanyAdminForm(ModelForm):
     def clean(self):
         invalid_users = []
         users = self.cleaned_data['users']
+        company_users = self.instance.users.all() if self.instance and self.instance.pk else []
         for user in users:
-            if not user in self.instance.users.all() and user.company_users.exists():
+            if not user in company_users and user.company_users.exists():
                 invalid_users.append(user.email)
         if invalid_users:
             raise ValidationError(
                 f"The following users already belong to another company, Select users who are not connected to any company yet: {invalid_users}")
-        super(CompanyAdminForm, self).clean()
+        super().clean()
