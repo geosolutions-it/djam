@@ -22,10 +22,11 @@ class GeoServerRolesView(views.APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, format=None):
-        group_names = [group.name for group in Group.objects.all()]
+        groups_pbjects = Group.objects.all()
+        group_names = [group.name for group in groups_pbjects]
+        group_names_wms = [group.name + '_wms' for group in groups_pbjects]
 
-        return Response({"groups": group_names})
-
+        return Response({"groups": group_names + group_names_wms})
 
 class GeoServerAdminRoleView(views.APIView):
     """
