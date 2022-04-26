@@ -14,9 +14,9 @@ class AccountManagementModel(AbstractBaseModel):
     start_timestamp = models.DateTimeField(null=True)
     end_timestamp = models.DateTimeField(blank=True, null=True)
     user = models.ForeignKey(
-        get_user_model(), blank=True, related_name="accountmodel_users", on_delete=models.CASCADE
+        get_user_model(), blank=True, related_name="accountmodel_users", on_delete=models.DO_NOTHING
     )
-    company = models.ForeignKey(Company, max_length=250, blank=True, null=True, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, max_length=250, blank=True, null=True, on_delete=models.DO_NOTHING)
 
     subscription_plan = models.CharField(max_length=250, choices=[(x, x) for x in SubscriptionPermissions.ALL])
     class Meta:
