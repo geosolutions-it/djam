@@ -6,3 +6,5 @@ from apps.billing.forms import CompanyAdminForm
 class CompanyAdmin(admin.ModelAdmin):
     form = CompanyAdminForm
     fields = ["company_name", "users"]
+    ordering = ('company_name',)
+    search_fields = ('company_name',)
