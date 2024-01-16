@@ -31,7 +31,7 @@ def send_hubspot_notify(email, username, subscription, first_name, last_name):
                     {
                         "value": subscription,
                         "subscriptionTypeId": 5579305,
-                        "text": "<p>By clicking 'Sign Up' below, you agree to the MapStand's <a href='   https://www.mapstand.com/terms/   ' rel='   noopener   '>Terms of Use</a>&nbsp; and <a href='   https://www.mapstand.com/privacy/   ' rel='   noopener   '>Privacy Policy</a></p>",
+                        "text": "<p>By clicking 'Sign Up' below, you agree to the MapStand's <a href='   https://mapstand.com/terms-of-use   ' rel='   noopener   '>Terms of Use</a>&nbsp; and <a href='   https://mapstand.com/privacy-policy   ' rel='   noopener   '>Privacy Policy</a></p>",
                     }
                 ],
             }
