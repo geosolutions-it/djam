@@ -8,27 +8,64 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('billing', '0013_auto_20210825_0844'),
-        ('privilege_manager', '0005_openidloginprevention'),
+        ("billing", "0013_auto_20210825_0844"),
+        ("privilege_manager", "0005_openidloginprevention"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('administration', '0004_auto_20210825_0841'),
+        ("administration", "0004_auto_20210825_0841"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='IndividualSubscription',
+            name="IndividualSubscription",
             fields=[
-                ('subscription_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='billing.Subscription')),
-                ('user', models.ForeignKey(blank=True, on_delete=django.db.models.deletion.CASCADE, related_name='individual_users', to=settings.AUTH_USER_MODEL)),
+                (
+                    "subscription_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="billing.Subscription",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        blank=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="individual_users",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
-            bases=('billing.subscription',),
+            bases=("billing.subscription",),
         ),
         migrations.CreateModel(
-            name='CompanySubscription',
+            name="CompanySubscription",
             fields=[
-                ('subscription_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='billing.Subscription')),
-                ('company', models.ForeignKey(blank=True, max_length=250, null=True, on_delete=django.db.models.deletion.CASCADE, to='billing.Company')),
+                (
+                    "subscription_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="billing.Subscription",
+                    ),
+                ),
+                (
+                    "company",
+                    models.ForeignKey(
+                        blank=True,
+                        max_length=250,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="billing.Company",
+                    ),
+                ),
             ],
-            bases=('billing.subscription',),
+            bases=("billing.subscription",),
         ),
     ]

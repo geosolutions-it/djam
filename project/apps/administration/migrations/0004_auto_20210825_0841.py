@@ -6,14 +6,10 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('administration', '0003_companymanagementmodel_individualmanagementmodel'),
+        ("administration", "0003_companymanagementmodel_individualmanagementmodel"),
     ]
 
     operations = [
-        migrations.DeleteModel(
-            name='CompanyManagementModel',
-        ),
-        migrations.DeleteModel(
-            name='IndividualManagementModel',
-        ),
+        migrations.DeleteModel(name="CompanyManagementModel",),
+        migrations.DeleteModel(name="IndividualManagementModel",),
     ]

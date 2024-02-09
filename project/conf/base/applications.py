@@ -19,10 +19,10 @@ INSTALLED_APPS = [
     "apps.privilege_manager.apps.PrivilegeManagerConfig",
     "apps.stripe_djam.apps.StripeDjamConfig",
     "apps.billing.apps.SubscriptionConfig",
-    "apps.hubspot_integration.apps.HubspotIntegrationConfig",
     "apps.global_configuration.apps.GlobalConfigurationConfig",
-    "captcha",
+    "django_recaptcha",
     # Djam health-checks - should always be last in the INSTALLED_APPS
     "checks.ProjectChecksConfig",
-
 ]
+
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"

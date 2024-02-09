@@ -8,7 +8,7 @@ from django.core.management import BaseCommand
 class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument(
-            "--data", type=FileType("r"), help="MapStand API JSON representation."
+            "--data", type=FileType("r"), help="API JSON representation."
         )
 
     def handle(self, *args, **options):

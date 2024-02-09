@@ -6,12 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('administration', '0005_companysubscription_individualsubscription'),
+        ("administration", "0005_companysubscription_individualsubscription"),
     ]
 
     operations = [
         migrations.AddConstraint(
-            model_name='individualsubscription',
-            constraint=models.UniqueConstraint(fields=('subscription_ptr_id', 'user'), name='unique_user_per_subscription'),
+            model_name="individualsubscription",
+            constraint=models.UniqueConstraint(
+                fields=("subscription_ptr_id", "user"),
+                name="unique_user_per_subscription",
+            ),
         ),
     ]

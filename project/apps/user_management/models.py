@@ -10,7 +10,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.utils import timezone
 from django.db.models.signals import pre_save, post_save
@@ -69,8 +69,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         error_messages={"unique": _("A user with that email already exists."),},
     )
     secondary_email = CaseInsensitiveEmailField(
-        _("secondary email address"),
-        unique=False, blank=True, null=True
+        _("secondary email address"), unique=False, blank=True, null=True
     )
     email_confirmed = models.BooleanField(default=False)
     uuid = models.UUIDField(default=uuid.uuid4, unique=True)
@@ -92,13 +91,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     subscription = models.BooleanField(blank=True, null=True)
 
     company_name = models.CharField(
-        max_length=250, 
-        blank=True, 
-        null=True,
-        help_text=_(
-            "Associated company name"
-        )
-    )    
+        max_length=250, blank=True, null=True, help_text=_("Associated company name")
+    )
 
     objects = UserManager()
 
@@ -132,7 +126,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
     def get_absolute_url(self):
-        return reverse('user_account_edit', kwargs={'id': self.pk})
+        return reverse("user_account_edit", kwargs={"id": self.pk})
 
     def get_group(self):
         """
@@ -141,8 +135,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         Hierarchy: ENTERPRISE > PRO > FREE
         """
         from apps.billing.models import Subscription
-        groups_hierarchy = (('enterprise', 2), ('pro', 1), ('free', 0))
-        subcriptions = Subscription.objects.filter(Q(individualsubscription__user=self) | Q(companysubscription__company__users=self))
+
+        groups_hierarchy = (("enterprise", 2), ("pro", 1), ("free", 0))
+        subcriptions = Subscription.objects.filter(
+            Q(individualsubscription__user=self)
+            | Q(companysubscription__company__users=self)
+        )
         active_subs = [sub.groups for sub in subcriptions.all() if sub.is_active]
         if len(active_subs) > 0:
             groups_name = [s.name.lower() for s in active_subs]

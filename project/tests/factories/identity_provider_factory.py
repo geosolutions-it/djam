@@ -36,7 +36,6 @@ class OIDCConfidentialClientFactory(factory.DjangoModelFactory):
         self.response_types.add(oidc_models.ResponseType.objects.get(value="code"))
 
 
-
 class OpenIdLoginPreventionFactory(factory.DjangoModelFactory):
     class Meta:
         model = OpenIdLoginPrevention

@@ -7,6 +7,7 @@ from datetime import datetime
 from apps.user_management.models import User
 from rest_framework.permissions import IsAuthenticated
 
+
 class ApiKeyManager(views.APIView):
     queryset = ApiKey.objects.none()
     permission_classes = [IsAuthenticated]
@@ -24,10 +25,10 @@ class ApiKeyManager(views.APIView):
                 "created": created,
                 "last_modified": token.last_modified,
             }
-            status=200
+            status = 200
         else:
-            data={}
-            status=403
+            data = {}
+            status = 403
         return JsonResponse(data, status=status)
 
     def put(self, request):
@@ -46,10 +47,10 @@ class ApiKeyManager(views.APIView):
                 "created": created,
                 "last_modified": token.last_modified,
             }
-            status=200
+            status = 200
         else:
-            data={}
-            status=403
+            data = {}
+            status = 403
         return JsonResponse(data, status=status)
 
     def delete(self, request):
@@ -63,7 +64,7 @@ class ApiKeyManager(views.APIView):
             else:
                 status = 500
         else:
-            status=403
+            status = 403
         return JsonResponse(data={}, status=status)
 
     def patch(self, request):
@@ -78,25 +79,27 @@ class ApiKeyManager(views.APIView):
                 token.update(revoked=new_value)
                 if not new_value:
                     message = token.key
-                    wms_token = token.wms_key,
+                    wms_token = (token.wms_key,)
                 status = 200
             else:
                 status = 500
         else:
-            status=403
-        return JsonResponse(data={"token": message, "wms_token": wms_token}, status=status)
+            status = 403
+        return JsonResponse(
+            data={"token": message, "wms_token": wms_token}, status=status
+        )
 
     def _user_is_authorized(self, user):
         group = user.get_group()
         if group:
-            if group == 'admin' or user.is_superuser:
+            if group == "admin" or user.is_superuser:
                 return True
             else:
-                return 'enterprise' == group
+                return "enterprise" == group
         return False
-    
+
     def _select_user(self, request, user):
-        other_user = request.GET.get('account_id', None)
+        other_user = request.GET.get("account_id", None)
         if other_user:
             founded_user = User.objects.filter(id=other_user)
             if founded_user.exists():

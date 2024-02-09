@@ -1,4 +1,3 @@
-
 from datetime import timedelta
 from django.utils import timezone
 from apps.billing.models import Subscription
@@ -12,7 +11,7 @@ class SubscriptionModelTests(TestCase):
         """
         sub, _ = Subscription.objects.get_or_create(
             start_timestamp=timezone.now(),
-            end_timestamp=(timezone.now() + timedelta(days=3))
+            end_timestamp=(timezone.now() + timedelta(days=3)),
         )
         is_active = sub.is_active
         self.assertTrue(is_active)
@@ -23,7 +22,7 @@ class SubscriptionModelTests(TestCase):
         """
         sub, _ = Subscription.objects.get_or_create(
             start_timestamp=timezone.now(),
-            end_timestamp=(timezone.now() - timedelta(days=3))
+            end_timestamp=(timezone.now() - timedelta(days=3)),
         )
         is_active = sub.is_active
         self.assertFalse(is_active)
@@ -32,8 +31,6 @@ class SubscriptionModelTests(TestCase):
         """
         Given a subscription without end_date, is considered valid
         """
-        sub, _ = Subscription.objects.get_or_create(
-            end_timestamp=None
-        )
+        sub, _ = Subscription.objects.get_or_create(end_timestamp=None)
         is_active = sub.is_active
         self.assertTrue(is_active)

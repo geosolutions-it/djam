@@ -6,16 +6,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('administration', '0006_auto_20210825_0850'),
+        ("administration", "0006_auto_20210825_0850"),
     ]
 
     operations = [
         migrations.RemoveConstraint(
-            model_name='individualsubscription',
-            name='unique_user_per_subscription',
+            model_name="individualsubscription", name="unique_user_per_subscription",
         ),
         migrations.AddConstraint(
-            model_name='individualsubscription',
-            constraint=models.UniqueConstraint(fields=('user',), name='unique_user_per_subscription'),
+            model_name="individualsubscription",
+            constraint=models.UniqueConstraint(
+                fields=("user",), name="unique_user_per_subscription"
+            ),
         ),
     ]

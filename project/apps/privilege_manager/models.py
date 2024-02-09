@@ -19,11 +19,11 @@ class Group(models.Model):
     """
     v1 version of AuthZ Group model of Djam - for MVP only RBAC is supported
     """
+
     class GroupNames(Enum):
-        FREE = 'free'
-        PRO = 'pro'
-        ENTERPRISE = 'enterprise'
-        HUB = 'hub'
+        FREE = "free"
+        PRO = "pro"
+        ENTERPRISE = "enterprise"
 
     name = models.CharField(max_length=30)
 

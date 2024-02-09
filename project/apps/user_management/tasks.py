@@ -12,7 +12,7 @@ def send_activation_email(
     email,
     activation_url,
     sender=settings.DEFAULT_FROM_EMAIL,
-    subject="Activate your Mapstand Account",
+    subject="Activate your Account",
 ):
     # Email subject *must not* contain newlines
     subject = "".join(subject.splitlines())
@@ -22,7 +22,7 @@ def send_activation_email(
         {
             "activation_url": activation_url,
             # TODO: change this once any server is deployed
-            "logo_url": "https://mapstand-frontend-prod.s3-eu-west-2.amazonaws.com/images/logo-inverted.png",
+            "logo_url": "",
         },
     )
 

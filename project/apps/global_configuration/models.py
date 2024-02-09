@@ -6,18 +6,18 @@ class SingletonRawOperationError(Exception):
 
 
 class SingletonQuerySet(models.query.QuerySet):
-
     def delete(self):
-        raise SingletonRawOperationError('Deletion is not allowed')
+        raise SingletonRawOperationError("Deletion is not allowed")
 
 
 class SingletonModelManager(models.Manager):
-
     def get_queryset(self):
         return SingletonQuerySet(self.model, using=self._db)
 
     def create(self, **obj_data):
-        raise SingletonRawOperationError('Direct creation is not allowed in this kind of model')
+        raise SingletonRawOperationError(
+            "Direct creation is not allowed in this kind of model"
+        )
 
 
 class SingletonModel(models.Model):
@@ -26,6 +26,7 @@ class SingletonModel(models.Model):
     Note: when registering a Singleton model in admin panel, remember to restrict deletion permissions
     since deleting model will throw an exception
     """
+
     objects = SingletonModelManager()
 
     class Meta:
@@ -38,11 +39,11 @@ class SingletonModel(models.Model):
 
     def save(self, *args, **kwargs):
         self.pk = 1
-        kwargs.update({'force_insert': False})
+        kwargs.update({"force_insert": False})
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        raise SingletonRawOperationError('Method is not allowed in this kind of model')
+        raise SingletonRawOperationError("Method is not allowed in this kind of model")
 
 
 class GlobalConfiguration(SingletonModel):
@@ -50,7 +51,7 @@ class GlobalConfiguration(SingletonModel):
     map_redirect_url = models.URLField()
 
     class Meta:
-        verbose_name_plural = 'Configuration'
+        verbose_name_plural = "Configuration"
 
     def __str__(self):
-        return 'Configuration'
+        return "Configuration"

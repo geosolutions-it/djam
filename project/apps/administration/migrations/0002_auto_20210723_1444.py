@@ -6,26 +6,52 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('administration', '0001_initial'),
+        ("administration", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='AccountManagementModel',
+            name="AccountManagementModel",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('email', models.EmailField(blank=True, max_length=254, verbose_name='email address')),
-                ('first_name', models.CharField(blank=True, max_length=30, verbose_name='first name')),
-                ('last_name', models.CharField(blank=True, max_length=150, verbose_name='last name')),
-                ('company_name', models.CharField(blank=True, max_length=250, verbose_name='company name')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "email",
+                    models.EmailField(
+                        blank=True, max_length=254, verbose_name="email address"
+                    ),
+                ),
+                (
+                    "first_name",
+                    models.CharField(
+                        blank=True, max_length=30, verbose_name="first name"
+                    ),
+                ),
+                (
+                    "last_name",
+                    models.CharField(
+                        blank=True, max_length=150, verbose_name="last name"
+                    ),
+                ),
+                (
+                    "company_name",
+                    models.CharField(
+                        blank=True, max_length=250, verbose_name="company name"
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Account Management',
-                'verbose_name_plural': 'Account Management',
-                'managed': False,
+                "verbose_name": "Account Management",
+                "verbose_name_plural": "Account Management",
+                "managed": False,
             },
         ),
-        migrations.DeleteModel(
-            name='ClientManagementModel',
-        ),
+        migrations.DeleteModel(name="ClientManagementModel",),
     ]

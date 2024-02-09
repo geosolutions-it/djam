@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('identity_provider', '0005_auto_20200218_1405'),
+        ("identity_provider", "0005_auto_20200218_1405"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='apikey',
-            name='last_modified',
+            model_name="apikey",
+            name="last_modified",
             field=models.DateTimeField(blank=True, null=True),
         ),
     ]

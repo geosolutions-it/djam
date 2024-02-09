@@ -40,9 +40,5 @@ urlpatterns = [
         GeoserverCredentialsIntrospection.as_view(),
         name="user_credentials_introspection",
     ),
-    path(
-        "api/token/",
-        ApiKeyManager.as_view(),
-        name="api_key_manager",
-    ),
+    path("api/token/", ApiKeyManager.as_view(), name="api_key_manager",),
 ]

@@ -8,13 +8,15 @@ from django.utils.timezone import utc
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('billing', '0004_auto_20210802_0941'),
+        ("billing", "0004_auto_20210802_0941"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='subscription',
-            name='start_timestamp',
-            field=models.DateTimeField(default=datetime.datetime(2021, 8, 2, 9, 44, 10, 37242, tzinfo=utc)),
+            model_name="subscription",
+            name="start_timestamp",
+            field=models.DateTimeField(
+                default=datetime.datetime(2021, 8, 2, 9, 44, 10, 37242, tzinfo=utc)
+            ),
         ),
     ]

@@ -10,7 +10,8 @@ from django.contrib.auth.forms import (
     UserChangeForm,
     PasswordResetForm,
     AuthenticationForm,
-    PasswordChangeForm, UsernameField,
+    PasswordChangeForm,
+    UsernameField,
 )
 from django.forms import ModelForm
 from django.utils.encoding import force_bytes
@@ -18,8 +19,8 @@ from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 from django.forms.widgets import PasswordInput
-from captcha.fields import ReCaptchaField
-from captcha.widgets import ReCaptchaV3
+from django_recaptcha.fields import ReCaptchaField
+from django_recaptcha.widgets import ReCaptchaV3
 from django.conf import settings
 
 from .tasks import send_multi_alternatives_mail
@@ -84,13 +85,13 @@ class ResendActivationEmailForm(forms.Form):
 
 class FormSendEmailMixin:
     def send_mail(
-            self,
-            subject_template_name,
-            email_template_name,
-            context,
-            from_email,
-            to_email,
-            html_email_template_name=None,
+        self,
+        subject_template_name,
+        email_template_name,
+        context,
+        from_email,
+        to_email,
+        html_email_template_name=None,
     ):
         """
         Function sending password reset email using Dramatiq
@@ -117,24 +118,28 @@ class UserAccountForm(FormSendEmailMixin, ModelForm):
     secondary_email = forms.CharField(max_length=150, required=False)
     secondary_email = forms.CharField(max_length=150, required=False)
     subscription = forms.BooleanField(required=False)
+
     class Meta:
         model = get_user_model()
         fields = ("first_name", "last_name", "email", "secondary_email", "subscription")
 
-    def save(self, domain_override=None,
-             subject_template_name="user_management/email_change_subject.txt",
-             email_template_name="user_management/email_change_email_txt.html",
-             use_https=False,
-             token_generator=default_token_generator,
-             from_email=None,
-             request=None,
-             html_email_template_name="user_management/email_change_email.html",
-             extra_email_context=None,
-             logo_url="https://mapstand-frontend-prod.s3-eu-west-2.amazonaws.com/images/logo-inverted.png",
-             commit=True):
+    def save(
+        self,
+        domain_override=None,
+        subject_template_name="user_management/email_change_subject.txt",
+        email_template_name="user_management/email_change_email_txt.html",
+        use_https=False,
+        token_generator=default_token_generator,
+        from_email=None,
+        request=None,
+        html_email_template_name="user_management/email_change_email.html",
+        extra_email_context=None,
+        logo_url="",
+        commit=True,
+    ):
         old_email = request.user.email
         obj = super().save(commit)
-        if 'email' in self.changed_data:
+        if "email" in self.changed_data:
             if not domain_override:
                 current_site = get_current_site(request)
                 site_name = current_site.name
@@ -143,13 +148,13 @@ class UserAccountForm(FormSendEmailMixin, ModelForm):
                 site_name = domain = domain_override
             context = {
                 "site_name": site_name,
-                'domain': domain,
+                "domain": domain,
                 "protocol": "https" if use_https else "http",
-                'user': request.user,
+                "user": request.user,
                 **(extra_email_context or {}),
-                'first_name': request.user.first_name,
-                'last_name': request.user.last_name,
-                'logo_url': logo_url
+                "first_name": request.user.first_name,
+                "last_name": request.user.last_name,
+                "logo_url": logo_url,
             }
 
             self.send_mail(
@@ -170,22 +175,24 @@ class UMPasswordResetForm(FormSendEmailMixin, PasswordResetForm):
         cleaned_data = super().clean()
 
         try:
-            get_user_model().objects.get(email=cleaned_data['email'])
+            get_user_model().objects.get(email=cleaned_data["email"])
         except ObjectDoesNotExist:
-            raise forms.ValidationError(f"No user found with email: {cleaned_data['email']}")
+            raise forms.ValidationError(
+                f"No user found with email: {cleaned_data['email']}"
+            )
 
     def save(
-            self,
-            domain_override=None,
-            subject_template_name="registration/password_reset_subject.txt",
-            email_template_name="registration/password_reset_email_txt.html",
-            use_https=False,
-            token_generator=default_token_generator,
-            from_email=None,
-            request=None,
-            html_email_template_name="registration/password_reset_email.html",
-            extra_email_context=None,
-            logo_url="https://mapstand-frontend-prod.s3-eu-west-2.amazonaws.com/images/logo-inverted.png",
+        self,
+        domain_override=None,
+        subject_template_name="registration/password_reset_subject.txt",
+        email_template_name="registration/password_reset_email_txt.html",
+        use_https=False,
+        token_generator=default_token_generator,
+        from_email=None,
+        request=None,
+        html_email_template_name="registration/password_reset_email.html",
+        extra_email_context=None,
+        logo_url="",
     ):
         """
         Generate a one-use only link for resetting password and send it to the
@@ -223,23 +230,27 @@ class UMPasswordResetForm(FormSendEmailMixin, PasswordResetForm):
                 html_email_template_name=html_email_template_name,
             )
 
+
 class UMAdminAuthenticationForm(AdminAuthenticationForm):
-    username = UsernameField(label='Email', widget=forms.TextInput(attrs={'autofocus': True}))
+    username = UsernameField(
+        label="Email", widget=forms.TextInput(attrs={"autofocus": True})
+    )
     error_messages = {
-        'invalid_login': _(
+        "invalid_login": _(
             "Please enter a correct email address and password. Note that both "
             "fields may be case-sensitive."
         ),
-        'inactive': _("This account is inactive."),
+        "inactive": _("This account is inactive."),
     }
+
 
 class UMAuthenticationForm(AuthenticationForm):
     error_messages = {
-        'invalid_login': _(
+        "invalid_login": _(
             "Please enter a correct email address and password. Note that both "
             "fields may be case-sensitive."
         ),
-        'inactive': _("This account is inactive."),
+        "inactive": _("This account is inactive."),
     }
 
     def confirm_login_allowed(self, user):
@@ -283,17 +294,20 @@ class CustomChangePasswordForm(PasswordChangeForm, FormSendEmailMixin):
         widget=PasswordInput(attrs={"placeholder": "Enter your new password (again)"})
     )
 
-    def save(self, domain_override=None,
-             subject_template_name="user_management/password_change_subject.txt",
-             email_template_name="user_management/password_change_email_txt.html",
-             use_https=False,
-             token_generator=default_token_generator,
-             from_email=None,
-             request=None,
-             html_email_template_name="user_management/password_change_email.html",
-             extra_email_context=None,
-             logo_url="https://mapstand-frontend-prod.s3-eu-west-2.amazonaws.com/images/logo-inverted.png",
-             commit=True):
+    def save(
+        self,
+        domain_override=None,
+        subject_template_name="user_management/password_change_subject.txt",
+        email_template_name="user_management/password_change_email_txt.html",
+        use_https=False,
+        token_generator=default_token_generator,
+        from_email=None,
+        request=None,
+        html_email_template_name="user_management/password_change_email.html",
+        extra_email_context=None,
+        logo_url="",
+        commit=True,
+    ):
 
         obj = super().save(commit)
         if not domain_override:
@@ -304,13 +318,13 @@ class CustomChangePasswordForm(PasswordChangeForm, FormSendEmailMixin):
             site_name = domain = domain_override
         context = {
             "site_name": site_name,
-            'domain': domain,
+            "domain": domain,
             "protocol": "https" if use_https else "http",
-            'user': self.user,
+            "user": self.user,
             **(extra_email_context or {}),
-            'first_name': self.user.first_name,
-            'last_name': self.user.last_name,
-            'logo_url': logo_url
+            "first_name": self.user.first_name,
+            "last_name": self.user.last_name,
+            "logo_url": logo_url,
         }
 
         self.send_mail(

@@ -1,4 +1,5 @@
 import ast, os
+
 # include nickname and email in id_token
 OIDC_IDTOKEN_INCLUDE_CLAIMS = True
 
@@ -15,4 +16,6 @@ OIDC_EXTRA_SCOPE_CLAIMS = (
 
 REQUIRE_SECURE_HTTP_FOR_GEOSERVER_INTROSPECTION = True
 
-APIKEY_MANAGER_AUTHORIZED_GROUPS = ast.literal_eval(os.getenv('APIKEY_MANAGER_AUTHORIZED_GROUPS', "['enterprise', 'hub', 'pro']"))
+APIKEY_MANAGER_AUTHORIZED_GROUPS = ast.literal_eval(
+    os.getenv("APIKEY_MANAGER_AUTHORIZED_GROUPS", "['enterprise', 'hub', 'pro']")
+)

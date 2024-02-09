@@ -80,12 +80,11 @@ body {
 }
 
 .flex-left-half {
-  width: 50vw;
+  width: 25vw;
   height: calc(100vh - 60px);
 
   /* height: 90vh;  */
 
-  background-color: #668B4E;
   /* background-position: center bottom;   */
   /* background-image: url(../img/test_background.png);  */
   /* background-repeat: no-repeat; 
@@ -157,10 +156,6 @@ body {
   text-align: center;
   height: 20vh;
   position: relative;
-}
-
-.mapstand-logo-right {
-  display: none;
 }
 
 .right-title-text {
@@ -252,11 +247,6 @@ label {
   color: #3a8ea8;
 }
 
-.mapstand-logo-right {
-  width: 300px;
-  margin: 8vh;
-  display: none;
-}
 
 .form-error-message {
   color: red;
@@ -339,10 +329,6 @@ input:-webkit-autofill:active {
     margin: 10vw;
   }
 
-  .mapstand-logo-right {
-    display: none;
-  }
-
   .right-navbar-section {
     padding-right: 10px;
   }
@@ -362,9 +348,6 @@ input:-webkit-autofill:active {
     margin: 5vw;
   }
 
-  .mapstand-logo-right {
-    margin-top: 40px;
-  }
 
   .back-to-map-button {
     padding: 13px 15px;

@@ -6,22 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('billing', '0012_auto_20210825_0841'),
+        ("billing", "0012_auto_20210825_0841"),
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='individualsubscription',
-            name='groups',
-        ),
-        migrations.RemoveField(
-            model_name='individualsubscription',
-            name='user',
-        ),
-        migrations.DeleteModel(
-            name='CompanySubscription',
-        ),
-        migrations.DeleteModel(
-            name='IndividualSubscription',
-        ),
+        migrations.RemoveField(model_name="individualsubscription", name="groups",),
+        migrations.RemoveField(model_name="individualsubscription", name="user",),
+        migrations.DeleteModel(name="CompanySubscription",),
+        migrations.DeleteModel(name="IndividualSubscription",),
     ]

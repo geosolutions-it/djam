@@ -125,7 +125,9 @@ class GeoserverAuthKeyAndApiKeyIntrospection(GeoserverIntrospection, views.APIVi
         return Response({"username": user.username, "groups": user_groups_names,})
 
     def introspect_api_key(self, api_key_uuid):
-        api_key = ApiKey.objects.filter(Q(key=api_key_uuid) | Q(wms_key=api_key_uuid)).first()
+        api_key = ApiKey.objects.filter(
+            Q(key=api_key_uuid) | Q(wms_key=api_key_uuid)
+        ).first()
 
         if api_key.revoked:
             raise ValidationError(f"API key {api_key.key} is revoked.")
@@ -135,7 +137,9 @@ class GeoserverAuthKeyAndApiKeyIntrospection(GeoserverIntrospection, views.APIVi
 
         if str(api_key.wms_key) == api_key_uuid:
             # add "_wms" suffix to the group names
-            user_groups_names = [f"{group_name}_wms" for group_name in user_groups_names]
+            user_groups_names = [
+                f"{group_name}_wms" for group_name in user_groups_names
+            ]
 
         return Response({"username": user.username, "groups": user_groups_names,})
 
@@ -154,21 +158,21 @@ class GeoserverCredentialsIntrospection(GeoserverIntrospection, views.APIView):
             )
 
         try:
-            username = base64.b64decode(request.GET.get("u")).decode('ascii')
-            password = base64.b64decode(request.GET.get("p")).decode('ascii')
+            username = base64.b64decode(request.GET.get("u")).decode("ascii")
+            password = base64.b64decode(request.GET.get("p")).decode("ascii")
         except Exception:
-            logger.debug("GeoserverCredentialsIntrospection: Couldn't decode Base64 encoded credentials")
+            logger.debug(
+                "GeoserverCredentialsIntrospection: Couldn't decode Base64 encoded credentials"
+            )
             return Response(
-                {"username": None, "groups": None},
-                status=status.HTTP_400_BAD_REQUEST
+                {"username": None, "groups": None}, status=status.HTTP_400_BAD_REQUEST
             )
 
         try:
             user = get_user_model().objects.get(username=username)
         except ObjectDoesNotExist:
             return Response(
-                {"username": None, "groups": None},
-                status=status.HTTP_404_NOT_FOUND
+                {"username": None, "groups": None}, status=status.HTTP_404_NOT_FOUND
             )
 
         if user.check_password(password):
@@ -177,7 +181,5 @@ class GeoserverCredentialsIntrospection(GeoserverIntrospection, views.APIView):
             return Response({"username": user.username, "groups": user_groups_names,})
         else:
             return Response(
-                {"username": None, "groups": None},
-                status=status.HTTP_401_UNAUTHORIZED
+                {"username": None, "groups": None}, status=status.HTTP_401_UNAUTHORIZED
             )
-

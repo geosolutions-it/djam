@@ -38,15 +38,20 @@ class ApiKey(models.Model):
     last_modified = models.DateTimeField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
-        if not self.pk and ApiKey.objects.filter(user=self.user, revoked=False).exists():
+        if (
+            not self.pk
+            and ApiKey.objects.filter(user=self.user, revoked=False).exists()
+        ):
             # we might create new ApiKey but user already has one valid
-            logger.info(f'User {self.user.username} already has active API Key. Skipping')
+            logger.info(
+                f"User {self.user.username} already has active API Key. Skipping"
+            )
             # get is intentional. exception here is mistake in logic
             api_key = ApiKey.objects.get(user=self.user, revoked=False)
             self.pk = api_key.pk
             self.key = api_key.key
             # this is to force update if possible
-            kwargs.update({'force_insert': False})
+            kwargs.update({"force_insert": False})
             super(ApiKey, self).save(*args, **kwargs)
         else:
             # pk exists, then we are in update, we want to save. or user doesnt have valid keys

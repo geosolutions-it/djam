@@ -385,10 +385,7 @@ class TestAuthKey(IdentityProviderBaseTestCase):
         _company, _ = Company.objects.get_or_create(company_name="Foo")
         _company.users.add(user)
 
-        subscription_manager.create_company_subscription(
-            groups=ent,
-            company=_company
-        )
+        subscription_manager.create_company_subscription(groups=ent, company=_company)
         # OIDC login
         session_token = self.openid_login(web_client, user)
         # Introspect AuthKey

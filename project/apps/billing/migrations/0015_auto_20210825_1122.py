@@ -7,14 +7,18 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('privilege_manager', '0005_openidloginprevention'),
-        ('billing', '0014_subscription_groups'),
+        ("privilege_manager", "0005_openidloginprevention"),
+        ("billing", "0014_subscription_groups"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='subscription',
-            name='groups',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='privilege_manager.Group'),
+            model_name="subscription",
+            name="groups",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="privilege_manager.Group",
+            ),
         )
     ]

@@ -11,7 +11,7 @@ class CompanyAdminForm(ModelForm):
     users = ModelMultipleChoiceField(
         queryset=get_user_model().objects.all(),
         widget=FilteredSelectMultiple("users__email", is_stacked=False),
-        required=False
+        required=False,
     )
 
     class Meta:
@@ -20,12 +20,15 @@ class CompanyAdminForm(ModelForm):
 
     def clean(self):
         invalid_users = []
-        users = self.cleaned_data['users']
-        company_users = self.instance.users.all() if self.instance and self.instance.pk else []
+        users = self.cleaned_data["users"]
+        company_users = (
+            self.instance.users.all() if self.instance and self.instance.pk else []
+        )
         for user in users:
             if not user in company_users and user.company_users.exists():
                 invalid_users.append(user.email)
         if invalid_users:
             raise ValidationError(
-                f"The following users already belong to another company, Select users who are not connected to any company yet: {invalid_users}")
+                f"The following users already belong to another company, Select users who are not connected to any company yet: {invalid_users}"
+            )
         super().clean()

@@ -9,23 +9,34 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('billing', '0014_subscription_groups'),
-        ('administration', '0007_auto_20210825_0903'),
+        ("billing", "0014_subscription_groups"),
+        ("administration", "0007_auto_20210825_0903"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='companysubscription',
-            name='company',
-            field=models.ForeignKey(max_length=250, null=True, on_delete=django.db.models.deletion.CASCADE, to='billing.Company'),
+            model_name="companysubscription",
+            name="company",
+            field=models.ForeignKey(
+                max_length=250,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="billing.Company",
+            ),
         ),
         migrations.AlterField(
-            model_name='individualsubscription',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='individual_users', to=settings.AUTH_USER_MODEL),
+            model_name="individualsubscription",
+            name="user",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="individual_users",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AddConstraint(
-            model_name='companysubscription',
-            constraint=models.UniqueConstraint(fields=('company',), name='unique_company_per_subscription'),
+            model_name="companysubscription",
+            constraint=models.UniqueConstraint(
+                fields=("company",), name="unique_company_per_subscription"
+            ),
         ),
     ]

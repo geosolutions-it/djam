@@ -2,7 +2,6 @@ import logging
 from apps.billing.models import Subscription
 from apps.administration.models import CompanySubscription, IndividualSubscription
 from apps.identity_provider.models import ApiKey
-from apps.hubspot_integration.utils import get_hubspot_subscription
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -22,12 +21,9 @@ logger = logging.getLogger(__name__)
 
 
 class ProfileRedirectView(RedirectView):
-
     def get_redirect_url(self, *args, **kwargs):
         if self.request.user.is_authenticated:
-            return reverse('user_account', kwargs={
-                'id': self.request.user.pk
-            })
+            return reverse("user_account", kwargs={"id": self.request.user.pk})
         return reverse(settings.HOME_VIEW)
 
 
@@ -75,20 +71,23 @@ class AccountEditView(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['fix_error'] = self.request.GET.get('fix_error')
-        context['api_key'] = ApiKey.objects.filter(user=context['object']).first()
-        context['success'] = self.request.GET.get('success')
-        context['mail_subscription'] = get_hubspot_subscription(context['object'])
-        context['individual_subscriptions'] = IndividualSubscription.objects.filter(user=context['object']).first()
-        context['company_subscriptions'] = CompanySubscription.objects.filter(company__users=context['object'])
+        context["fix_error"] = self.request.GET.get("fix_error")
+        context["api_key"] = ApiKey.objects.filter(user=context["object"]).first()
+        context["success"] = self.request.GET.get("success")
+        context["individual_subscriptions"] = IndividualSubscription.objects.filter(
+            user=context["object"]
+        ).first()
+        context["company_subscriptions"] = CompanySubscription.objects.filter(
+            company__users=context["object"]
+        )
         return context
 
     def form_valid(self, form):
         opts = {
-            'use_https': self.request.is_secure(),
-            'request': self.request,
+            "use_https": self.request.is_secure(),
+            "request": self.request,
         }
         self.object = form.save(**opts)
         context = self.get_context_data()
-        context['success'] = True
+        context["success"] = True
         return render(self.request, self.template_name, context)

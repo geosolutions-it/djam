@@ -6,36 +6,62 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('administration', '0002_auto_20210723_1444'),
+        ("administration", "0002_auto_20210723_1444"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='CompanyManagementModel',
+            name="CompanyManagementModel",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('start_timestamp', models.DateTimeField(null=True)),
-                ('end_timestamp', models.DateTimeField(blank=True, null=True)),
-                ('subscription_plan', models.CharField(choices=[('ENTERPRISE', 'ENTERPRISE')], max_length=250)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("start_timestamp", models.DateTimeField(null=True)),
+                ("end_timestamp", models.DateTimeField(blank=True, null=True)),
+                (
+                    "subscription_plan",
+                    models.CharField(
+                        choices=[("ENTERPRISE", "ENTERPRISE")], max_length=250
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Company subscription',
-                'verbose_name_plural': 'Company subscriptions',
-                'managed': False,
+                "verbose_name": "Company subscription",
+                "verbose_name_plural": "Company subscriptions",
+                "managed": False,
             },
         ),
         migrations.CreateModel(
-            name='IndividualManagementModel',
+            name="IndividualManagementModel",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('start_timestamp', models.DateTimeField(null=True)),
-                ('end_timestamp', models.DateTimeField(blank=True, null=True)),
-                ('subscription_plan', models.CharField(choices=[('FREE', 'FREE'), ('PRO', 'PRO')], max_length=250)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("start_timestamp", models.DateTimeField(null=True)),
+                ("end_timestamp", models.DateTimeField(blank=True, null=True)),
+                (
+                    "subscription_plan",
+                    models.CharField(
+                        choices=[("FREE", "FREE"), ("PRO", "PRO")], max_length=250
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Individual subscription',
-                'verbose_name_plural': 'Individual subscriptions',
-                'managed': False,
+                "verbose_name": "Individual subscription",
+                "verbose_name_plural": "Individual subscriptions",
+                "managed": False,
             },
         ),
     ]

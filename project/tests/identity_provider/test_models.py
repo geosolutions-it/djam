@@ -9,7 +9,6 @@ from django.db import models
 
 
 class ApiKeyTest(TestCase):
-
     @classmethod
     def setUpClass(cls):
         super(ApiKeyTest, cls).setUpClass()
@@ -25,11 +24,15 @@ class ApiKeyTest(TestCase):
     def test_user_api_key_management(self):
         initial_api_keys = 0
         a = ApiKey.objects.create(user=self.user)
-        self.assertEqual(ApiKey.objects.filter(user=self.user).count(), initial_api_keys + 1)
+        self.assertEqual(
+            ApiKey.objects.filter(user=self.user).count(), initial_api_keys + 1
+        )
 
         # create another key. user has valid one
         a = ApiKey.objects.create(user=self.user)
-        self.assertEqual(ApiKey.objects.filter(user=self.user).count(), initial_api_keys + 1)
+        self.assertEqual(
+            ApiKey.objects.filter(user=self.user).count(), initial_api_keys + 1
+        )
         self.assertEqual(ApiKey.objects.filter(user=self.user).first(), a)
 
         # revoke key and recreate new one
@@ -37,11 +40,13 @@ class ApiKeyTest(TestCase):
         a.save()
 
         a = ApiKey.objects.create(user=self.user)
-        self.assertEqual(ApiKey.objects.filter(user=self.user).count(), initial_api_keys + 2)
+        self.assertEqual(
+            ApiKey.objects.filter(user=self.user).count(), initial_api_keys + 2
+        )
 
     def test_user_with_two_valid_keys(self):
         # temporary hack on fabric to create undesired situation
-        with patch.object(ApiKey, 'save', models.Model.save):
+        with patch.object(ApiKey, "save", models.Model.save):
             a1 = ApiKeyFactory(user=self.user)
             a2 = ApiKeyFactory(user=self.user)
 

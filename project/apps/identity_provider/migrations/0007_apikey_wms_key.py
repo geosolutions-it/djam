@@ -7,13 +7,13 @@ import uuid
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('identity_provider', '0006_apikey_last_modified'),
+        ("identity_provider", "0006_apikey_last_modified"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='apikey',
-            name='wms_key',
+            model_name="apikey",
+            name="wms_key",
             field=models.UUIDField(default=uuid.uuid4),
         ),
     ]

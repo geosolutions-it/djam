@@ -9,25 +9,46 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('billing', '0010_auto_20210804_1121'),
+        ("billing", "0010_auto_20210804_1121"),
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='subscription',
-            name='company_name',
-        ),
+        migrations.RemoveField(model_name="subscription", name="company_name",),
         migrations.CreateModel(
-            name='Company',
+            name="Company",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('company_name', models.CharField(blank=True, max_length=250, null=True)),
-                ('users', models.ManyToManyField(blank=True, related_name='company_users', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "company_name",
+                    models.CharField(blank=True, max_length=250, null=True),
+                ),
+                (
+                    "users",
+                    models.ManyToManyField(
+                        blank=True,
+                        related_name="company_users",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='subscription',
-            name='company',
-            field=models.ForeignKey(blank=True, help_text="API key will have the same privilege groups as it's owner.", null=True, on_delete=django.db.models.deletion.CASCADE, to='billing.Company'),
+            model_name="subscription",
+            name="company",
+            field=models.ForeignKey(
+                blank=True,
+                help_text="API key will have the same privilege groups as it's owner.",
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="billing.Company",
+            ),
         ),
     ]

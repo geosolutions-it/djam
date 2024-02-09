@@ -10,14 +10,17 @@ from django.test import TestCase
 
 # Create your tests here.
 
+
 class SubscriptionManagerTest(TestCase):
     def setUp(self):
         self.sut = subscription_manager
-        self.free_group = Group.objects.get(name='free')
-        self.pro_group = Group.objects.get(name='pro')
-        self.enterprise_group = Group.objects.get(name='enterprise')
-        self.user, _ = get_user_model().objects.get_or_create(username='admin', email_confirmed=True)
-        self.company, _ = Company.objects.get_or_create(company_name='Foo')
+        self.free_group = Group.objects.get(name="free")
+        self.pro_group = Group.objects.get(name="pro")
+        self.enterprise_group = Group.objects.get(name="enterprise")
+        self.user, _ = get_user_model().objects.get_or_create(
+            username="admin", email_confirmed=True
+        )
+        self.company, _ = Company.objects.get_or_create(company_name="Foo")
         self.company.users.add(self.user)
 
     def _delete_subs(self):
@@ -25,10 +28,9 @@ class SubscriptionManagerTest(TestCase):
         for x in s:
             x.delete()
 
-
     def tearDown(self):
         self._delete_subs()
-        
+
     def test_indivitual_sub_free_group(self):
         """
         Given FREE group CAN create an INDIVIDUAL sub
@@ -37,8 +39,7 @@ class SubscriptionManagerTest(TestCase):
         self._delete_subs()
 
         subscription = self.sut.create_individual_subscription(
-            groups=self.free_group,
-            users=self.user
+            groups=self.free_group, users=self.user
         )
         self.assertIsNotNone(subscription)
 
@@ -47,7 +48,9 @@ class SubscriptionManagerTest(TestCase):
         Given PRO group CAN create an INDIVIDUAL sub
         """
         self._delete_subs()
-        subscription = self.sut.create_individual_subscription(groups=self.pro_group, users=self.user)
+        subscription = self.sut.create_individual_subscription(
+            groups=self.pro_group, users=self.user
+        )
         self.assertIsNotNone(subscription)
 
     def test_indivitual_sub_enterprise_group(self):
@@ -56,13 +59,17 @@ class SubscriptionManagerTest(TestCase):
         """
         self._delete_subs()
         with self.assertRaises(SubscriptionException) as e:
-            self.sut.create_individual_subscription(groups=self.enterprise_group, users=self.user)
+            self.sut.create_individual_subscription(
+                groups=self.enterprise_group, users=self.user
+            )
 
     def test_company_sub_enterprise_group(self):
         """
         Given ENTERPRISE group CAN create a COMPANY sub
         """
-        subscription = self.sut.create_company_subscription(groups=self.enterprise_group, company=self.company)
+        subscription = self.sut.create_company_subscription(
+            groups=self.enterprise_group, company=self.company
+        )
         self.assertIsNotNone(subscription)
 
     def test_company_sub_free_group(self):
@@ -70,14 +77,18 @@ class SubscriptionManagerTest(TestCase):
         Given FREE group CANNOT create an COMPANY sub
         """
         with self.assertRaises(SubscriptionException) as e:
-            self.sut.create_company_subscription(groups=self.free_group, company=self.company)
+            self.sut.create_company_subscription(
+                groups=self.free_group, company=self.company
+            )
 
     def test_company_sub_pro_group(self):
         """
         Given PRO group CANNOT create an COMPANY sub
         """
         with self.assertRaises(SubscriptionException) as e:
-            self.sut.create_company_subscription(groups=self.pro_group, company=self.company)
+            self.sut.create_company_subscription(
+                groups=self.pro_group, company=self.company
+            )
 
     def test_user1_with_2_active_individual_and_0_company(self):
         """
@@ -86,7 +97,9 @@ class SubscriptionManagerTest(TestCase):
 
         # Trying to create a second individual subscription
         with self.assertRaises(SubscriptionException) as e:
-            self.sut.create_individual_subscription(groups=self.free_group, users=self.user)
+            self.sut.create_individual_subscription(
+                groups=self.free_group, users=self.user
+            )
 
     def test_user1_with_1_active_individual_and_1_company(self):
         """
@@ -94,12 +107,13 @@ class SubscriptionManagerTest(TestCase):
         """
         # the free one is created by default when the user is created
         sub2 = self.sut.create_company_subscription(
-            groups=self.enterprise_group,
-            company=self.company
+            groups=self.enterprise_group, company=self.company
         )
         # Trying to create a second individual subscription
         with self.assertRaises(SubscriptionException) as e:
-            self.sut.create_individual_subscription(groups=self.free_group, users=self.user)
+            self.sut.create_individual_subscription(
+                groups=self.free_group, users=self.user
+            )
 
     def test_user1_no_subs(self):
         """
@@ -128,7 +142,9 @@ class SubscriptionManagerTest(TestCase):
         user1 with 0 individual active sub and 1 company active sub -> Valid
         """
         self._delete_subs()
-        subs = self.sut.create_company_subscription(groups=self.enterprise_group, company=self.company)
+        subs = self.sut.create_company_subscription(
+            groups=self.enterprise_group, company=self.company
+        )
         active_subs = self.sut.can_add_new_subscription_by_user(self.user)
         self.assertTrue(active_subs)
 
@@ -137,7 +153,9 @@ class SubscriptionManagerTest(TestCase):
         user1 with 1 individual active sub and 1 company active sub -> Valid
         If we the user already have 1 individual and 1 company, we cannot add new subscriptions
         """
-        subs = self.sut.create_company_subscription(groups=self.enterprise_group, company=self.company)
+        subs = self.sut.create_company_subscription(
+            groups=self.enterprise_group, company=self.company
+        )
         active_subs = self.sut.can_add_new_subscription_by_user(self.user)
         self.assertFalse(active_subs)
 
@@ -145,10 +163,12 @@ class SubscriptionManagerTest(TestCase):
         """
         user1 with 1 individual inactive sub and 1 company active sub -> Valid
         """
-        
-        self.sut.create_company_subscription(groups=self.enterprise_group, company=self.company)
+
+        self.sut.create_company_subscription(
+            groups=self.enterprise_group, company=self.company
+        )
         s = IndividualSubscription.objects.filter(user=self.user)
-        s.update(end_timestamp=timezone.now() -timedelta(days=10))
+        s.update(end_timestamp=timezone.now() - timedelta(days=10))
 
         active_subs = self.sut.can_add_new_subscription_by_user(self.user)
         self.assertTrue(active_subs)
@@ -160,7 +180,7 @@ class SubscriptionManagerTest(TestCase):
         subs = self.sut.create_company_subscription(
             groups=self.enterprise_group,
             company=self.company,
-            end_timestamp=timezone.now() -timedelta(days=10)
+            end_timestamp=timezone.now() - timedelta(days=10),
         )
 
         active_subs = self.sut.can_add_new_subscription_by_user(self.user)
@@ -173,9 +193,9 @@ class SubscriptionManagerTest(TestCase):
         subs = self.sut.create_company_subscription(
             groups=self.enterprise_group,
             company=self.company,
-            end_timestamp=timezone.now() -timedelta(days=10)
+            end_timestamp=timezone.now() - timedelta(days=10),
         )
- 
+
         active_subs = self.sut.can_add_new_subscription_by_user(self.user)
         self.assertTrue(active_subs)
 
@@ -187,11 +207,10 @@ class SubscriptionManagerTest(TestCase):
         subs = self.sut.create_company_subscription(
             groups=self.enterprise_group,
             company=self.company,
-            end_timestamp=timezone.now() -timedelta(days=10)
+            end_timestamp=timezone.now() - timedelta(days=10),
         )
-        
-        self.sut.update_subscription(subs, company_name='New Fantastic Company')
+
+        self.sut.update_subscription(subs, company_name="New Fantastic Company")
         subs.refresh_from_db()
 
-        self.assertEqual('New Fantastic Company', subs.company_name)
-
+        self.assertEqual("New Fantastic Company", subs.company_name)

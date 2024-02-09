@@ -7,18 +7,15 @@ from apps.global_configuration.models import GlobalConfiguration
 
 def init_configuration(apps, schemas):
     from django.conf import settings
+
     config = GlobalConfiguration.load()
-    config.navbar_redirect_url = settings.MAPSTAND_URL
     config.map_redirect_url = settings.MAP_URL
     config.save()
 
 
-
 class Migration(migrations.Migration):
     dependencies = [
-        ('global_configuration', '0001_initial'),
+        ("global_configuration", "0001_initial"),
     ]
 
-    operations = [
-        migrations.RunPython(init_configuration)
-    ]
+    operations = [migrations.RunPython(init_configuration)]

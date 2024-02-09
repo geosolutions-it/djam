@@ -10,27 +10,11 @@
   display: none;
 }
 
-.mapstand-logo-right {
-  display: none;
-}
-
 .form-box {
   height: 80vh;
   position: relative;
   /* border: red 1px solid; */
 
-}
-
-.mapstand-avatar-box {
-  position: relative;
-  width: 100%;
-  height: 20vh;
-  text-align: center;
-}
-
-.mapstand-avatar {
-  margin: 40px;
-  margin-top: 7vh;
 }
 
 .user-edit-form-box {
@@ -127,7 +111,7 @@
 .change-password-link {
   font-size: 1.1em;
   font-weight: bold;
-  color: #739773;
+  color: #000000;
   display: block;
   width: 100%;
   padding: .375rem .75rem;
@@ -135,25 +119,9 @@
 }
 
 
-@media only screen and (max-width: 1200px) {
-  .mapstand-logo-right {
-    width: 250px;
-    margin: 2vh;
-  }
-}
-
-
 @media only screen and (max-width: 650px) {
   h1 {
     font-size: 1.9em;
-  }
-
-  .mapstand-avatar-box {
-    height: 16vh;
-  }
-
-  .mapstand-avatar {
-    width: 15vw;
   }
 
   .right-title {
@@ -190,9 +158,6 @@
 }
 
 @media only screen and (max-height: 560px) {
-  .mapstand-avatar-box {
-    display: none;
-  }
   .right-title {
     display: none;
   }

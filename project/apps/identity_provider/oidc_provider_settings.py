@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext_lazy as _
 from django.db.models import Q
 from oidc_provider.lib.claims import ScopeClaims
 
@@ -27,9 +27,7 @@ class CustomScopeClaims(ScopeClaims):
     )
 
     def scope_groups(self):
-        dic = {
-            "groups": [self.user.get_group()]
-        }
+        dic = {"groups": [self.user.get_group()]}
 
         return dic
 
@@ -73,8 +71,6 @@ class CustomScopeClaims(ScopeClaims):
     )
 
     def scope_email(self):
-        dic = {
-            "email": self.user.email
-        }
+        dic = {"email": self.user.email}
 
         return dic

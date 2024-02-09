@@ -15,7 +15,7 @@
     {% endblock left_title %}
     
     {% block left_subtitle %}
-    Welcome to the community! Sign in to explore Mapstand.
+    Welcome to the community!
     {% endblock left_subtitle %}
 
     {% block left_image %}
@@ -29,13 +29,13 @@
 
 
     <div class="sign-in-box common-input-form">
-        <div class="mapstand-avatar-box">
-            <img class="mapstand-avatar" src="{% static "user_management/img/default-avatar.png" %}"/>
+        <div class="djam-avatar-box">
+            <img  src="{% static "user_management/img/test-avatar.png" %}"/>
         </div>
 
         <div class="sign-in-form">
              <span class=error-message>{{ error|safe }}</span>
-            <h1>Sign in to MapStand</h1>
+            <h1>Sign in to DJAM</h1>
             <form role="form" method="post" action="{% url 'login' %}?{{ request.GET.urlencode }}">
                 {% csrf_token %}
 

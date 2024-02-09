@@ -1,8 +1,11 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
-from apps.user_management.forms import UMAdminUserCreationForm, UMAdminUserChangeForm, \
-    UMAdminAuthenticationForm
+from apps.user_management.forms import (
+    UMAdminUserCreationForm,
+    UMAdminUserChangeForm,
+    UMAdminAuthenticationForm,
+)
 
 
 @admin.register(get_user_model())
@@ -25,7 +28,7 @@ class IPUserAdmin(UserAdmin):
     )
 
     add_fieldsets = (
-        (None, {"classes": ("wide",), "fields": ("email", "password1", "password2",), }),
+        (None, {"classes": ("wide",), "fields": ("email", "password1", "password2",),}),
     )
 
 

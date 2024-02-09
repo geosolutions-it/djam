@@ -8,18 +8,22 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('billing', '0008_subscription_company_name'),
+        ("billing", "0008_subscription_company_name"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='subscription',
-            name='users',
-            field=models.ManyToManyField(blank=True, related_name='subscription_users', to=settings.AUTH_USER_MODEL),
+            model_name="subscription",
+            name="users",
+            field=models.ManyToManyField(
+                blank=True,
+                related_name="subscription_users",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AlterField(
-            model_name='subscription',
-            name='company_name',
+            model_name="subscription",
+            name="company_name",
             field=models.CharField(blank=True, max_length=250, null=True),
         ),
     ]

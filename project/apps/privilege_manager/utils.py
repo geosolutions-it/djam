@@ -27,7 +27,7 @@ def has_login_permission(user, oidc_client_id):
     user_group = user.get_group()
 
     has_permission = False
-    if user_group in groups_allowed.values_list('name', flat=True):
+    if user_group in groups_allowed.values_list("name", flat=True):
         has_permission = True
 
     message = (

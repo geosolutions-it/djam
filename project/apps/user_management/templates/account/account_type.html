@@ -13,7 +13,7 @@
         </div>
         <div class="message">
             {% if user.get_group|lower == 'free' %}
-                Contact our <a href="mailto:support@mapstand.com">Support Team</a> to know more how to upgrade your account to Enterprise
+                Contact our <a href="mailto:support@example.com">Support Team</a> to know more how to upgrade your account to Enterprise
             {% else %}
                 {% if company_subscriptions %}
                     {% for sub in company_subscriptions %}
@@ -21,8 +21,7 @@
                             {% if sub.groups.first.name|lower == 'free' %}
                             <label>You have a {{sub.subscription_type}} subscription</b>.
                             {% else %}
-                            <br><label>Your {{sub.subscription_type}} subscription (<b>{{sub.company.company_name}}</b>), will expire in <b>{{ sub.end_timestamp|timeuntil }}</b>. 
-                            Contact our <a href="mailto:support@mapstand.com">Support Team</a> to help you to renew your plan.
+                            <br><label>Your {{sub.subscription_type}} subscription (<b>{{sub.company.company_name}}</b>), will expire in <b>{{ sub.end_timestamp|timeuntil }}</b>.
                             {% endif %}
                             </label>
                         {% endif %}
@@ -34,7 +33,7 @@
                             <label>You have a {{sub.subscription_type}} subscription</b>.
                             {% else %}
                             <br><label>Your {{sub.subscription_type}} subscription, will expire in <b>{{ sub.end_timestamp|timeuntil }}</b>. 
-                            Contact our <a href="mailto:support@mapstand.com">Support Team</a> to help you to renew your plan.
+                            Contact our <a href="mailto:support@example.com">Support Team</a> to help you to renew your plan.
                             {% endif %}
                             </label>
                         {% endwith %}
@@ -51,14 +50,13 @@
         <div>
             {% if user.get_group|lower == 'free' %}
                 <div class="message">
-                    <label class="col-12 col-form-label">You need an API Access token to configure <a href="#">MapStand OGC web services</a>. Read more about <a href="">API access token</a> in our documentation.</label>
-                    <p>TO CREATE A TOKEN YOU NEED TO UPGRADE TO ENTERPRISE. Please <a href="mailto:support@mapstand.com">contact our SUPPORT TEAM</a></p>
+                    <p>TO CREATE A TOKEN YOU NEED TO UPGRADE TO ENTERPRISE. Please <a href="mailto:support@example.com">contact our SUPPORT TEAM</a></p>
                 </div>
             {% endif %}
             {% if user.get_group|lower == 'enterprise' or user.is_superuser %}
                 {% if not api_key %}
                 <div class="message">
-                    <label class="col-12 col-form-label">You need an API Access token to configure <a href="">MapStand OCG web services</a>. Read more about <a href="">API access token</a> in our documentation.</label>
+                    <label class="col-12 col-form-label">You need an API Access token to configure <a href="">API access token</a> in our documentation.</label>
                 </div>
                 {% endif %}
                 <div class="row" id="token-div-info" {% if not api_key %}style="display: none;"{% endif %}>

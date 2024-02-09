@@ -7,11 +7,11 @@ from apps.user_management.api.pagination import DefaultPagination
 from apps.user_management.api.serializers import UserSerializer
 
 
-class UserViewSet(mixins.ListModelMixin,
-                  GenericViewSet):
+class UserViewSet(mixins.ListModelMixin, GenericViewSet):
     """
     Get users data with proper filtering
     """
+
     permission_classes = [permissions.IsAdminUser]
     serializer_class = UserSerializer
     filterset_class = UsersFilterSet
@@ -20,5 +20,12 @@ class UserViewSet(mixins.ListModelMixin,
 
     def get_renderer_context(self):
         context = super().get_renderer_context()
-        context['header'] = ['id', 'username', 'first_name', 'last_name', 'last_login', 'email']
+        context["header"] = [
+            "id",
+            "username",
+            "first_name",
+            "last_name",
+            "last_login",
+            "email",
+        ]
         return context

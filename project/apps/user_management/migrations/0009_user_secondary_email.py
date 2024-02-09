@@ -7,13 +7,18 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('user_management', '0008_auto_20200630_1324'),
+        ("user_management", "0008_auto_20200630_1324"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='secondary_email',
-            field=apps.user_management.models.CaseInsensitiveEmailField(blank=True, max_length=254, null=True, verbose_name='secondary email address'),
+            model_name="user",
+            name="secondary_email",
+            field=apps.user_management.models.CaseInsensitiveEmailField(
+                blank=True,
+                max_length=254,
+                null=True,
+                verbose_name="secondary email address",
+            ),
         ),
     ]

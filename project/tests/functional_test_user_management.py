@@ -21,7 +21,7 @@ class TestUserManagement(TestCase):
         user.save()
 
         form = UMAuthenticationForm(
-            None, {"username": user.username, "password": user_psw, }
+            None, {"username": user.username, "password": user_psw,}
         )
 
         self.assertFalse(
@@ -143,85 +143,95 @@ class TestUserManagement(TestCase):
 
 
 class TestGetUserData(APITestCase):
-
     def setUp(self):
-        self.admin = UserFactory(username='admin', is_staff=True, is_superuser=True)
-        self.user = UserFactory(username='test_user')
-        self.u1 = UserFactory(username='u1', last_login='2020-05-21T07:59:26.324Z')
-        self.u2 = UserFactory(username='u2', last_login='2020-05-11T07:59:26.342Z')   
-        self.pro_group = GroupFactory(name='pro')
-        self.ent_group = GroupFactory(name='enterprise')
-        self.free_group = GroupFactory(name='free')        
-        #self.free_group.users.add(*[self.user, self.u1, self.u2, self.admin])
-        #self.pro_group.users.add(self.admin)
-        #self.ent_group.users.add(self.u1)
+        self.admin = UserFactory(username="admin", is_staff=True, is_superuser=True)
+        self.user = UserFactory(username="test_user")
+        self.u1 = UserFactory(username="u1", last_login="2020-05-21T07:59:26.324Z")
+        self.u2 = UserFactory(username="u2", last_login="2020-05-11T07:59:26.342Z")
+        self.pro_group = GroupFactory(name="pro")
+        self.ent_group = GroupFactory(name="enterprise")
+        self.free_group = GroupFactory(name="free")
+        # self.free_group.users.add(*[self.user, self.u1, self.u2, self.admin])
+        # self.pro_group.users.add(self.admin)
+        # self.ent_group.users.add(self.u1)
         User = get_user_model()
-        self.admin = User.objects.get(username='admin')
-        self.user = User.objects.get(username='test_user')
+        self.admin = User.objects.get(username="admin")
+        self.user = User.objects.get(username="test_user")
 
     def test_user_not_allowed(self):
         self.client.force_authenticate(self.user)
-        response = self.client.get(reverse('fetch_users-list'))
+        response = self.client.get(reverse("fetch_users-list"))
         self.assertEquals(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_user_allowed(self):
         users_count = 4
         self.client.force_authenticate(self.admin)
-        response = self.client.get(reverse('fetch_users-list'))
+        response = self.client.get(reverse("fetch_users-list"))
         self.assertEquals(response.status_code, status.HTTP_200_OK)
-        self.assertEquals(response.json().get('count', 0), users_count)
+        self.assertEquals(response.json().get("count", 0), users_count)
 
     def test_user_allowed_filter_groups(self):
-        IndividualSubscription.objects.filter(user=self.u1).update(groups=self.pro_group)
+        IndividualSubscription.objects.filter(user=self.u1).update(
+            groups=self.pro_group
+        )
         users_count = 1
         self.client.force_authenticate(self.admin)
-        response = self.client.get(reverse('fetch_users-list') + '?groups=pro')
+        response = self.client.get(reverse("fetch_users-list") + "?groups=pro")
         self.assertEquals(response.status_code, status.HTTP_200_OK)
-        self.assertEquals(response.json().get('count', 0), users_count)
+        self.assertEquals(response.json().get("count", 0), users_count)
 
     def test_user_allowed_filter_wrong_groups(self):
         users_count = 0
         self.client.force_authenticate(self.admin)
-        response = self.client.get(reverse('fetch_users-list') + '?groups=test')
+        response = self.client.get(reverse("fetch_users-list") + "?groups=test")
         self.assertEquals(response.status_code, status.HTTP_200_OK)
-        self.assertEquals(response.json().get('count', 0), users_count)
+        self.assertEquals(response.json().get("count", 0), users_count)
 
     def test_user_allowed_filter_mult_groups(self):
-        company, _ = Company.objects.get_or_create(company_name='Foo')
+        company, _ = Company.objects.get_or_create(company_name="Foo")
         company.users.add(self.admin)
         subscription_manager.create_company_subscription(
-            groups=self.ent_group,
-            company=company
-        )   
-        IndividualSubscription.objects.filter(user=self.u1).update(groups=self.pro_group)
+            groups=self.ent_group, company=company
+        )
+        IndividualSubscription.objects.filter(user=self.u1).update(
+            groups=self.pro_group
+        )
         users_count = 2
         self.client.force_authenticate(self.admin)
-        response = self.client.get(reverse('fetch_users-list') + '?groups=enterprise,pro')
+        response = self.client.get(
+            reverse("fetch_users-list") + "?groups=enterprise,pro"
+        )
         self.assertEquals(response.status_code, status.HTTP_200_OK)
-        self.assertEquals(response.json().get('count', 0), users_count)
+        self.assertEquals(response.json().get("count", 0), users_count)
 
     def test_user_allowed_filter_wrong_filter(self):
         users_count = 4
         self.client.force_authenticate(self.admin)
-        response = self.client.get(reverse('fetch_users-list') + '?not_a_filter=free,pro')
+        response = self.client.get(
+            reverse("fetch_users-list") + "?not_a_filter=free,pro"
+        )
         self.assertEquals(response.status_code, status.HTTP_200_OK)
-        self.assertEquals(response.json().get('count', 0), users_count)
+        self.assertEquals(response.json().get("count", 0), users_count)
 
     def test_user_allowed_filter_older_than(self):
         users_count = 2
         self.client.force_authenticate(self.admin)
-        response = self.client.get(reverse('fetch_users-list') + '?older=2020-05-21T11:19:10Z')
+        response = self.client.get(
+            reverse("fetch_users-list") + "?older=2020-05-21T11:19:10Z"
+        )
         self.assertEquals(response.status_code, status.HTTP_200_OK)
-        self.assertEquals(response.json().get('count', 0), users_count)
+        self.assertEquals(response.json().get("count", 0), users_count)
 
     def test_user_allowed_filter_newer_than(self):
         users_count = 0
         self.client.force_authenticate(self.admin)
-        response = self.client.get(reverse('fetch_users-list') + '?newer=2020-05-21T11:19:10Z')
+        response = self.client.get(
+            reverse("fetch_users-list") + "?newer=2020-05-21T11:19:10Z"
+        )
         self.assertEquals(response.status_code, status.HTTP_200_OK)
-        self.assertEquals(response.json().get('count', 0), users_count)
+        self.assertEquals(response.json().get("count", 0), users_count)
 
     def test_user_allowed_filter_wrong_date(self):
         self.client.force_authenticate(self.admin)
-        response = self.client.get(reverse('fetch_users-list') + '?newer=wrongg_fate')
+        response = self.client.get(reverse("fetch_users-list") + "?newer=wrongg_fate")
         self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)

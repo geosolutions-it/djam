@@ -5,7 +5,6 @@ from apps.global_configuration.models import GlobalConfiguration
 
 @admin.register(GlobalConfiguration)
 class GlobalConfigurationAdmin(admin.ModelAdmin):
-
     def has_delete_permission(self, request, obj=None):
         # Since model is not deletable, lets hide deletion possibility in the admin
         return False

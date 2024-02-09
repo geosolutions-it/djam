@@ -4,8 +4,9 @@ from apps.privilege_manager.utils import has_login_permission
 
 from tests.factories.user_management_factory import UserFactory, GroupFactory
 from tests.factories.identity_provider_factory import (
-    OIDCConfidentialClientFactory, OpenIdLoginPreventionFactory
-    )
+    OIDCConfidentialClientFactory,
+    OpenIdLoginPreventionFactory,
+)
 
 
 class PrivilegeManagerBaseTestCase(TestCase):
@@ -16,7 +17,7 @@ class PrivilegeManagerBaseTestCase(TestCase):
         return web_client.get("/api/privilege/geoserver/users",)
 
 
-class TestPrivilegeManager(PrivilegeManagerBaseTestCase, ):
+class TestPrivilegeManager(PrivilegeManagerBaseTestCase,):
     def test_geosever_roles_response(self):
         user = UserFactory()
         web_client = Client()
@@ -25,10 +26,10 @@ class TestPrivilegeManager(PrivilegeManagerBaseTestCase, ):
         web_client.force_login(user)
 
         privilege_response = self.privilege_geoserver_roles(web_client)
-        privilege_response.json()['groups'].sort()
+        privilege_response.json()["groups"].sort()
         self.assertDictEqual(
             privilege_response.json(),
-            {"groups": ['admin', 'enterprise', 'free', 'hub', 'pro']},
+            {"groups": ["admin", "enterprise", "free", "hub", "pro"]},
         )
 
     def test_geosever_users_no_permission_response(self):
@@ -97,6 +98,6 @@ class TestPrivilegeManager(PrivilegeManagerBaseTestCase, ):
         has_perm, message = has_login_permission(user, oidc_client.client_id)
         self.assertEqual(
             message,
-            "Your subscription does not allow this login. You need to upgrade your subscription to continue."
+            "Your subscription does not allow this login. You need to upgrade your subscription to continue.",
         )
         self.assertFalse(has_perm)

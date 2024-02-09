@@ -26,62 +26,30 @@
 
     {% block header_scripts %}{% endblock header_scripts %}
 </head>
-<body class="mapstand" data-ms2-container="mapstand">
+<body  data-ms2-container="">
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W99PQ7G"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
     <div class="flex-container">
-    <div class="flex-left-half">
-
-    <a class="logo-image" href="{% url 'login' %}">
-        <img src="{% static "user_management/img/mapstand-white-logo.svg" %}"/>
-    </a>
-
-    <div class="main-title">
-        <h1 class="main-title-text">
-        {% block left_title %}
-        {% endblock left_title %}
-        </h1>
-
-    </div>
-
-    <div class="sub-title" >
-        <h2 class="sub-title-text">
-        {% block left_subtitle %}
-        {% endblock left_subtitle %}
-        </h2>
-    </div>
-
-    <div class="main-image-section">
-        {% block left_image %}
-        {% endblock left_image %}
-    </div>
-
-
-    </div>
-
-    <div class="flex-right-half">
-        <div class="right-title" >
-            <a href="{% url 'login' %}">
-            <img class="mapstand-logo-right" src="{% static "user_management/img/logo-inverted.png" %}"/>
-            </a>
-            {% block right_title %}
-            {% endblock right_title %}
+        <div class="flex-left-half">
         </div>
 
-        {% block right_action %}
-        {% endblock right_action %}
+        <div class="flex-right-half">
+            <div class="right-title" >
+                <a href="{% url 'login' %}">
+                </a>
+                {% block right_title %}
+                {% endblock right_title %}
+            </div>
 
-
-
+            {% block right_action %}
+            {% endblock right_action %}
 
         </div>
-
+        <div class="flex-left-half">
+        </div>
 
     </div>
-    <!-- Start of HubSpot Embed Code -->
-    <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/4635716.js"></script>
-    <!-- End of HubSpot Embed Code -->
 </body>
 

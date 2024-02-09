@@ -126,9 +126,7 @@
 }
 
 @media only screen and (max-height: 560px) {
-  .mapstand-avatar-box {
-    display: none;
-  }
+
   .right-title {
     display: none;
   }
@@ -160,9 +158,7 @@
 }
 
 @media only screen and (max-height: 560px) {
-  .mapstand-avatar-box {
-    display: none;
-  }
+
   .form-box {
     height: 300px;
   }

@@ -7,19 +7,24 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='GlobalConfiguration',
+            name="GlobalConfiguration",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('navbar_redirect_url', models.URLField()),
-                ('map_redirect_url', models.URLField()),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("navbar_redirect_url", models.URLField()),
+                ("map_redirect_url", models.URLField()),
             ],
-            options={
-                'verbose_name_plural': 'Configuration',
-            },
+            options={"verbose_name_plural": "Configuration",},
         ),
     ]
