@@ -1,0 +1,50 @@
+{% extends 'user_management/base.html' %}
+
+{% block header_scripts %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'user_management/css/activation_msg_sent.css' %}">
+
+{%  endblock %}
+
+
+
+    <!-- Left panel -->
+
+    {% block left_title %}
+    Check your inbox!
+    {% endblock left_title %}
+    
+    {% block left_subtitle %}
+    A confirmation email has been sent to the email address you provided. Please follow the link.
+    {% endblock left_subtitle %}
+
+    {% block left_image %}
+    <img class="main-image" src="{% static "user_management/img/high-five.png" %}"/>
+    {% endblock left_image %}
+
+
+    <!-- Right/ mobile panel -->
+
+    {% block right_action %}
+    <section class="confirmation-email-right-section">
+    
+    <div class="top-image-box">
+
+    <img class="mail-image" src="{% static "user_management/img/email-sent.png" %}"/>
+    <h1>Confirmation Email</h1>
+        
+    </div>
+    <div class="middle-text-box">
+        <h2>
+            We have sent you an email. Please click on the link provided to complete your registration.
+        </h2>
+    </div>
+
+    <div class="bottom-text-box">
+        <p>
+            Didn't receive an email? <a class="verification-link" href="{% url 'resend_verification_email' %}">Resend verification.</a>
+        </p>
+    </div>
+
+    </section>
+    {% endblock right_action %}

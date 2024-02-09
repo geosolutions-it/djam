@@ -1,0 +1,197 @@
+{% extends "admin/change_list.html" %}
+{{ block.super }}
+{% load humanize admin_list%}
+{% load static %}
+{% load tag_extras %}
+
+{% block result_list %}
+<style>
+.custom-admin-button {
+    border-color: lightgreen;
+    background-color: lightgreen;
+    border-radius: 25px;
+    padding: 8px
+  }
+
+.a-pointer {
+  cursor:pointer;
+}
+#loading-arrow {
+  max-width: 78px;
+  max-height: 55px;
+}
+.additional-actions {
+  max-width:100%;
+  float:right
+}
+.loading-arrow {
+  max-width: 78px;
+  max-height: 55px;
+}
+</style>
+<link rel="stylesheet" type="text/css" href="{% static 'font-awesome/css/font-awesome.css' %}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="{% static 'js/clipboard.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/token_creation.js' %}"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<div class="results">
+  <table id="result_list">
+  <thead>
+  <tr>
+    <th scope="col" class="sortable column-id">
+      <div class="text"><a href="?o=1.2">id</a></div>
+      <div class="clear"></div>
+    </th>
+    <th scope="col" class="sortable column-user">
+      <div class="text"><a href="?o=1.2">user</a></div>
+      <div class="clear"></div>
+    </th>
+    <th scope="col" class="sortable column-active">
+      <div class="text"><a href="?o=1.2">Is active</a></div>
+      <div class="clear"></div>
+    </th>
+    <th scope="col" class="sortable column-active">
+      <div class="text"><a href="?o=1.2">Action</a></div>
+      <div class="clear"></div>
+    </th>
+    <th scope="col" class="sortable column-company">
+      <div class="text"><a href="?o=1.2">Subscription Type</a></div>
+      <div class="clear"></div>
+    </th>
+    <th scope="col" class="sortable column-group">
+      <div class="text"><a href="?o=-2">Plan - Start Date</a></div>
+      <div class="clear"></div>
+    </th>
+    <th scope="col" class="sortable column-start_date">   
+      <div class="text"><a href="?o=3.2">Plan - Start Enddate</a></div>
+      <div class="clear"></div>
+    </th>
+    <th scope="col" class="sortable column-expiry_date">   
+      <div class="text"><a href="?o=3.2">Subscription Plan</a></div>
+      <div class="clear"></div>
+    </th>
+    <th scope="col" class="sortable column-time_remaining">   
+      <div class="text"><a href="?o=3.2">Time remaining</a></div>
+      <div class="clear"></div>
+    </th>
+    <th scope="col" class="sortable column-length">   
+      <div class="text"><a href="?o=3.2">Plan Length</a></div>
+      <div class="clear"></div>
+    </th>
+    <th scope="col" class="sortable column-token">   
+      <div class="text"><a href="?o=3.2">API Token</a></div>
+      <div class="clear"></div>
+    </th>
+  </tr>
+  </thead>
+  <tbody>
+
+  {% for subscription in cl.result_list %}
+    {% with subscription|get_company_sub as company_sub %}   
+      <tr class="row{{subscription.id}}">
+        <td class="field-id nowrap">{{subscription.id}}</td>
+        <td class="field-user nowrap">
+            {{subscription.user.email}}
+            {% if company_sub %}
+            <br><br>{{subscription.user.email}}
+            {% endif %}
+        </td>
+        <td class="field-isactive nowrap">
+          {% if subscription.is_active %}
+            <img src="/static/admin/img/icon-yes.svg" alt="True">
+          {% else %}
+            <img src="/static/admin/img/icon-no.svg" alt="False">
+          {% endif %}
+          {% if company_sub %}
+            <br><br>
+            {% if company_sub.is_active %}
+              <img src="/static/admin/img/icon-yes.svg" alt="True">
+            {% else %}
+              <img src="/static/admin/img/icon-no.svg" alt="False">
+            {% endif %}
+          {% endif %}
+        </td>
+        <td class="field-id nowrap">
+        <a href="{% url 'admin:administration_individualsubscription_change' subscription.id %}">Edit</a>
+          {% if company_sub %}
+            <br><br>
+            <a href="{% url 'admin:administration_companysubscription_change' company_sub.id %}">Edit</a>
+          {% endif %}
+        </td>
+        <td class="field-subtype nowrap">
+          INDIVIDUAL
+          {% if company_sub %}
+            <br><br>COMPANY ({{company_sub.company.company_name }})
+          {% endif %}
+        </td>
+        <td class="field-start-date nowrap">
+          {{subscription.start_timestamp|default:""|date:"d M Y" }}
+          {% if company_sub %}
+            <br><br>{{company_sub.start_timestamp|default:""|date:"d M Y" }}
+          {% endif %}
+        </td>
+        <td class="field-end-date nowrap">{{subscription.end_timestamp|default:""|date:"d M Y" }}
+          {% if company_sub %}
+            <br><br>{{company_sub.end_timestamp|default:""|date:"d M Y" }}
+          {% endif %}
+        </td>
+        <td class="field-permissions nowrap">{{subscription.groups|default:""|upper}}
+          {% if company_sub %}
+            <br><br>{{company_sub.groups|default:""|upper }}
+          {% endif %}
+        </td>
+        <td class="field-remaining nowrap">{{subscription.end_timestamp|timeuntil|naturaltime}}
+          {% if company_sub %}
+            <br><br>{{company_sub.end_timestamp|timeuntil|naturaltime }}
+          {% endif %}
+        </td>
+        {% with subscription.end_timestamp as expiry_date %}
+        <td class="field-length nowrap">{% if subscription.end_timestamp %}{{subscription.start_timestamp|timesince:subscription.end_timestamp}}{% endif %}
+          {% if company_sub and company_sub.end_timestamp %}
+            <br><br>{{company_sub.start_timestamp|timesince:company_sub.end_timestamp}}
+          {% endif %}
+        </td>
+        {% endwith %}
+        <td class="field-token nowrap">NO TOKEN FOR FREE ACCOUNT
+          {% if company_sub and company_sub.is_active %}
+          <br><br>
+            {% with subscription.user.id as user_id %}
+              <div class="container">
+                <img id="loading-arrow-{{user_id}}" class="loading-arrow" style="display: none;" src="{% static "images/loading_arrow.gif" %}"/>        
+                <div class="token-creation" style="max-width:100%;float:left">
+                  <span id="token-value-{{user_id}}" {% if not subscription.user.apikey_set.first.key %}style="display:none;"{% endif %}>
+                  {% if subscription.user.apikey_set.first.revoked %}
+                    The API key is revoked
+                  {% else %}
+                    {{subscription.user.apikey_set.first.key}}
+                  {% endif %}
+                  </span>
+                  <div id="create-token-container-{{user_id}}" {% if subscription.user.apikey_set.first.key %}style="display: none;"{% endif %} >
+                      <div>
+                          <p class="custom-admin-button a-pointer" onclick="sendRequest('POST', {{user_id}})">Create a token</p>
+                      </div>
+                  </div>
+                </div>
+                <div id="token-div-info-{{user_id}}" {% if not subscription.user.apikey_set.first.key %}style="display: none;"{% endif %} class="additional-actions">
+                    <i class="fa fa-refresh" aria-hidden="true"></i><a class="a-pointer" onclick="sendRequest('PUT', {{user_id}})"> Refresh</a><br>
+                    <i class="fa fa-undo" aria-hidden="true"></i><a id="admin-revoke-{{user_id}}" class="a-pointer" onclick="sendRequest('PATCH', {{user_id}})">
+                    {% if subscription.user.first.apikey_set.first.revoked %} Re-enable{% else %} Revoke{% endif %}</a><br>
+                    <i class="fa fa-trash" aria-hidden="true"></i><a class="a-pointer" onclick="sendRequest('DELETE', {{user_id}})"> Delete</a>
+                </div>
+              </div>
+            {% endwith %}
+          {% endif %}
+        </td>
+      </tr>
+    {% endwith %}
+  {% endfor %}
+  </tbody>
+  </table>
+</div>
+<script>
+if ( window.history.replaceState ) {
+  window.history.replaceState( null, null, window.location.href );
+}
+</script>
+{% endblock %}

@@ -1,0 +1,238 @@
+.flex-right-half {
+  margin-top: 5vh;
+}
+
+.main-image {
+  bottom: -35px;
+}
+
+.right-title {
+  display: none;
+}
+
+.form-box {
+  height: 80vh;
+  position: relative;
+  /* border: red 1px solid; */
+
+}
+
+.user-edit-form-box {
+  width: 70%;
+  margin-left: 15%;
+  margin-right: 15%;
+  height: 50vh;
+  position: absolute;
+  text-align: center;
+  /* border: blue 1px solid; */
+}
+
+.user-edit-form-box p {
+  font-size: 1.2em;
+  margin-top: 5vh;
+}
+
+.user-edit-form-box #copy-token,  #copy-token_wms {
+  margin-left:10px; 
+  cursor: pointer
+}
+
+.user-edit-form-box #copy-token-result, #copy-token-result_wms {
+  transition: opacity 0.1s ease-out;
+  opacity: 0;
+  margin-left:10px; 
+  color: #212529;
+  font-size: 0.85em;
+  font-weight: 400;
+}
+
+.user-edit-form-box #copy-token-result.shown, #copy-token-result_wms.shown {
+  opacity: 1;
+  display: inline;
+}
+
+.user-edit-form-box .form-group {
+  text-align: left;
+  width: 100%;
+  height: 55px;
+  /* border: green 1px solid; */
+
+}
+
+.user-edit-form-box .card {
+  margin-top: 20px;
+  text-align: left;
+}
+
+.user-edit-form-box .card-header {
+  text-align: left;
+}
+
+.user-edit-form-box .password-form-group {
+  text-align: left;
+  width: 70%;
+  height: 10px;
+  margin: 5%;
+  /* border: green 1px solid; */
+}
+
+.user-edit-form-box .message {
+  text-align: left;
+  padding-bottom:10px
+}
+
+.user-edit-form-box .message {
+  text-align: left;
+  padding-bottom:10px
+}
+
+.user-edit-form-box #token-div-info {
+  margin-top: 10px;
+}
+
+.user-edit-form-box .btn-sm {
+  padding: 0px;
+  margin-right: 5px;
+}
+
+.user-edit-form-box .btn-sm .btn-label {
+  margin-left: 5px;
+}
+
+.form-group label {
+  /* font-weight: bold;
+  text-align: left;
+  float: left; */
+  display: inline-block;
+}
+
+
+
+.change-password-link {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #000000;
+  display: block;
+  width: 100%;
+  padding: .375rem .75rem;
+  line-height: 1.5;
+}
+
+
+@media only screen and (max-width: 650px) {
+  h1 {
+    font-size: 1.9em;
+  }
+
+  .right-title {
+    display: none;
+  }
+
+  .user-edit-form-box {
+    width: 100%;
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+}
+
+
+@media only screen and (max-width: 1200px) {
+  .flex-container {
+    height: 100vh;
+ }
+ .right-title {
+  display: none;
+}
+}
+
+
+@media only screen and (max-height: 750px) {
+  .flex-right-half {
+  overflow: scroll !important;
+  margin-top: 0px !important;
+  height: 100vh !important;
+ }
+ .form-box {
+   height: 660px;
+ }
+}
+
+@media only screen and (max-height: 560px) {
+  .right-title {
+    display: none;
+  }
+  .form-box {
+    height: 500px;
+  }
+  .password-change-form-box{
+    padding-top: 20vh;
+  }
+}
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 30px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #157347;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.custom-link-img {
+  max-width: 35px;
+  margin-right: 1px;
+}

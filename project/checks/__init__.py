@@ -6,7 +6,7 @@ class ProjectChecksConfig(AppConfig):
     Pseudo application implementing project checks.
     """
 
-    name = 'checks'
+    name = "checks"
     verbose_name = "Project checks"
 
     def ready(self):

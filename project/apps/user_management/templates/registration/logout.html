@@ -1,0 +1,76 @@
+{% extends 'user_management/base.html' %}
+
+{% block header_scripts %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'user_management/css/login.css' %}">
+
+{%  endblock %}
+
+
+
+    <!-- Left panel -->
+
+    {% block left_title %}
+    You've signed out!
+    {% endblock left_title %}
+    
+    {% block left_subtitle %}
+    Sorry to see you go.
+    {% endblock left_subtitle %}
+
+    {% block left_image %}
+    <img class="main-image" src="{% static "user_management/img/sleeping-at-computer.png" %}"/>
+    {% endblock left_image %}
+
+
+    <!-- Right/ mobile panel -->
+
+    {% block right_action %}
+
+
+    <div class="sign-in-box common-input-form">
+        <div class="djam-avatar-box">
+            <img  src="{% static "user_management/img/test-avatar.png" %}"/>
+        </div>
+
+        <div class="sign-in-form">
+            <h1>Sign in to DJAM</h1> 
+            <form role="form" method="post" action="{% url 'login' %}?{{ request.GET.urlencode }}">
+                {% csrf_token %}
+
+                <input type="text" id="username" name="username" placeholder="Enter your email address">
+                <div>
+                    {% for msg in form.first_name.errors %} 
+                    {{ msg }} 
+                    {% endfor %}
+                </div>
+
+                <input type="password" id="password" name="password" placeholder="Enter your password">
+            
+                <div class="lower-form">
+
+                    <div class="underform-box">
+                        <div class="underform-half-forgot-password">
+                        <a class="signing-link" href="{% url 'password_reset' %}">Forgot password?</a>
+                        </div>
+                    </div>
+
+                </div>
+                        <br>
+                
+                <div class="submit-button-section">
+                    <input class="submit-button" type="submit" value="Sign in">
+                </div>
+                <div class="alternative-option-section">
+                    <p>Don't have an account?<a class="signing-link" href="{% url 'register' %}"> Sign up</a></p>
+                </div>
+
+
+            </form>
+        </div>
+            
+        </div>
+    
+
+
+    {% endblock right_action %}

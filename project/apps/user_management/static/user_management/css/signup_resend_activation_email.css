@@ -1,0 +1,171 @@
+.main-image {
+  bottom: -50;
+}
+
+.form-box {
+  height: 80vh;
+  position: relative;
+}
+
+.top-image-box {
+  width: 100%;
+  text-align: center;
+}
+
+.mail-image {
+  width: 250px;
+}
+
+.resend-email-form-box {
+  width: 70%;
+  margin-left: 15%;
+  margin-right: 15%;
+  height: 50vh;
+  position: absolute;
+  text-align: center;
+}
+
+.resend-email-form-box h1 {
+  color: #8b8b8b;
+  font-size: 3em;
+}
+
+.resend-email-form-box p {
+  color: #8b8b8b;
+  font-size: 1.2em;
+  margin-top: 5vh;
+}
+
+.resend-email-form-box #username,
+#password {
+  width: 90%;
+  height: 50px;
+  font-size: 1.2em;
+  padding: 10px;
+  margin: 20px;
+}
+
+/* removes Email: label */
+.resend-email-form label {
+  display: none;
+}
+
+#id_email {
+  width: 90%;
+  height: 50px;
+  font-size: 1.2em;
+  padding: 10px;
+  margin: 20px;
+}
+
+@media only screen and (max-width: 800px) {
+  .right-title {
+    height: 25vh;
+  }
+}
+
+
+@media only screen and (max-width: 700px) {
+
+  .right-title {
+    height: 23vh;
+  }
+
+  .right-title-text {
+    display: none;
+  }
+
+  .mail-image {
+    margin: 20px;
+    width: 50%;
+  }
+
+  .resend-email-form-box h1 {
+    color: #8b8b8b;
+    font-size: 2em;
+  }
+
+  .resend-email-form-box h2 {
+    color: #8b8b8b;
+    font-size: 1.2em;
+
+  }
+
+  #id_email {
+    margin: 20px 0;
+  }
+
+  .resend-email-form-box p {
+    color: #8b8b8b;
+    font-size: 1.2em;
+
+  }
+
+  .resend-email-form-box {
+    width: 90%;
+    margin-left: 15px;
+    margin-right: 15px;
+    right: 5px;
+    left: 5px;
+  }
+
+  .bottom-text-box {
+    padding-top: 2vh;
+  }
+
+}
+/* 
+@media only screen and (max-height: 750px) {
+  .flex-right-half {
+  overflow: scroll !important;
+  margin-top: 0px !important;
+ }
+ .form-box {
+   padding-bottom: 200px;
+ }
+}
+
+@media only screen and (max-height: 560px) {
+
+  .right-title {
+    display: none;
+  }
+ .top-image-box {
+     display: none;
+ }
+ .middle-text-box{
+     margin-top: 30vh;
+ }
+} */
+
+
+@media only screen and (max-width: 1200px) {
+  .flex-container {
+    height: 100vh;
+ }
+}
+
+
+@media only screen and (max-height: 750px) {
+  .flex-right-half {
+  overflow: scroll !important;
+  margin-top: 0px !important;
+  height: 100vh !important;
+ }
+ .form-box {
+   height: 550px;
+ }
+}
+
+@media only screen and (max-height: 560px) {
+
+  .form-box {
+    height: 300px;
+  }
+  .top-image-box {
+      display: none;
+  }
+  .middle-text-box{
+      margin-top: 30vh;
+  }
+}

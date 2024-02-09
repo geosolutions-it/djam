@@ -1,6 +1,7 @@
 import re
 import json
 
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.db.models import ObjectDoesNotExist
 from oidc_provider.views import AuthorizeView, TokenView
@@ -16,8 +17,14 @@ class AuthorizeViewWithSessionKey(AuthorizeView):
 
     def get(self, request, *args, **kwargs):
 
+        # in case user data are missing, stop the flow and force fix
+        if request.user.is_authenticated and not self._user_claims_valid(request.user):
+            return HttpResponseRedirect(
+                request.user.get_absolute_url() + "?fix_error=1"
+            )
+
         # limit login access to a Client application to only privileged users
-        client_id = request.GET.get('client_id', None)
+        client_id = request.GET.get("client_id", None)
 
         if client_id is not None and not request.user.is_anonymous:
 
@@ -26,8 +33,8 @@ class AuthorizeViewWithSessionKey(AuthorizeView):
             if not has_permission:
                 return render(
                     request,
-                    'user_management/simple_message.html',
-                    context={'error': message},
+                    "user_management/simple_message.html",
+                    context={"error": message},
                 )
 
         response = super().get(request, *args, **kwargs)
@@ -35,10 +42,13 @@ class AuthorizeViewWithSessionKey(AuthorizeView):
 
         return response
 
+    def _user_claims_valid(self, user):
+        return user.first_name and user.last_name and user.username
+
     def post(self, request, *args, **kwargs):
 
         # limit login access to a Client application to only privileged users
-        client_id = request.POST.get('client_id', None)
+        client_id = request.POST.get("client_id", None)
 
         if client_id is not None and not request.user.is_anonymous:
 
@@ -47,8 +57,8 @@ class AuthorizeViewWithSessionKey(AuthorizeView):
             if not has_permission:
                 return render(
                     request,
-                    'user_management/simple_message.html',
-                    context={'error': message},
+                    "user_management/simple_message.html",
+                    context={"error": message},
                 )
 
         response = super().post(request, *args, **kwargs)
@@ -60,12 +70,16 @@ class AuthorizeViewWithSessionKey(AuthorizeView):
         """
         Function updating user djam session with Code value
         """
-        if response.status_code == 302 and response._headers.get('location', None):
-            re_code = re.search('code=(\w+)&*?', response._headers.get('location', '')[1])
+        if response.status_code == 302 and response._headers.get("location", None):
+            re_code = re.search(
+                "code=(\w+)&*?", response._headers.get("location", "")[1]
+            )
 
             if re_code is not None:
                 code = re_code.groups()[0]
-                session = Session.objects.get(session_key=self.request.session.session_key)
+                session = Session.objects.get(
+                    session_key=self.request.session.session_key
+                )
                 session.oidc_code = code
                 session.save()
 
@@ -81,11 +95,16 @@ class StatelessAuthorizeView(AuthorizeViewWithSessionKey):
 
         response = super().get(*args, **kwargs)
 
-        if response.has_header('location'):
+        if response.has_header("location"):
             # check if state param is empty
-            if re.search('&state=$', response._headers['location'][1]) or re.search('&state=&', response._headers['location'][1]):
+            if re.search("&state=$", response._headers["location"][1]) or re.search(
+                "&state=&", response._headers["location"][1]
+            ):
                 # remove empty state from redirect url
-                response._headers['location'] = ('Location', response._headers['location'][1].replace('&state=', ''))
+                response._headers["location"] = (
+                    "Location",
+                    response._headers["location"][1].replace("&state=", ""),
+                )
 
         return response
 
@@ -94,8 +113,9 @@ class TokenViewWithSessionKey(TokenView):
     """
     Token view with response extended with Session Token
     """
+
     def post(self, request, *args, **kwargs):
-        code = request.POST.get('code', None)
+        code = request.POST.get("code", None)
         response = super().post(request, *args, **kwargs)
 
         # if response is correct, attach Session Token
@@ -106,7 +126,7 @@ class TokenViewWithSessionKey(TokenView):
                 return response
 
             data = json.loads(response.content)
-            data['session_token'] = str(session.uuid)
+            data["session_token"] = str(session.uuid)
             response.content = json.dumps(data)
 
         return response

@@ -24,15 +24,16 @@ services:
         build:
           context: ./
         restart: always
-        # command: uwsgi  --emperor uwsgi.ini
+#        command: uwsgi  --emperor uwsgi.ini
         # command: uwsgi --ini uwsgi.ini
-        # ports:
-        # - "8002:8000"
+#        ports:
+#        - "8002:8000"
         volumes:
           - djam_static:/djam/project/static
         environment:
           - DJAM_PROJECT_ENVIRONMENT=dev
           - DJAM_RABBITMQ_HOST=broker
+          - DJAM_RABBITMQ_PORT=5672
           - DJAM_DB_HOST=${DJAM_DB_HOST}
           - DJAM_DB_PORT=${DJAM_DB_PORT}
           - DJAM_DB_NAME=${DJAM_DB_NAME}
@@ -40,6 +41,10 @@ services:
           - DJAM_DB_PASSWORD=${DJAM_DB_PASSWORD}
           - DJAM_EMAIL_HOST_USER=${DJAM_EMAIL_HOST_USER}
           - DJAM_EMAIL_HOST_PASSWORD=${DJAM_EMAIL_HOST_PASSWORD}
+          - DJAM_EMAIL_HOST=${DJAM_EMAIL_HOST}
+          - DJAM_EMAIL_SENDER=${DJAM_EMAIL_SENDER}
+          - DJAM_EMAIL_PORT=${DJAM_EMAIL_PORT}
+          - DJAM_SECRET_KEY=${DJAM_SECRET_KEY}
         depends_on:
           - broker
 

@@ -1,32 +1,70 @@
-{% extends 'user_management/base.html' %}
+{% extends 'account/base-with-navbar.html' %}
 
 {% block header_scripts %}
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'user_management/css/forms.css' %}">
-{%  endblock %}
+    <link rel="stylesheet" type="text/css" href="{% static 'user_management/css/user_edit.css' %}">
 
-{% block message %}
-    <form role="form" method="post" action="{% url 'user_account_edit' id=object.id %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <h3 class="message-header">Edit profile</h3>
-        </div>
-        <div class="form-group">
-            <label for="first_name">First name</label>
-            <input type="text" class="form-control input-lg" name="first_name" id="id_first_name" required
-                   placeholder="Enter first name"
-                    {% if form.first_name.value %}
-                   value="{{ form.first_name.value }}" {% endif %}>
-            {{ form.first_name.errors }}
-        </div>
-        <div class="form-group">
-            <label for="last_name">Last name</label>
-            <input type="text" class="form-control input-lg" name="last_name" id="id_last_name" required
-                   placeholder="Enter last name password" \
-                    {% if form.last_name.value %}
-                   value="{{ form.last_name.value }}" {% endif %}>
-            {{ form.last_name.errors }}
-        </div>
-        <button type="submit" class="btn btn-lg btn-primary pull-right" id="btn_submit">Save</button>
-    </form>
+    <script>
+        $(document).ready(function(){
+          $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
 {% endblock %}
+
+
+<!-- Left panel -->
+
+{% block left_title %}
+    Your digital portrait
+{% endblock left_title %}
+
+{% block left_subtitle %}
+    Keep your personal data up to date.
+{% endblock left_subtitle %}
+
+{% block left_image %}
+    <img class="main-image" src="{% static "user_management/img/test-laptop-man.png" %}"/>
+{% endblock left_image %}
+
+
+{% block right_action %}
+<!-- Right/ mobile panel -->
+
+    <div class="form-box common-input-form">
+        {% if fix_error %}
+            <div id="error_dialog" class="alert alert-danger" role="alert">
+                <strong>User data cannot be empty!</strong> Fill the form and try again!
+            </div>
+        {% endif %}
+        {% if success %}
+            <div id="success_dialog" class="alert alert-success" role="alert">
+                <strong>Information successfully updated!</strong>
+            </div>
+        {% endif %}
+
+        <div class="user-edit-form-box" style="margin-bottom:100px">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation" style="max-width:45%">
+                    <button class="nav-link active" s id="account-tab" data-bs-toggle="tab" data-bs-target="#account" type="button" role="tab" aria-controls="account" aria-selected="true">
+                        <img class="custom-link-img" src="{% static "images/account_and_marketing.png" %}"/>
+                        Account info &amp; marketing</button>
+                </li>
+                <li class="nav-item" role="presentation" style="max-width:45%">
+                    <button class="nav-link" id="api-tab"  data-bs-toggle="tab" data-bs-target="#api" type="button" role="tab" aria-controls="api" aria-selected="false">
+                    <img class="custom-link-img" src="{% static "images/type_and_api.png" %}"/>
+                    Account Type &amp; API key</button>
+                </li>
+            </ul>
+            <div class="tab-content" id="editProfileTabContent">
+                <div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
+                   {% include "account/account_and_marketing.html" %}
+                </div>
+                <div class="tab-pane fade" id="api" role="tabpanel" aria-labelledby="api-tab">
+                   {% include "account/account_type.html" %}
+                </div>
+            </div>
+            <div class="col-12">
+            </div>
+        </div>
+    </div>
+{% endblock right_action %}

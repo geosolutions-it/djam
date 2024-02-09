@@ -1,0 +1,8 @@
+-r requirements.txt
+autopep8==1.5.1
+bandit==1.6.2
+coverage==5.1
+coverage-badge==1.0.1
+pep8==1.7.1
+flake8==3.7.9
+black

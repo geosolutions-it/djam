@@ -7,4 +7,4 @@ from apps.privilege_manager.models import Group
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Group
-        fields = ['id', 'name']
+        fields = ["id", "name"]

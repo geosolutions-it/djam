@@ -18,20 +18,23 @@ class GeoServerRolesView(views.APIView):
     """
     Endpoint returning User permission groups, which in terminology of Geoserver are called 'roles'
     """
+
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, format=None):
-        group_names = [group.name for group in Group.objects.all()]
-        group_names.append('admin')
+        groups_pbjects = Group.objects.all()
+        group_names = [group.name for group in groups_pbjects]
+        group_names_wms = [group.name + "_wms" for group in groups_pbjects]
 
-        return Response({'groups': group_names})
+        return Response({"groups": group_names + group_names_wms})
 
 
 class GeoServerAdminRoleView(views.APIView):
     """
     Endpoint returning name of admin User permission group, which in terminology of Geoserver is called 'adminRole'
     """
+
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, format=None):
-        return Response({'adminRole': 'admin'})
+        return Response({"adminRole": "admin"})

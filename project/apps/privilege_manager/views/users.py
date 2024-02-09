@@ -13,6 +13,7 @@ class GeoServerUsersView(views.APIView):
     """
     Endpoint returning User list with their permission groups, for Geoserver REST roles service
     """
+
     permission_classes = [IsAdminUser]
 
     def get(self, request, format=None):
@@ -20,6 +21,9 @@ class GeoServerUsersView(views.APIView):
 
         user_list = []
         for user in UserModel.objects.all():
-            user_list.append({'username': user.username, 'groups': [group.name for group in user.group_set.all()]})
+            if user.get_group():
+                user_list.append(
+                    {"username": user.username, "groups": [user.get_group()],}
+                )
 
-        return Response({'users': user_list})
+        return Response({"users": user_list})

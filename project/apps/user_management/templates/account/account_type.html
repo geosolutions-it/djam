@@ -1,0 +1,89 @@
+{{ block.super }}
+
+{% load static %}
+<script type="text/javascript" src="{% static 'js/clipboard.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/token_creation.js' %}"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<div class="card">
+    <div class="card-header">Account Type</div>
+    <div class="card-body">
+        <div class="message">
+            Your account is <b>{{ user.get_group }}</b>.
+        </div>
+        <div class="message">
+            {% if user.get_group|lower == 'free' %}
+                Contact our <a href="mailto:support@example.com">Support Team</a> to know more how to upgrade your account to Enterprise
+            {% else %}
+                {% if company_subscriptions %}
+                    {% for sub in company_subscriptions %}
+                        {% if sub.is_active %}
+                            {% if sub.groups.first.name|lower == 'free' %}
+                            <label>You have a {{sub.subscription_type}} subscription</b>.
+                            {% else %}
+                            <br><label>Your {{sub.subscription_type}} subscription (<b>{{sub.company.company_name}}</b>), will expire in <b>{{ sub.end_timestamp|timeuntil }}</b>.
+                            {% endif %}
+                            </label>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    {% if individual_subscriptions and individual_subscriptions.is_active %}
+                        {% with sub=individual_subscriptions  %}
+                            {% if sub.groups.first.name|lower == 'free' %}
+                            <label>You have a {{sub.subscription_type}} subscription</b>.
+                            {% else %}
+                            <br><label>Your {{sub.subscription_type}} subscription, will expire in <b>{{ sub.end_timestamp|timeuntil }}</b>. 
+                            Contact our <a href="mailto:support@example.com">Support Team</a> to help you to renew your plan.
+                            {% endif %}
+                            </label>
+                        {% endwith %}
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+<br>
+<div class="card">
+    <div class="card-header">Access token</div>
+    <div class="card-body">
+        <div>
+            {% if user.get_group|lower == 'free' %}
+                <div class="message">
+                    <p>TO CREATE A TOKEN YOU NEED TO UPGRADE TO ENTERPRISE. Please <a href="mailto:support@example.com">contact our SUPPORT TEAM</a></p>
+                </div>
+            {% endif %}
+            {% if user.get_group|lower == 'enterprise' or user.is_superuser %}
+                {% if not api_key %}
+                <div class="message">
+                    <label class="col-12 col-form-label">You need an API Access token to configure <a href="">API access token</a> in our documentation.</label>
+                </div>
+                {% endif %}
+                <div class="row" id="token-div-info" {% if not api_key %}style="display: none;"{% endif %}>
+                    <div>
+                        <code>
+                            <span id="token-value">{{api_key.key}}</span> (WFS)<span id="copy-token" class="fa fa-copy" aria-label="Copy token to clipboard" title="Copy token to clipboard" alt="Copy token to clipboard" data-clipboard-target="#token-value"></span><span id="copy-token-result" aria-hidden="true">Copied!</span></br>
+                            <span id="wms-token-value">{{api_key.wms_key}}</span> (WMS)<span id="copy-token_wms" class="fa fa-copy" aria-label="Copy token to clipboard" title="Copy token to clipboard" alt="Copy token to clipboard" data-clipboard-target="#wms-token-value"></span><span id="copy-token-result_wms" aria-hidden="true">Copied!</span>
+                        </code>
+                        <div>
+                            <small id="token-last-modified">Last modified: {{api_key.last_modified|timesince}} ago</small>
+                        </div>
+                    </div>           
+                    <div>
+                        <button type="button" class="btn btn-sm" aria-label="Left Align" id="refresh-token">
+                            <span class="fa fa-refresh" aria-hidden="true"></span><span class="btn-link btn-label">Regenerate</span>
+                        </button>
+                        <button type="button" class="btn btn-sm" aria-label="Left Align" id="delete-token">
+                            <span class="fa fa-trash" aria-hidden="true"></span><span class="btn-link btn-label">Delete</span>
+                        </button>
+                    </div>
+                </div>
+                    <div id="create-token-container" {% if api_key %}style="display: none;"{% endif %} >
+                        <div>
+                            <input class="btn submit-button" id="create-token" type="submit" value="Create a token"><img id="loading-arrow" style="display: none;" src="{% static "images/loading_arrow.gif" %}"/>
+                        </div>
+                    </div>
+            {% endif %}
+        </div>
+    </div>
+</div>

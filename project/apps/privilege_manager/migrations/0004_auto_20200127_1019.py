@@ -8,18 +8,16 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('privilege_manager', '0003_auto_20200123_1359'),
+        ("privilege_manager", "0003_auto_20200123_1359"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='group',
-            name='name',
-            field=models.CharField(max_length=30),
+            model_name="group", name="name", field=models.CharField(max_length=30),
         ),
         migrations.AlterField(
-            model_name='group',
-            name='users',
+            model_name="group",
+            name="users",
             field=models.ManyToManyField(blank=True, to=settings.AUTH_USER_MODEL),
         ),
     ]

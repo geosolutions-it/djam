@@ -13,8 +13,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -24,15 +24,17 @@ SECRET_KEY = os.getenv("DJAM_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [os.getenv("DJAM_ALLOWED_HOSTS")]
 
-ROOT_URLCONF = 'urls'
+ROOT_URLCONF = "urls"
 
-WSGI_APPLICATION = 'wsgi.application'
+WSGI_APPLICATION = "wsgi.application"
 
-AUTH_USER_MODEL = 'user_management.User'
+AUTH_USER_MODEL = "user_management.User"
 
-SESSION_COOKIE_NAME = 'djam_sessionid'
-LOGIN_REDIRECT_URL = '/user/account/'
+SESSION_COOKIE_NAME = "djam_sessionid"
+LOGIN_REDIRECT_URL = "/user/account/edit/"
 
-HOME_VIEW = os.getenv('DJAM_HOME_VIEW', 'login')
+HOME_VIEW = os.getenv("DJAM_HOME_VIEW", "login")
+LOGOUT_REDIRECT_URL = os.getenv("DJAM_LOGOUT_REDIRECT", "login")
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 100000

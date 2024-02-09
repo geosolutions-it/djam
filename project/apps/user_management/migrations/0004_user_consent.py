@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('user_management', '0003_user_legacy_user_id'),
+        ("user_management", "0003_user_legacy_user_id"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='consent',
+            model_name="user",
+            name="consent",
             field=models.BooleanField(blank=True, null=True),
         ),
     ]

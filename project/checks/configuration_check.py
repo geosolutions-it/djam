@@ -4,23 +4,20 @@ from django.core.checks import Error, register
 
 
 REQUIRED_ENVVAR_CONFIG = [
-    'DJAM_SECRET_KEY',
-
-    'DJAM_DB_NAME',
-    'DJAM_DB_USER',
-    'DJAM_DB_PASSWORD',
-    'DJAM_DB_HOST',
-    'DJAM_DB_PORT',
-    'DJAM_DB_NAME',
-
-    'DJAM_RABBITMQ_HOST',
-    'DJAM_RABBITMQ_PORT',
-
-    'DJAM_EMAIL_HOST',
-    'DJAM_EMAIL_PORT',
-    'DJAM_EMAIL_HOST_USER',
-    'DJAM_EMAIL_HOST_PASSWORD',
-    'DJAM_EMAIL_SENDER',
+    "DJAM_SECRET_KEY",
+    "DJAM_DB_NAME",
+    "DJAM_DB_USER",
+    "DJAM_DB_PASSWORD",
+    "DJAM_DB_HOST",
+    "DJAM_DB_PORT",
+    "DJAM_DB_NAME",
+    "DJAM_RABBITMQ_HOST",
+    "DJAM_RABBITMQ_PORT",
+    "DJAM_EMAIL_HOST",
+    "DJAM_EMAIL_PORT",
+    "DJAM_EMAIL_HOST_USER",
+    "DJAM_EMAIL_HOST_PASSWORD",
+    "DJAM_EMAIL_SENDER",
 ]
 
 
@@ -35,7 +32,7 @@ def environment_check(app_configs, **kwargs):
                     f'Environment configuration error: "{envvar_name}" not found in environment variables',
                     hint=f'Please add "{envvar_name}" to your environment variables',
                     obj=settings,
-                    id='djam.config.E001',
+                    id="djam.config.E001",
                 )
             )
 

@@ -3,44 +3,134 @@
 {% block header_scripts %}
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'user_management/css/signup.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'user_management/css/forms.css' %}">
 
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-	<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-show-password/1.0.3/bootstrap-show-password.min.js"></script>
+    <script>
+        $(document).ready(function(){
+          $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
 {%  endblock %}
 
-{% block message %}
-    <form role="form" method="post" action="{% url 'register' %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <h3 class="message-header">Welcome to Mapstand</h3>
+
+
+    <!-- Left panel -->
+
+    {% block left_title %}
+    Join the community!
+    {% endblock left_title %}
+    
+    {% block left_subtitle %}
+    Global energy news, maps and activities.
+    {% endblock left_subtitle %}
+
+    {% block left_image %}
+    <img class="main-image" src="{% static "user_management/img/oil-rigs-map2.png" %}"/>
+    {% endblock left_image %}
+
+
+    <!-- Right/ mobile panel -->
+
+    {% block right_action %}
+
+
+    <div class="sign-up-box common-input-form">
+        <div class="djam-avatar-box">
+            <img  src="{% static "user_management/img/test-avatar.png" %}"/>
         </div>
-        <div class="form-group">
-            <label for="first_name">First Name</label>
-            <input type="text" class="form-control input-lg" name="first_name" id="id_first_name" placeholder="Enter Your First Name" {% if form.first_name.value %} value="{{ form.first_name.value }}" {% endif %}>
-            {{ form.first_name.errors }}
+
+        <div class="sign-up-form">
+            <h1>Create your account</h1>
+            <form role="form" method="post" action="{% url 'register' %}">
+                {% csrf_token %}
+
+
+                <input type="text" id="id_first_name" name="first_name" required placeholder="Enter your first name">
+                <div class="error-message">
+                    {% for msg in form.first_name.errors %}
+                    {{ msg }}
+                    {% endfor %}
+                </div>
+
+
+                <input type="text" id="id_last_name" name="last_name" required placeholder="Enter your last name">
+                <div class="error-message">
+                    {% for msg in form.last_name.errors %}
+                    {{ msg }}
+                    {% endfor %}
+                </div>
+
+
+                <input type="text" id="id_email" name="email" required placeholder="Enter your email address">
+                <div class="error-message">
+                    {% for msg in form.email.errors %}
+                {{ msg }}
+                {% endfor %}
+                </div>
+
+
+                <input type="text" id="id_secondary_email" name="secondary_email" placeholder="Enter your secondary email address"
+                       data-toggle="tooltip" data-placement="top" title="This email will be used for the account recovery.">
+                <div class="error-message">
+                    {% for msg in form.secondary_email.errors %}
+                {{ msg }}
+                {% endfor %}
+                </div>
+
+                <input type="password" id="id_password1" name="password1" required placeholder="Enter your password">
+                <div class="error-message">
+                    {% for msg in form.password1.errors %}
+                    {{ msg }}
+                    {% endfor %}
+                </div>
+
+
+                <input type="password" id="id_password2" name="password2" required placeholder="Enter your password (again)">
+                <div class="error-message">
+                    {% for msg in form.password2.errors %}
+                    {{ msg }}
+                    {% endfor %}
+                </div>
+
+                <div class="captcha">
+                    {{ form.captcha }}
+                    <div>
+                        {% for msg in form.captcha.errors %}
+                        {{ msg }}
+                        {% endfor %}
+                    </div>
+                </div>
+
+            
+                <div class="lower-form">
+
+                    <div class="underform-box">
+                       
+                        <div class="agree-to-marketing">
+                        </div>
+
+                        <div class="agree-to-terms">
+                        <p>
+                            By clicking 'Sign Up', you agree to DJAM's <a class="signing-link" href="">Terms of Use</a>
+                            & <a class="signing-link" href="">Privacy Policy</a>
+                        </p>
+                        </div>
+                    </div>
+
+                </div>
+                
+                <div class="submit-button-section">
+                    <input class="submit-button" type="submit" value="Sign up">
+                </div>
+                <div class="alternative-option-section">
+                    <p>Already have an account?<a class="signing-link" href="{% url 'login' %}"> Sign in</a></p>
+                </div>
+
+
+            </form>
         </div>
-        <div class="form-group">
-            <label for="last_name">Last Name</label>
-            <input type="text" class="form-control input-lg" name="last_name" id="id_last_name" placeholder="Enter Your Last Name" {% if form.last_name.value %} value="{{ form.last_name.value }}" {% endif %}>
-            {{ form.last_name.errors }}
+            
         </div>
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="text" class="form-control input-lg" name="email" id="id_email" required placeholder="Enter email"  {% if form.email.value %} value="{{ form.email.value }}" {% endif %}>
-            {{ form.email.errors }}
-        </div>
-        <div class="form-group">
-            <label for="Password">Password</label>
-            <input type="password" class="form-control input-lg" name="password1" id="id_password1" data-toggle="password" required placeholder="Enter password">
-            {{ form.password1.errors }}
-        </div>
-        <div class="form-group">
-            <label for="username">Password confirmation</label>
-            <input type="password" class="form-control input-lg" name="password2" id="id_password2" data-toggle="password" required placeholder="Repeat password">
-            {{ form.password2.errors }}
-        </div>
-        <button type="submit" class="btn btn-lg btn-primary pull-right" id="btn_submit">Sign In</button>
-    </form>
-{%  endblock %}
+    
+
+
+    {% endblock right_action %}
