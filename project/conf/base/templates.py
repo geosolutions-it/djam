@@ -6,7 +6,6 @@ TEMPLATES = [
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
             os.path.join(BASE_DIR, "templates"),
-            os.path.join(BASE_DIR, "apps", "hubspot_integration", "templates"),
             os.path.join(BASE_DIR, "apps", "user_management", "templates"),
         ],
         "APP_DIRS": True,
