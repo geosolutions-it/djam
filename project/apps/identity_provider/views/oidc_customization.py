@@ -70,9 +70,9 @@ class AuthorizeViewWithSessionKey(AuthorizeView):
         """
         Function updating user djam session with Code value
         """
-        if response.status_code == 302 and response._headers.get("location", None):
+        if response.status_code == 302 and response.headers.get("Location", None):
             re_code = re.search(
-                "code=(\w+)&*?", response._headers.get("location", "")[1]
+                "code=(\w+)&*?", response.headers.get("Location", "")[1]
             )
 
             if re_code is not None:
@@ -97,13 +97,13 @@ class StatelessAuthorizeView(AuthorizeViewWithSessionKey):
 
         if response.has_header("location"):
             # check if state param is empty
-            if re.search("&state=$", response._headers["location"][1]) or re.search(
-                "&state=&", response._headers["location"][1]
+            if re.search("&state=$", response.headers["Location"][1]) or re.search(
+                "&state=&", response.headers["Location"][1]
             ):
                 # remove empty state from redirect url
-                response._headers["location"] = (
+                response.headers["Location"] = (
                     "Location",
-                    response._headers["location"][1].replace("&state=", ""),
+                    response.headers["Location"][1].replace("&state=", ""),
                 )
 
         return response
