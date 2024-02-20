@@ -17,7 +17,6 @@ INSTALLED_APPS = [
     "apps.administration.apps.AdminConfig",
     "apps.user_management.apps.UserManagementConfig",
     "apps.privilege_manager.apps.PrivilegeManagerConfig",
-    "apps.stripe_djam.apps.StripeDjamConfig",
     "apps.billing.apps.SubscriptionConfig",
     "apps.global_configuration.apps.GlobalConfigurationConfig",
     "django_recaptcha",
