@@ -29,7 +29,7 @@ class TestPrivilegeManager(PrivilegeManagerBaseTestCase,):
         privilege_response.json()["groups"].sort()
         self.assertDictEqual(
             privilege_response.json(),
-            {"groups": ["admin", "enterprise", "free", "hub", "pro"]},
+            {"groups": ["admin", "enterprise", "free", "pro"]},
         )
 
     def test_geosever_users_no_permission_response(self):
