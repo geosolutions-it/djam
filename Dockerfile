@@ -1,4 +1,4 @@
-FROM python:3.7.4-alpine
+FROM python:3.10.4-alpine
 ENV PYTHONUNBUFFERED 1
 
 RUN mkdir /djam
