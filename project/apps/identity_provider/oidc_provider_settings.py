@@ -79,7 +79,7 @@ class CustomScopeClaims(ScopeClaims):
 
         return dic
 
-    def companies(self):
+    def scope_companies(self):
         return {
             "companies": [x.company_name for x in self.user.company_users.all()],
         }
