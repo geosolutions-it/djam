@@ -74,3 +74,8 @@ class CustomScopeClaims(ScopeClaims):
         dic = {"email": self.user.email}
 
         return dic
+
+    def scope_companies(self):
+        return {
+            "companies": [x.company_name for x in self.user.company_users.all()],
+        }
