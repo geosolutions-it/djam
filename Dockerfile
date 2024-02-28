@@ -12,7 +12,7 @@ RUN apk add --no-cache --virtual build-deps \
 
 RUN apk add --no-cache postgresql
 RUN apk add --no-cache pcre
-RUN pip3 install -r djam/requirements-dev.txt
+RUN pip3 install -r djam/requirements.txt
 WORKDIR /djam/project
 
 RUN  chmod +x ./docker-entrypoint.sh

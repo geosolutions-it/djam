@@ -6,4 +6,3 @@ coverage-badge==1.0.1
 pep8==1.7.1
 flake8==3.7.9
 black
-gunicorn
