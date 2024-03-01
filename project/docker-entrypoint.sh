@@ -5,4 +5,4 @@ echo "running dramatiq"
 nohup python manage.py rundramatiq &
 echo "running django"
 cd /djam/project
-DJANGO_SETTINGS_MODULE=settings gunicorn wsgi
+DJANGO_SETTINGS_MODULE=settings gunicorn wsgi --bind=0.0.0.0:8000

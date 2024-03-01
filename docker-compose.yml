@@ -14,6 +14,7 @@ services:
     container_name: djam
     build:
       context: ./
+    image: djam:20240228
     restart: always
     env_file:
       - .env_docker
@@ -30,7 +31,7 @@ services:
       - DJAM_DB_NAME=djam
       - DJAM_DB_USER=djam
       - DJAM_DB_PASSWORD=djam
-      - DJAM_STATIC_ROOT=/djam/project/static_root
+      - DJAM_STATIC_ROOT=/mnt/volumes/statics/static/
       - DJAM_EMAIL_HOST_USER=${DJAM_EMAIL_HOST_USER}
       - DJAM_EMAIL_HOST_PASSWORD=${DJAM_EMAIL_HOST_PASSWORD}
       - DJAM_EMAIL_HOST=${DJAM_EMAIL_HOST}
