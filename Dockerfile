@@ -5,14 +5,14 @@ RUN mkdir /djam
 COPY ./ /djam/
 
 RUN apk add --no-cache --virtual build-deps \
-    postgresql-dev gcc musl-dev g++ linux-headers pcre pcre-dev \
+    postgresql-dev gcc musl-dev g++ linux-headers pcre pcre-dev curl \
     && pip install -r /djam/requirements.txt \
     && pip install uwsgi \
     && apk del build-deps
 
 RUN apk add --no-cache postgresql
 RUN apk add --no-cache pcre
-
+RUN pip3 install -r djam/requirements.txt
 WORKDIR /djam/project
 
 RUN  chmod +x ./docker-entrypoint.sh

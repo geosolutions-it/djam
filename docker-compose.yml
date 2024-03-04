@@ -1,54 +1,65 @@
 version: '3'
 services:
 
-    broker:
-      container_name: rabbitmq
-      image: 'rabbitmq:3-management'
+  rabbitmq:
+    container_name: rabbitmq
+    image: 'rabbitmq:3-management'
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
 
-    nginx:
-        container_name: nginx
-        build:
-          context: ./deployment/nginx/
-        restart: always
-        ports:
-        - "8080:80"
-        # - "80:80"
-        volumes:
-          - djam_static:/djam_static
-        # - ./log:/var/log/nginx
-        depends_on:
-          - server
-
-    server:
-        container_name: djam
-        build:
-          context: ./
-        restart: always
-        env_file:
-          - .env
-#        command: uwsgi  --emperor uwsgi.ini
-        # command: uwsgi --ini uwsgi.ini
-#        ports:
-#        - "8002:8000"
-        volumes:
-          - djam_static:/djam/project/static
-        environment:
-          - DJAM_PROJECT_ENVIRONMENT=dev
-          - DJAM_RABBITMQ_HOST=broker
-          - DJAM_RABBITMQ_PORT=5672
-          - DJAM_DB_HOST=${DJAM_DB_HOST}
-          - DJAM_DB_PORT=${DJAM_DB_PORT}
-          - DJAM_DB_NAME=${DJAM_DB_NAME}
-          - DJAM_DB_USER=${DJAM_DB_USER}
-          - DJAM_DB_PASSWORD=${DJAM_DB_PASSWORD}
-          - DJAM_EMAIL_HOST_USER=${DJAM_EMAIL_HOST_USER}
-          - DJAM_EMAIL_HOST_PASSWORD=${DJAM_EMAIL_HOST_PASSWORD}
-          - DJAM_EMAIL_HOST=${DJAM_EMAIL_HOST}
-          - DJAM_EMAIL_SENDER=${DJAM_EMAIL_SENDER}
-          - DJAM_EMAIL_PORT=${DJAM_EMAIL_PORT}
-          - DJAM_SECRET_KEY=${DJAM_SECRET_KEY}
-        depends_on:
-          - broker
-
+  djam:
+    container_name: djam
+    build:
+      context: ./
+    image: djam:20240228
+    restart: always
+    env_file:
+      - .env_docker
+    ports:
+    - "8001:8000"
+    volumes:
+      - djam_static:/djam/project/static
+    environment:
+      - DJAM_PROJECT_ENVIRONMENT=dev
+      - DJAM_RABBITMQ_HOST=rabbitmq
+      - DJAM_RABBITMQ_PORT=5672
+      - DJAM_DB_HOST=db
+      - DJAM_DB_PORT=5432
+      - DJAM_DB_NAME=djam
+      - DJAM_DB_USER=djam
+      - DJAM_DB_PASSWORD=djam
+      - DJAM_STATIC_ROOT=/mnt/volumes/statics/static/
+      - DJAM_EMAIL_HOST_USER=${DJAM_EMAIL_HOST_USER}
+      - DJAM_EMAIL_HOST_PASSWORD=${DJAM_EMAIL_HOST_PASSWORD}
+      - DJAM_EMAIL_HOST=${DJAM_EMAIL_HOST}
+      - DJAM_EMAIL_SENDER=${DJAM_EMAIL_SENDER}
+      - DJAM_EMAIL_PORT=${DJAM_EMAIL_PORT}
+      - DJAM_SECRET_KEY=${DJAM_SECRET_KEY}
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+  db:
+    container_name: db
+    restart: always
+    build:
+      context: ./deployment/postgres/
+    env_file:
+      - .env_docker
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+    healthcheck:
+      test: "pg_isready -d postgres -U postgres"
+              
 volumes:
     djam_static:
+    db:
+      name: djam_db
+    rabbitmq:
+      name: djam_rabbitmq

@@ -23,7 +23,6 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 ("navbar_redirect_url", models.URLField()),
-                ("map_redirect_url", models.URLField()),
             ],
             options={"verbose_name_plural": "Configuration",},
         ),

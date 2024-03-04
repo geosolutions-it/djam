@@ -48,7 +48,6 @@ class SingletonModel(models.Model):
 
 class GlobalConfiguration(SingletonModel):
     navbar_redirect_url = models.URLField()
-    map_redirect_url = models.URLField()
 
     class Meta:
         verbose_name_plural = "Configuration"
