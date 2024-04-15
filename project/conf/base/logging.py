@@ -2,7 +2,7 @@ import os
 from conf.base.base import BASE_DIR
 
 
-LOG_LEVEL = os.getenv("DJANGO_LOG_LEVEL", "INFO").upper()
+LOG_LEVEL = "DEBUG"# os.getenv("DJANGO_LOG_LEVEL", "INFO").upper()
 
 
 LOGGING = {

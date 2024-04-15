@@ -1,8 +1,8 @@
 version: '3'
 services:
 
-  rabbitmq:
-    container_name: rabbitmq
+  rabbitmq_djam:
+    container_name: rabbitmq_djam
     image: 'rabbitmq:3-management'
     healthcheck:
       test: rabbitmq-diagnostics -q ping
@@ -14,7 +14,7 @@ services:
     container_name: djam
     build:
       context: ./
-    image: djam:20240321
+    image: djam:20240415
     restart: always
     env_file:
       - .env_docker
@@ -38,8 +38,9 @@ services:
       - DJAM_EMAIL_SENDER=${DJAM_EMAIL_SENDER}
       - DJAM_EMAIL_PORT=${DJAM_EMAIL_PORT}
       - DJAM_SECRET_KEY=${DJAM_SECRET_KEY}
+      - STATIC_URL="http://geonode.local/static/"
     depends_on:
-      rabbitmq:
+      rabbitmq_djam:
         condition: service_healthy
       db:
         condition: service_healthy
@@ -61,5 +62,5 @@ volumes:
     djam_static:
     db:
       name: djam_db
-    rabbitmq:
+    rabbitmq_djam:
       name: djam_rabbitmq
