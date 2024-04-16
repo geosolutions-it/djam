@@ -23,7 +23,7 @@ services:
     volumes:
       - djam_static:/djam/project/static
     environment:
-      - DJAM_PROJECT_ENVIRONMENT=dev
+      - DJAM_PROJECT_ENVIRONMENT=prod
       - DJAM_RABBITMQ_HOST=rabbitmq_djam
       - DJAM_RABBITMQ_PORT=5672
       - DJAM_DB_HOST=db
@@ -38,7 +38,6 @@ services:
       - DJAM_EMAIL_SENDER=${DJAM_EMAIL_SENDER}
       - DJAM_EMAIL_PORT=${DJAM_EMAIL_PORT}
       - DJAM_SECRET_KEY=${DJAM_SECRET_KEY}
-      - STATIC_URL="http://geonode.local/static/"
     depends_on:
       rabbitmq_djam:
         condition: service_healthy

@@ -25,7 +25,11 @@
             <h1>Create your account</h1>
             <form role="form" method="post" action="{% url 'register' %}">
                 {% csrf_token %}
-
+                <div class="error-message">
+                    {% for key, msg in errors.items %}
+                    {{ key }}: {{ msg }}
+                    {% endfor %}
+                </div>
 
                 <input type="text" id="id_first_name" name="first_name" required placeholder="Enter your first name">
                 <div class="error-message">
