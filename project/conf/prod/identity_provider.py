@@ -1,3 +1,3 @@
 REQUIRE_SECURE_HTTP_FOR_GEOSERVER_INTROSPECTION = True
 
-SITEURL = "http://djam.local/"
+SITEURL = os.getenv("SITEURL", "http://djam.local/")
