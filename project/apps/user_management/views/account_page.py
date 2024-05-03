@@ -1,6 +1,4 @@
 import logging
-from apps.billing.models import Subscription
-from apps.administration.models import CompanySubscription, IndividualSubscription
 from apps.identity_provider.models import ApiKey
 
 from django.conf import settings
@@ -14,8 +12,6 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views.generic import UpdateView, DetailView, RedirectView
 from apps.user_management.forms import UserAccountForm
-from apps.privilege_manager.models import Group
-from django.db.models import Q
 
 logger = logging.getLogger(__name__)
 
@@ -74,12 +70,6 @@ class AccountEditView(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
         context["fix_error"] = self.request.GET.get("fix_error")
         context["api_key"] = ApiKey.objects.filter(user=context["object"]).first()
         context["success"] = self.request.GET.get("success")
-        context["individual_subscriptions"] = IndividualSubscription.objects.filter(
-            user=context["object"]
-        ).first()
-        context["company_subscriptions"] = CompanySubscription.objects.filter(
-            company__users=context["object"]
-        )
         return context
 
     def form_valid(self, form):

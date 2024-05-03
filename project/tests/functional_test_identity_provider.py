@@ -8,15 +8,12 @@ from oidc_provider import models as oidc_models
 
 from apps.identity_provider import models
 from apps.privilege_manager.models import Group
-from apps.billing.models import Company
-from apps.administration.models import IndividualSubscription
 
 from tests.factories.identity_provider_factory import (
     OIDCConfidentialClientFactory,
     ApiKeyFactory,
 )
 from tests.factories.user_management_factory import UserFactory
-from apps.billing.utils import subscription_manager
 
 
 class IdentityProviderBaseTestCase(TestCase):
@@ -371,52 +368,6 @@ class TestAuthKey(IdentityProviderBaseTestCase):
         self.assertIsNone(
             authkey_response.json().get("groups"),
             "/authkey/introspect with invalid session_token: groups is not None",
-        )
-
-    def test_validate_valid_session_key_user_with_multiple_groups(self):
-        web_client = Client()
-        user = UserFactory()
-
-        # assign user to multiple groups
-        pro = Group.objects.get(name="pro")
-        ent = Group.objects.get(name="enterprise")
-
-        IndividualSubscription.objects.filter(user=user).update(groups=pro)
-        _company, _ = Company.objects.get_or_create(company_name="Foo")
-        _company.users.add(user)
-
-        subscription_manager.create_company_subscription(groups=ent, company=_company)
-        # OIDC login
-        session_token = self.openid_login(web_client, user)
-        # Introspect AuthKey
-        authkey_response = self.authkey_introspect(web_client, session_token)
-
-        self.assertEqual(
-            authkey_response.status_code,
-            200,
-            "/authkey/introspect: response status code is not 200",
-        )
-        self.assertIn(
-            "username",
-            authkey_response.json(),
-            "/authkey/introspect: username not in JSON response",
-        )
-        self.assertIn(
-            "groups",
-            authkey_response.json(),
-            "/authkey/introspect: groups not in JSON response",
-        )
-        self.assertEqual(
-            authkey_response.json().get("username"),
-            user.email,
-            "/authkey/introspect: returned username is not equal user's email",
-        )
-        # Watch out! Geoserver does not understand a list in classic approach, so it will be in ['free,pro,enterprise'] format!!
-        # 20211116 - endpoint will return only the hight value group
-        self.assertIn(
-            "enterprise",
-            authkey_response.json().get("groups")[0],
-            "/authkey/introspect: 'enterprise' not in user's groups",
         )
 
     def test_validate_valid_api_key(self):

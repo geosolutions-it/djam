@@ -4,7 +4,6 @@ from django.db.models import Q
 from oidc_provider.lib.claims import ScopeClaims
 
 from apps.privilege_manager.models import Group
-from apps.billing.models import Subscription
 
 
 class CustomScopeClaims(ScopeClaims):
@@ -74,8 +73,3 @@ class CustomScopeClaims(ScopeClaims):
         dic = {"email": self.user.email}
 
         return dic
-
-    def scope_companies(self):
-        return {
-            "companies": [x.company_name for x in self.user.company_users.all()],
-        }
