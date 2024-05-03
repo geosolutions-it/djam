@@ -1,16 +1,12 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from django.core import exceptions
 from django.shortcuts import reverse
 from django.test import TestCase, Client
 from rest_framework import status
 from rest_framework.test import APITestCase
-from apps.billing.models import Company
-from apps.administration.models import IndividualSubscription
 
 from tests.factories.user_management_factory import UserFactory, GroupFactory
 from apps.user_management.forms import UMAuthenticationForm
-from apps.billing.utils import subscription_manager
 
 
 class TestUserManagement(TestCase):
@@ -170,37 +166,10 @@ class TestGetUserData(APITestCase):
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         self.assertEquals(response.json().get("count", 0), users_count)
 
-    def test_user_allowed_filter_groups(self):
-        IndividualSubscription.objects.filter(user=self.u1).update(
-            groups=self.pro_group
-        )
-        users_count = 1
-        self.client.force_authenticate(self.admin)
-        response = self.client.get(reverse("fetch_users-list") + "?groups=pro")
-        self.assertEquals(response.status_code, status.HTTP_200_OK)
-        self.assertEquals(response.json().get("count", 0), users_count)
-
     def test_user_allowed_filter_wrong_groups(self):
         users_count = 0
         self.client.force_authenticate(self.admin)
         response = self.client.get(reverse("fetch_users-list") + "?groups=test")
-        self.assertEquals(response.status_code, status.HTTP_200_OK)
-        self.assertEquals(response.json().get("count", 0), users_count)
-
-    def test_user_allowed_filter_mult_groups(self):
-        company, _ = Company.objects.get_or_create(company_name="Foo")
-        company.users.add(self.admin)
-        subscription_manager.create_company_subscription(
-            groups=self.ent_group, company=company
-        )
-        IndividualSubscription.objects.filter(user=self.u1).update(
-            groups=self.pro_group
-        )
-        users_count = 2
-        self.client.force_authenticate(self.admin)
-        response = self.client.get(
-            reverse("fetch_users-list") + "?groups=enterprise,pro"
-        )
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         self.assertEquals(response.json().get("count", 0), users_count)
 

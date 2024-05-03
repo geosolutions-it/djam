@@ -3,7 +3,6 @@ import factory
 from django.contrib.auth import get_user_model
 
 from apps.privilege_manager.models import Group
-from apps.billing.models import Company
 
 
 class AdminFactory(factory.DjangoModelFactory):
@@ -37,10 +36,3 @@ class GroupFactory(factory.DjangoModelFactory):
         model = Group
 
     name = factory.Faker("name")
-
-
-class CompanyFactory(factory.DjangoModelFactory):
-    class Meta:
-        model = Company
-
-    company_name = factory.Faker("name")
