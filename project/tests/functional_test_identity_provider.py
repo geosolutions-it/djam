@@ -13,7 +13,7 @@ from tests.factories.identity_provider_factory import (
     OIDCConfidentialClientFactory,
     ApiKeyFactory,
 )
-from tests.factories.user_management_factory import UserFactory
+from tests.factories.user_management_factory import TeamFactory, UserFactory
 
 
 class IdentityProviderBaseTestCase(TestCase):
@@ -308,6 +308,9 @@ class TestAuthKey(IdentityProviderBaseTestCase):
     def test_validate_valid_session_key(self):
         web_client = Client()
         user = UserFactory()
+        team = TeamFactory()
+        user.team.add(team)
+        user.save()
 
         # OIDC login
         session_token = self.openid_login(web_client, user)
@@ -335,7 +338,7 @@ class TestAuthKey(IdentityProviderBaseTestCase):
             "/authkey/introspect: returned username is not equal user's email",
         )
         self.assertEqual(
-            ["free"],
+            [team.name],
             authkey_response.json().get("groups"),
             "/authkey/introspect: 'free' not in user's groups",
         )
@@ -373,6 +376,9 @@ class TestAuthKey(IdentityProviderBaseTestCase):
     def test_validate_valid_api_key(self):
         web_client = Client()
         user = UserFactory()
+        team = TeamFactory()
+        user.team.add(team)
+        user.save()
         api_key = ApiKeyFactory(user=user)
 
         # Introspect API key
@@ -399,7 +405,7 @@ class TestAuthKey(IdentityProviderBaseTestCase):
             "/authkey/introspect API key: returned username is not equal user's email",
         )
         self.assertIn(
-            "free",
+            team.name,
             apikey_response.json().get("groups")[0],
             "/authkey/introspect API key: 'free' not in user's groups",
         )
@@ -407,7 +413,7 @@ class TestAuthKey(IdentityProviderBaseTestCase):
         apikey_response = self.authkey_introspect(web_client, api_key.wms_key)
 
         self.assertEqual(apikey_response.status_code, 200)
-        self.assertIn("free_wms", apikey_response.json().get("groups")[0])
+        self.assertIn(f"{team.name}_wms", apikey_response.json().get("groups")[0])
 
     def test_validate_revoked_api_key(self):
         web_client = Client()
@@ -444,6 +450,9 @@ class TestAuthKey(IdentityProviderBaseTestCase):
     def test_validate_valid_api_key_with_existing_session_key(self):
         web_client = Client()
         user = UserFactory()
+        team = TeamFactory()
+        user.team.add(team)
+        user.save()
         api_key = ApiKeyFactory(user=user)
 
         # OIDC login
@@ -472,7 +481,7 @@ class TestAuthKey(IdentityProviderBaseTestCase):
             "/authkey/introspect API key with existing SessionKey: returned username is not equal user's email",
         )
         self.assertIn(
-            "free",
+            team.name,
             apikey_response.json().get("groups")[0],
             "/authkey/introspect API key with existing SessionKey: 'free' not in user's groups",
         )
@@ -480,6 +489,9 @@ class TestAuthKey(IdentityProviderBaseTestCase):
     def test_validate_valid_session_key_with_existing_api_key(self):
         web_client = Client()
         user = UserFactory()
+        team = TeamFactory()
+        user.team.add(team)
+        user.save()
         api_key = ApiKeyFactory(user=user)
 
         # OIDC login
@@ -508,7 +520,7 @@ class TestAuthKey(IdentityProviderBaseTestCase):
             "/authkey/introspect Session key with existing API Key: returned username is not equal user's email",
         )
         self.assertEqual(
-            ["free"],
+            [team.name],
             authkey_response.json().get("groups"),
             "/authkey/introspect Session key with existing API Key: 'free' not in user's groups",
         )
@@ -516,6 +528,9 @@ class TestAuthKey(IdentityProviderBaseTestCase):
     def test_validate_invalid_session_key_with_existing_api_key(self):
         web_client = Client()
         user = UserFactory()
+        team = TeamFactory()
+        user.team.add(team)
+        user.save()
         api_key = ApiKeyFactory(user=user)
 
         # Introspect AuthKey
@@ -595,6 +610,8 @@ class TestUserCredentialsValidation(TestCase):
 
         user = UserFactory(username="foo@bar.com")
         user.set_password("some_password")
+        team = TeamFactory()
+        user.team.add(team)
         user.save()
 
         base64_username = base64.b64encode(b"foo@bar.com")

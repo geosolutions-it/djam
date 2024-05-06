@@ -5,7 +5,7 @@ from django.test import TestCase, Client
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from tests.factories.user_management_factory import UserFactory, GroupFactory
+from tests.factories.user_management_factory import UserFactory, TeamFactory
 from apps.user_management.forms import UMAuthenticationForm
 
 
@@ -144,9 +144,9 @@ class TestGetUserData(APITestCase):
         self.user = UserFactory(username="test_user")
         self.u1 = UserFactory(username="u1", last_login="2020-05-21T07:59:26.324Z")
         self.u2 = UserFactory(username="u2", last_login="2020-05-11T07:59:26.342Z")
-        self.pro_group = GroupFactory(name="pro")
-        self.ent_group = GroupFactory(name="enterprise")
-        self.free_group = GroupFactory(name="free")
+        self.pro_group = TeamFactory(name="pro")
+        self.ent_group = TeamFactory(name="enterprise")
+        self.free_group = TeamFactory(name="free")
         # self.free_group.users.add(*[self.user, self.u1, self.u2, self.admin])
         # self.pro_group.users.add(self.admin)
         # self.ent_group.users.add(self.u1)
@@ -169,7 +169,7 @@ class TestGetUserData(APITestCase):
     def test_user_allowed_filter_wrong_groups(self):
         users_count = 0
         self.client.force_authenticate(self.admin)
-        response = self.client.get(reverse("fetch_users-list") + "?groups=test")
+        response = self.client.get(reverse("fetch_users-list") + "?teams=test")
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         self.assertEquals(response.json().get("count", 0), users_count)
 

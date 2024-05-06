@@ -11,7 +11,7 @@ class UsersFilterSet(django_filters.FilterSet):
     newer_equal = django_filters.IsoDateTimeFilter(
         lookup_expr="gte", field_name="last_login"
     )
-    groups = django_filters.BaseInFilter(method="get_by_group")
+    teams = django_filters.BaseInFilter(method="get_by_team")
     email_confirmation = django_filters.BooleanFilter(field_name="email_confirmed")
 
     class Meta:
@@ -21,9 +21,10 @@ class UsersFilterSet(django_filters.FilterSet):
             "older_equal",
             "newer",
             "newer_equal",
-            "groups",
+            "teams",
             "email_confirmation",
         ]
 
-    def get_by_group(self, queryset, field_name, value):
-        return queryset.distinct()
+    def get_by_team(self, queryset, field_name, value):
+        return queryset.filter(team__name__in=value)
+

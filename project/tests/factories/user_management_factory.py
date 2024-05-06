@@ -31,7 +31,7 @@ class UserFactory(factory.DjangoModelFactory):
     is_staff = False
 
 
-class GroupFactory(factory.DjangoModelFactory):
+class TeamFactory(factory.DjangoModelFactory):
     class Meta:
         model = Team
 

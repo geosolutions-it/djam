@@ -8,7 +8,7 @@ from django.contrib import admin
 from apps.identity_provider.models import ApiKey
 from apps.privilege_manager.admin import GroupAdmin
 from apps.privilege_manager.models import Team
-from tests import UserFactory, ApiKeyFactory, GroupFactory, get_user_model
+from tests import UserFactory, ApiKeyFactory, TeamFactory, get_user_model
 
 
 class TestAdminGroup(TestCase):
@@ -116,7 +116,7 @@ class TestAdminGroup(TestCase):
         a2 = ApiKeyFactory(user=u2)
         a3 = ApiKeyFactory(user=u3)
 
-        g = GroupFactory(name="enterprise")
+        g = TeamFactory(name="enterprise")
         return {
             "group": g,
             "users": [{"u": u1, "ak": a1}, {"u": u2, "ak": a2}, {"u": u3, "ak": a3}],

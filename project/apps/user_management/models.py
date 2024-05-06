@@ -136,7 +136,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         return reverse("user_account_edit", kwargs={"id": self.pk})
 
     def get_team(self):
-        return self.team.all()
+        team = self.team.first()
+        return team.name if team else None
 
     def __str__(self):
         return self.email
