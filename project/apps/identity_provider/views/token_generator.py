@@ -1,7 +1,7 @@
 import apps.user_management.models
 from django.http.response import JsonResponse
 from apps.identity_provider.models import ApiKey
-from apps.privilege_manager.models import Group
+from apps.privilege_manager.models import Team
 from rest_framework import views
 from datetime import datetime
 from apps.user_management.models import User

@@ -47,7 +47,6 @@ class UMUserCreationForm(UserCreationForm):
             "secondary_email",
             "password1",
             "password2",
-            "subscription",
         )
 
 

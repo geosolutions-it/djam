@@ -20,6 +20,7 @@ from django.db.models import Q
 from apps.user_management.utils import random_string
 from apps.user_management.model_managers import UserManager
 from apps.user_management.tasks import send_user_notification_email
+from apps.privilege_manager.models import Team
 
 
 logger = logging.getLogger(__name__)
@@ -88,10 +89,16 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
     legacy_user_id = models.IntegerField(null=True, blank=False)
-    subscription = models.BooleanField(blank=True, null=True)
-
-    company_name = models.CharField(
-        max_length=250, blank=True, null=True, help_text=_("Associated company name")
+    
+    team = models.ManyToManyField(
+        Team,
+        verbose_name=_("teams"),
+        blank=True,
+        help_text=_(
+            "The teams this user belongs to. A user will get all permissions "
+            "granted to each of their teams."
+        ),
+        related_name="team_set"
     )
 
     objects = UserManager()

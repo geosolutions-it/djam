@@ -1,4 +1,4 @@
-from apps.privilege_manager.models import Group
+from apps.privilege_manager.models import Team
 from django.test import TestCase
 from apps.user_management.models import User, UserActivationCode
 

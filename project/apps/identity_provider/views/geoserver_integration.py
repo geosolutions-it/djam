@@ -15,7 +15,7 @@ from django.http import JsonResponse
 from oidc_provider.views import TokenIntrospectionView
 from oidc_provider.lib.endpoints.introspection import TokenIntrospectionEndpoint
 from apps.identity_provider.models import Session, ApiKey
-from apps.privilege_manager.models import Group
+from apps.privilege_manager.models import Team
 from apps.user_management.models import User
 
 

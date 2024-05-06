@@ -7,7 +7,7 @@ from django.shortcuts import reverse
 from oidc_provider import models as oidc_models
 
 from apps.identity_provider import models
-from apps.privilege_manager.models import Group
+from apps.privilege_manager.models import Team
 
 from tests.factories.identity_provider_factory import (
     OIDCConfidentialClientFactory,
