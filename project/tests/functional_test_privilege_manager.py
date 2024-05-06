@@ -94,7 +94,7 @@ class TestPrivilegeManager(PrivilegeManagerBaseTestCase,):
 
         # test when the Client has preventions of user subscription
         prevention = OpenIdLoginPreventionFactory.create(oidc_client=oidc_client)
-        prevention.groups.set([GroupFactory(name=user.get_group()).id])
+        prevention.groups.set([GroupFactory(name=user.get_team()).id])
         has_perm, message = has_login_permission(user, oidc_client.client_id)
         self.assertEqual(
             message,

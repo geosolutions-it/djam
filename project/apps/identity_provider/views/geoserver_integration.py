@@ -120,7 +120,7 @@ class GeoserverAuthKeyAndApiKeyIntrospection(GeoserverIntrospection, views.APIVi
             )
 
         user = get_user_model().objects.get(id=user_id)
-        user_groups_names = [user.get_group()]
+        user_groups_names = [user.get_team()]
 
         return Response({"username": user.username, "groups": user_groups_names,})
 
@@ -133,7 +133,7 @@ class GeoserverAuthKeyAndApiKeyIntrospection(GeoserverIntrospection, views.APIVi
             raise ValidationError(f"API key {api_key.key} is revoked.")
 
         user = api_key.user
-        user_groups_names = [user.get_group()]
+        user_groups_names = [user.get_team()]
 
         if str(api_key.wms_key) == api_key_uuid:
             # add "_wms" suffix to the group names
@@ -176,7 +176,7 @@ class GeoserverCredentialsIntrospection(GeoserverIntrospection, views.APIView):
             )
 
         if user.check_password(password):
-            user_groups_names = [user.get_group()]
+            user_groups_names = [user.get_team()]
 
             return Response({"username": user.username, "groups": user_groups_names,})
         else:

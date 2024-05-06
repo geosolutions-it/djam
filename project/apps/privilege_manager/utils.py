@@ -24,7 +24,7 @@ def has_login_permission(user, oidc_client_id):
     all_permission_groups = Team.objects.all()
 
     groups_allowed = all_permission_groups.difference(preventions.teams.all())
-    user_group = user.get_group()
+    user_group = user.get_team()
 
     has_permission = False
     if user_group in groups_allowed.values_list("name", flat=True):

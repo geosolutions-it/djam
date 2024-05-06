@@ -90,7 +90,7 @@ class ApiKeyManager(views.APIView):
         )
 
     def _user_is_authorized(self, user):
-        group = user.get_group()
+        group = user.get_team()
         if group:
             if group == "admin" or user.is_superuser:
                 return True

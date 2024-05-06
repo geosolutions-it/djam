@@ -26,7 +26,7 @@ class CustomScopeClaims(ScopeClaims):
     )
 
     def scope_groups(self):
-        dic = {"groups": [self.user.get_group()]}
+        dic = {"groups": [self.user.get_team()]}
 
         return dic
 

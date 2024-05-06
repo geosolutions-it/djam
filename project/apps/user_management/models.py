@@ -135,8 +135,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_absolute_url(self):
         return reverse("user_account_edit", kwargs={"id": self.pk})
 
-    def get_group(self):
-        return None
+    def get_team(self):
+        return self.team.all()
 
     def __str__(self):
         return self.email
