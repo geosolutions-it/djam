@@ -2,7 +2,7 @@ import factory
 
 from django.contrib.auth import get_user_model
 
-from apps.privilege_manager.models import Group
+from apps.privilege_manager.models import Team
 
 
 class AdminFactory(factory.DjangoModelFactory):
@@ -31,8 +31,8 @@ class UserFactory(factory.DjangoModelFactory):
     is_staff = False
 
 
-class GroupFactory(factory.DjangoModelFactory):
+class TeamFactory(factory.DjangoModelFactory):
     class Meta:
-        model = Group
+        model = Team
 
     name = factory.Faker("name")

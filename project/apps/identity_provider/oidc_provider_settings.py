@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from django.db.models import Q
 from oidc_provider.lib.claims import ScopeClaims
 
-from apps.privilege_manager.models import Group
+from apps.privilege_manager.models import Team
 
 
 class CustomScopeClaims(ScopeClaims):
@@ -26,7 +26,7 @@ class CustomScopeClaims(ScopeClaims):
     )
 
     def scope_groups(self):
-        dic = {"groups": [self.user.get_group()]}
+        dic = {"groups": [self.user.get_team()]}
 
         return dic
 

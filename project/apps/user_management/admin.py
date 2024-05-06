@@ -25,11 +25,13 @@ class IPUserAdmin(UserAdmin):
         ("Personal info", {"fields": ("first_name", "last_name")}),
         ("Permissions", {"fields": ("is_active", "is_staff", "is_superuser")}),
         ("Important dates", {"fields": ("last_login", "date_joined")}),
+        ("Teams", {"fields": ("team",)}),
     )
 
     add_fieldsets = (
         (None, {"classes": ("wide",), "fields": ("email", "password1", "password2",),}),
     )
-
+    
+    filter_horizontal = ('team',)
 
 admin.site.login_form = UMAdminAuthenticationForm

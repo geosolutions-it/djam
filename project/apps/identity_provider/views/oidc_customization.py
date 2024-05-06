@@ -74,6 +74,10 @@ class AuthorizeViewWithSessionKey(AuthorizeView):
             re_code = re.search(
                 "code=(\w+)&*?", response.headers.get("Location", "")[1]
             )
+            if re_code is None:
+                re_code = re.search(
+                    "code=(\w+)&*?", response.headers.get("Location", "")
+                )
 
             if re_code is not None:
                 code = re_code.groups()[0]
@@ -97,13 +101,14 @@ class StatelessAuthorizeView(AuthorizeViewWithSessionKey):
 
         if response.has_header("location"):
             # check if state param is empty
-            if re.search("&state=$", response.headers["Location"][1]) or re.search(
-                "&state=&", response.headers["Location"][1]
+            location_header = response.headers["Location"]
+            if re.search("&state=$", location_header) or re.search(
+                "&state=&", response.location_header
             ):
                 # remove empty state from redirect url
                 response.headers["Location"] = (
                     "Location",
-                    response.headers["Location"][1].replace("&state=", ""),
+                    location_header.replace("&state=", ""),
                 )
 
         return response

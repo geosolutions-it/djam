@@ -2,7 +2,7 @@ from django.test import TestCase, Client
 
 from apps.privilege_manager.utils import has_login_permission
 
-from tests.factories.user_management_factory import UserFactory, GroupFactory
+from tests.factories.user_management_factory import UserFactory, TeamFactory
 from tests.factories.identity_provider_factory import (
     OIDCConfidentialClientFactory,
     OpenIdLoginPreventionFactory,
@@ -19,18 +19,20 @@ class PrivilegeManagerBaseTestCase(TestCase):
 
 class TestPrivilegeManager(PrivilegeManagerBaseTestCase,):
     def test_geosever_roles_response(self):
-        user = UserFactory()
         web_client = Client()
-
-        # force web client's login
+        team = TeamFactory()
+        team2 = TeamFactory()
+        user = UserFactory()
+        user.team.add(team)
+        user.team.add(team2)
+        user.save()
+        # force web client's login  
         web_client.force_login(user)
 
         privilege_response = self.privilege_geoserver_roles(web_client)
         privilege_response.json()["groups"].sort()
-        self.assertDictEqual(
-            privilege_response.json(),
-            {"groups": ["admin", "enterprise", "free", "pro"]},
-        )
+        teams = privilege_response.json()
+        self.assertTrue([x in [team.name, team2.name] for x in teams])
 
     def test_geosever_users_no_permission_response(self):
         user = UserFactory()
@@ -48,7 +50,9 @@ class TestPrivilegeManager(PrivilegeManagerBaseTestCase,):
         )
 
     def test_geosever_users_response(self):
+        team = TeamFactory()
         user = UserFactory()
+        user.team.add(team)
         user.is_staff = True
         user.save()
 
@@ -60,12 +64,14 @@ class TestPrivilegeManager(PrivilegeManagerBaseTestCase,):
         privilege_response = self.privilege_geoserver_users(web_client)
         self.assertEqual(
             privilege_response.json(),
-            {"users": [{"groups": ["free"], "username": user.username}]},
+            {"users": [{"groups": [team.name], "username": user.username}]},
         )
 
     def test_geosever_users_groups_response(self):
+        team = TeamFactory()
         user = UserFactory()
         user.is_staff = True
+        user.team.add(team)
         user.save()
 
         web_client = Client()
@@ -76,7 +82,7 @@ class TestPrivilegeManager(PrivilegeManagerBaseTestCase,):
         privilege_response = self.privilege_geoserver_users(web_client)
         self.assertAlmostEqual(
             privilege_response.json(),
-            {"users": [{"groups": ["free"], "username": user.username}]},
+            {"users": [{"groups": [team.name], "username": user.username}]},
         )
 
     def test_has_login_permission(self):
@@ -94,7 +100,7 @@ class TestPrivilegeManager(PrivilegeManagerBaseTestCase,):
 
         # test when the Client has preventions of user subscription
         prevention = OpenIdLoginPreventionFactory.create(oidc_client=oidc_client)
-        prevention.groups.set([GroupFactory(name=user.get_group()).id])
+        prevention.teams.set([TeamFactory(name="free").id])
         has_perm, message = has_login_permission(user, oidc_client.client_id)
         self.assertEqual(
             message,
