@@ -20,7 +20,7 @@ from django.db.models import Q
 from apps.user_management.utils import random_string
 from apps.user_management.model_managers import UserManager
 from apps.user_management.tasks import send_user_notification_email
-from apps.privilege_manager.models import Team
+from apps.privilege_manager.models import Team, Role
 
 
 logger = logging.getLogger(__name__)
@@ -100,6 +100,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         ),
         related_name="team_set"
     )
+
+    role = models.ManyToManyField(Role, blank=True)
 
     objects = UserManager()
 

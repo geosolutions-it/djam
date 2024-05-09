@@ -1,13 +1,13 @@
 from __future__ import unicode_literals
 
-import django.contrib.auth.validators
 import logging
-from enum import Enum
 
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 from django.contrib.auth.models import Group
 from oidc_provider.models import Client
+
+from apps.authorizations.models import Role
 
 
 logger = logging.getLogger(__name__)
@@ -17,6 +17,8 @@ class Team(Group):
     """
     v1 version of AuthZ Group model of Djam - for MVP only RBAC is supported
     """
+
+    role = models.ManyToManyField(Role, blank=True)
 
     def __str__(self):
         return self.name
