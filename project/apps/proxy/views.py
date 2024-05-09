@@ -1,5 +1,5 @@
 from urllib.parse import urlparse
-from django.http import Http404
+from django.http import Http404, HttpResponseForbidden
 from apps.authorizations.models import AccessRule
 from revproxy.views import ProxyView
 
@@ -11,7 +11,7 @@ def proxy_view(request, request_path):
     '''
     # closing access to anonymous users
     if request.user and request.user.is_anonymous:
-        raise Http404
+        return HttpResponseForbidden("The user does not have enough permissions to see the page")
     
     # getting the URL as object
     rule_path = urlparse(request.get_full_path_info())
@@ -29,13 +29,13 @@ def proxy_view(request, request_path):
 
     # if the rule does not exists for the user, the request is denined
     if not rules.exists():
-        raise Http404
+        return HttpResponseForbidden("The user does not have enough permissions to see the page")
 
     # if exists, we can retrieve the upstream url to be proxed to
     proxy_to_url = rules.first().resource.url
     
     # if the url is not set, an error is raised
-    if proxy_to_url is None:
+    if not proxy_to_url:
         raise Exception("Cannot prox to a url without the url set in the resorce")
     
     # if everything is fine, the proxy view is prepared

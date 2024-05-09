@@ -22,7 +22,7 @@ from apps.proxy.views import proxy_view
 
 
 urlpatterns = [
-    re_path(r'service/(?P<request_path>.*)', proxy_view),
+    re_path(r'service/(?P<request_path>.*)', proxy_view, name="proxy_view"),
 
     # ---- django.contrib.auth.urls.views ----
     path(
