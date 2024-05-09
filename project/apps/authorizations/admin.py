@@ -31,8 +31,9 @@ class RoleForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(RoleForm, self).__init__(*args, **kwargs)
         if self.instance:
-            self.fields["user"].initial = self.instance.user_set.all()
-            self.fields["team"].initial = self.instance.team_set.all()
+            is_insert = self.instance.pk is None
+            self.fields["user"].initial = [] if is_insert else self.instance.user_set.all() 
+            self.fields["team"].initial = [] if is_insert else self.instance.team_set.all() 
 
     def save(self, commit: bool = ...) -> Any:
         self.instance.user_set.add(*[u.id for u in self.cleaned_data['user']])
