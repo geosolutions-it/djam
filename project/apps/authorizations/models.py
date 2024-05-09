@@ -1,7 +1,5 @@
 from django.db import models
 
-from apps.privilege_manager.models import Team
-
 # Create your models here.
 
 class Resource(models.Model):
@@ -20,8 +18,9 @@ class Resource(models.Model):
 
 class Role(models.Model):
     name = models.CharField(verbose_name="Name")
-    user = models.ManyToManyField("user_management.User", blank=True)
-    team = models.ManyToManyField(Team, blank=True)
+
+    def __str__(self):
+        return self.name
 
 
 class AccessRule(models.Model):

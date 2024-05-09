@@ -11,3 +11,5 @@ class GroupAdmin(admin.ModelAdmin):
     list_display = ("name",)
     ordering = ("name",)
     search_fields = ("name",)
+
+    filter_horizontal = ('role',)

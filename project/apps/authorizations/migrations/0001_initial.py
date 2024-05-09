@@ -44,14 +44,6 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 ("name", models.CharField(verbose_name="Name")),
-                (
-                    "team",
-                    models.ManyToManyField(blank=True, to="privilege_manager.team"),
-                ),
-                (
-                    "user",
-                    models.ManyToManyField(blank=True, to=settings.AUTH_USER_MODEL),
-                ),
             ],
         ),
         migrations.CreateModel(
