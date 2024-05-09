@@ -45,10 +45,14 @@ class RoleForm(forms.ModelForm):
             )
 
     def save(self, commit: bool = ...) -> Any:
-        self.instance.user_set.add(*[u.id for u in self.cleaned_data["user"]])
-        self.instance.team_set.add(*[u.id for u in self.cleaned_data["team"]])
-        return super().save(commit=commit)
+        instance = super().save(commit=True)
+        return instance
 
+    def save_m2m(self):
+        self.instance.user_set.set([u.id for u in self.cleaned_data["user"]], clear=True)
+        self.instance.team_set.set([u.id for u in self.cleaned_data["team"]], clear=True)
+        self.instance.save()
+        return self.instance
 
 @admin.register(Role)
 class RoleAdmin(admin.ModelAdmin):
