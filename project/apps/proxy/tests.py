@@ -14,6 +14,7 @@ class TestProxyView(APITestCase):
         cls.team = TeamFactory()
         cls.role_1 = RoleFactory()
         cls.resource1 = ResourceFactory()
+        cls.resource2 = ResourceFactory(type="invalid_type", path="path_to_find")
         # assign the path to the resource
         cls.resource1.path = "path_to_find"
         cls.resource1.url = "http://proxyto.com"
@@ -76,6 +77,34 @@ class TestProxyView(APITestCase):
             )
             with self.assertRaises(Exception):
                 response = self.client.get(self.proxy_url)
+            
+        finally:
+            AccessRule.objects.all().delete()
+
+    def test_should_return_empty_response_for_not_upstream_service_type(self):
+        '''
+        For now we accept only UPSTREAM_SERVICE as service type.
+        If is not that type the proxy should redirect to an empty response
+        '''
+        try:
+            # no access rules defined
+            self.assertFalse(AccessRule.objects.all().exists())
+            
+            self.client.force_login(self.user_1)
+            
+            # assign the role to the user
+            self.user_1.role.set([self.role_1])
+            self.user_1.save()
+
+            # create the rule
+            AccessRule.objects.create(
+                resource=self.resource2,
+                role=self.role_1,
+                active=True
+            )
+
+            response = self.client.get(self.proxy_url)
+            self.assertEqual(204, response.status_code)
             
         finally:
             AccessRule.objects.all().delete()

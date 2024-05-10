@@ -12,6 +12,7 @@ class Resource(models.Model):
     class ResourceTypeEnum(models.TextChoices):
         UPSTREAM_SERVICE = "Upstream Service"
 
+    URL_REQUIRED_SERVICE = [ResourceTypeEnum.UPSTREAM_SERVICE]
 
     name = models.CharField(verbose_name="Name")
     path = models.CharField(verbose_name="path")
@@ -26,6 +27,10 @@ class Resource(models.Model):
     def __str__(self):
         return self.name
 
+    def url_required(self):
+        if self.type in self.URL_REQUIRED_SERVICE:
+            return True
+        return False
 
 class Role(models.Model):
     name = models.CharField(verbose_name="Name", unique=True)

@@ -52,3 +52,5 @@ class ResourceFactory(factory.DjangoModelFactory):
         model = Resource
 
     name = factory.Faker("name")
+    type = Resource.ResourceTypeEnum.UPSTREAM_SERVICE.value
+    url = "http://localhost:8000/"
