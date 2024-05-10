@@ -54,8 +54,8 @@ class TestProxyView(APITestCase):
 
     def test_should_raise_error_if_url_is_not_defined_in_the_resource(self):
         '''
-        User 1 does not have any permission to access
-        to the resource 1 via access_rule1
+        Should raise issue if none URL are defined in the resource configuration
+        without url the user cannot be proxed
         '''
         try:
             # no access rules defined
@@ -82,6 +82,35 @@ class TestProxyView(APITestCase):
         finally:
             AccessRule.objects.all().delete()
 
+
+    def test_user_with_perms_canot_be_proxed_if_rule_is_not_active(self):
+        '''
+        User 1 match the accesrule, but active is false
+        which means that the rule is not active and the 
+        access is denied
+        '''
+        try:
+            # no access rules defined
+            self.assertFalse(AccessRule.objects.all().exists())
+            
+            self.client.force_login(self.user_1)
+            
+            # assign the role to the user
+            self.user_1.role.set([self.role_1])
+            self.user_1.save()
+
+            # create the rule
+            AccessRule.objects.create(
+                resource=self.resource1,
+                role=self.role_1,
+                active=False
+            )
+
+            response = self.client.get(self.proxy_url)
+            self.assertEqual(403, response.status_code)
+            
+        finally:
+            AccessRule.objects.all().delete()
 
     def test_user_with_perms_can_be_proxed(self):
         '''
@@ -113,8 +142,7 @@ class TestProxyView(APITestCase):
 
     def test_team_with_perms_can_be_proxed(self):
         '''
-        User 1 does not have any permission to access
-        to the resource 1 via access_rule1
+        User of team1 can be proxed since the team has a role assigned
         '''
         try:
             # no access rules defined
@@ -123,7 +151,7 @@ class TestProxyView(APITestCase):
             self.client.force_login(self.user_1)
             # assign the team to the user
             self.user_1.team.set([self.team])
-            # assign the role to the user
+            # assign the role to the team
             self.team.role.set([self.role_1])
             self.team.save()
 
