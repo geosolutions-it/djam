@@ -23,7 +23,7 @@ class TestProxyView(APITestCase):
     
     def test_anonymous_cannot_access(self):
         '''
-        anonymous not have any permission to access the service proxy
+        anonymous doesn't have any permission to access the proxied service
         '''
         try:
             # no access rules defined
@@ -37,8 +37,7 @@ class TestProxyView(APITestCase):
 
     def test_authenticated_ser_with_no_rules_available(self):
         '''
-        User 1 does not have any permission to access
-        to the resource 1 via access_rule1
+        User 1 does not have any permission to access resource 1 via access_rule1
         '''
         try:
             # no access rules defined
@@ -54,8 +53,7 @@ class TestProxyView(APITestCase):
 
     def test_should_raise_error_if_url_is_not_defined_in_the_resource(self):
         '''
-        Should raise issue if none URL are defined in the resource configuration
-        without url the user cannot be proxed
+        Should raise an exception if the URL is not defined for a resource
         '''
         try:
             # no access rules defined
@@ -85,9 +83,8 @@ class TestProxyView(APITestCase):
 
     def test_user_with_perms_canot_be_proxed_if_rule_is_not_active(self):
         '''
-        User 1 match the accesrule, but active is false
-        which means that the rule is not active and the 
-        access is denied
+        User 1 matches the accesrule, but active is false
+        which means that the rule is not active and the is denied
         '''
         try:
             # no access rules defined
@@ -114,8 +111,7 @@ class TestProxyView(APITestCase):
 
     def test_user_with_perms_can_be_proxed(self):
         '''
-        User 1 does not have any permission to access
-        to the resource 1 via access_rule1
+        User 1 can access resource 1 via access_rule1
         '''
         try:
             # no access rules defined
@@ -142,7 +138,7 @@ class TestProxyView(APITestCase):
 
     def test_team_with_perms_can_be_proxed(self):
         '''
-        User of team1 can be proxed since the team has a role assigned
+        User of team 1 can access resource 1 since team 1 has a rule for its role
         '''
         try:
             # no access rules defined
