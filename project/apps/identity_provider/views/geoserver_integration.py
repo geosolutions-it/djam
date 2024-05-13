@@ -176,7 +176,7 @@ class GeoserverCredentialsIntrospection(GeoserverIntrospection, views.APIView):
             )
 
         if user.check_password(password):
-            user_groups_names = [user.get_team()]
+            user_groups_names = user.get_team()
 
             return Response({"username": user.username, "groups": user_groups_names,})
         else:
