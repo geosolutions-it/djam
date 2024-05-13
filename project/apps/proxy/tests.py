@@ -11,7 +11,7 @@ from tests.factories.user_management_factory import (
 from apps.authorizations.models import AccessRule
 import base64
 from rest_framework import HTTP_HEADER_ENCODING
-
+from django.contrib.auth import get_user_model
 # Create your tests here.
 
 
@@ -21,6 +21,7 @@ class TestProxyView(APITestCase):
         cls.user_1 = UserFactory()
         cls.user_2 = UserFactory()
         cls.user_with_team = UserFactory()
+        cls.user_admin = UserFactory()
         cls.team = TeamFactory()
         cls.role_1 = RoleFactory()
         cls.resource1 = ResourceFactory()
@@ -194,6 +195,27 @@ class TestProxyView(APITestCase):
 
             response = self.client.get(self.proxy_url)
             self.assertEqual(403, response.status_code)
+
+        finally:
+            AccessRule.objects.all().delete()
+
+    def test_superuser_can_be_proxed_even_without_being_in_the_team(self):
+        """
+        User of team 1 can access resource 1 since team 1 has a rule for its role
+        """
+        try:
+            # no access rules defined
+            self.assertFalse(AccessRule.objects.all().exists())
+            admin = get_user_model().objects.create_superuser(username="admin@admin.com")
+            self.client.force_login(admin)
+
+            # create the rule
+            AccessRule.objects.create(
+                resource=self.resource1, role=self.role_1, active=True
+            )
+
+            response = self.client.get(self.proxy_url)
+            self.assertEqual(302, response.status_code)
 
         finally:
             AccessRule.objects.all().delete()

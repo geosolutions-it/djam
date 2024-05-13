@@ -39,12 +39,16 @@ def proxy_view(request, request_path):
     if user and user.is_anonymous:
         return HttpResponseForbidden(FORBIDDEN_MESSAGE_403)
 
+
+    rule_filters = {
+        "resource__path": request_path,
+        "active": True
+    }
+    if not user.is_superuser:
+        rule_filters["role__in"] = user.get_role()
     # checking the access rule for the user
-    rules = (
-        AccessRule.objects.filter(resource__path=request_path)
-        .filter(role__in=user.get_role())
-        .filter(active=True)
-    )
+
+    rules = AccessRule.objects.filter(**rule_filters)
 
     # if the rule does not exists for the user, the request is denined
     if not rules.exists():
