@@ -15,7 +15,7 @@ class Resource(models.Model):
     URL_REQUIRED_SERVICE = [ResourceTypeEnum.UPSTREAM_SERVICE]
 
     name = models.CharField(verbose_name="Name")
-    path = models.CharField(verbose_name="path")
+    path = models.CharField(verbose_name="path", blank=True, default='')
     url = models.CharField(verbose_name="upstream url to be proxed to", null=True)
     type = models.CharField(
         max_length=100,

@@ -39,7 +39,6 @@ def proxy_view(request, request_path):
     if user and user.is_anonymous:
         return HttpResponseForbidden(FORBIDDEN_MESSAGE_403)
 
-
     rule_filters = {
         "resource__path": request_path,
         "active": True
