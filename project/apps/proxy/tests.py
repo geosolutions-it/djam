@@ -12,6 +12,7 @@ from apps.authorizations.models import AccessRule
 import base64
 from rest_framework import HTTP_HEADER_ENCODING
 from django.contrib.auth import get_user_model
+
 # Create your tests here.
 
 
@@ -35,9 +36,15 @@ class TestProxyView(APITestCase):
 
     @classmethod
     def tearDownClass(cls) -> None:
-        get_user_model().objects.filter(username__in=[cls.user_1.username, cls.user_2.username, cls.user_admin.username, cls.user_with_team.username]).delete()
+        get_user_model().objects.filter(
+            username__in=[
+                cls.user_1.username,
+                cls.user_2.username,
+                cls.user_admin.username,
+                cls.user_with_team.username,
+            ]
+        ).delete()
         return super().tearDownClass()
-
 
     def test_anonymous_cannot_access(self):
         """
@@ -212,7 +219,9 @@ class TestProxyView(APITestCase):
         try:
             # no access rules defined
             self.assertFalse(AccessRule.objects.all().exists())
-            admin = get_user_model().objects.create_superuser(username="admin@admin.com")
+            admin = get_user_model().objects.create_superuser(
+                username="admin@admin.com"
+            )
             self.client.force_login(admin)
 
             # create the rule
