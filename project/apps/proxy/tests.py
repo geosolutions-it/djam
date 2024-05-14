@@ -33,6 +33,12 @@ class TestProxyView(APITestCase):
         cls.proxy_url = reverse("proxy_view", args=["path_to_find"])
         return super().setUpClass()
 
+    @classmethod
+    def tearDownClass(cls) -> None:
+        get_user_model().objects.filter(username__in=[cls.user_1.username, cls.user_2.username, cls.user_admin.username, cls.user_with_team.username]).delete()
+        return super().tearDownClass()
+
+
     def test_anonymous_cannot_access(self):
         """
         anonymous doesn't have any permission to access the proxied service
