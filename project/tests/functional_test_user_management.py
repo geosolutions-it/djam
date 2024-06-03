@@ -139,6 +139,11 @@ class TestUserManagement(TestCase):
 
 
 class TestGetUserData(APITestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        get_user_model().objects.all().delete()
+        return super().setUpClass()
+
     def setUp(self):
         self.admin = UserFactory(username="admin", is_staff=True, is_superuser=True)
         self.user = UserFactory(username="test_user")

@@ -3,6 +3,8 @@ import factory
 from django.contrib.auth import get_user_model
 
 from apps.privilege_manager.models import Team
+from apps.authorizations.models import Role
+from apps.authorizations.models import Resource
 
 
 class AdminFactory(factory.DjangoModelFactory):
@@ -36,3 +38,19 @@ class TeamFactory(factory.DjangoModelFactory):
         model = Team
 
     name = factory.Faker("name")
+
+
+class RoleFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = Role
+
+    name = factory.Faker("name")
+
+
+class ResourceFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = Resource
+
+    name = factory.Faker("name")
+    type = Resource.ResourceTypeEnum.UPSTREAM_SERVICE.value
+    url = "http://localhost:8000/"
