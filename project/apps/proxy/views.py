@@ -1,5 +1,5 @@
 from urllib.parse import urlparse, parse_qs, urlencode
-from django.http import HttpResponse, HttpResponseForbidden
+from django.http import Http404, HttpResponse, HttpResponseForbidden
 from apps.authorizations.models import AccessRule
 from revproxy.views import ProxyView
 from django.contrib.auth import get_user_model
@@ -39,7 +39,7 @@ def proxy_view(request, request_path):
     if user and user.is_anonymous:
         return HttpResponseForbidden(FORBIDDEN_MESSAGE_403)
 
-    rule_filters = {"resource__path": request_path, "active": True}
+    rule_filters = {"resource__slug": request_path, "active": True}
     if not user.is_superuser:
         rule_filters["role__in"] = user.get_role()
     # checking the access rule for the user
@@ -48,7 +48,7 @@ def proxy_view(request, request_path):
 
     # if the rule does not exists for the user, the request is denined
     if not rules.exists():
-        return HttpResponseForbidden(FORBIDDEN_MESSAGE_403)
+        raise Http404("Requested service does not exists")
 
     # if exists, we can retrieve the upstream url to be proxed to
     proxy_to_url = rules.first().resource
@@ -62,6 +62,6 @@ def proxy_view(request, request_path):
         proxy_view = ProxyView.as_view(upstream=proxy_to_url.url)
 
         # this function return the dispatch of the response
-        return proxy_view(request, **{"path": request_path})
+        return proxy_view(request, **{"path": ""})
 
     return HttpResponse(status=204)

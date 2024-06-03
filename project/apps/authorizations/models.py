@@ -14,8 +14,7 @@ class Resource(models.Model):
 
     URL_REQUIRED_SERVICE = [ResourceTypeEnum.UPSTREAM_SERVICE]
 
-    name = models.CharField(verbose_name="Name")
-    path = models.CharField(verbose_name="path", blank=True, default='')
+    slug = models.SlugField(verbose_name="Slug", unique=True)
     url = models.CharField(verbose_name="upstream url to be proxed to", null=True)
     type = models.CharField(
         max_length=100,
@@ -25,7 +24,7 @@ class Resource(models.Model):
     )
 
     def __str__(self):
-        return self.name
+        return self.slug
 
     def url_required(self):
         if self.type in self.URL_REQUIRED_SERVICE:
