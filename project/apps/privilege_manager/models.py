@@ -1,35 +1,31 @@
 from __future__ import unicode_literals
 
 import logging
-from enum import Enum
 
-from django.conf import settings
+from django.utils.translation import gettext_lazy as _
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from django.contrib.auth import get_user_model
-
+from django.contrib.auth.models import Group
 from oidc_provider.models import Client
+
+from apps.authorizations.models import Role
 
 
 logger = logging.getLogger(__name__)
 
 
-class Group(models.Model):
+class Team(Group):
     """
     v1 version of AuthZ Group model of Djam - for MVP only RBAC is supported
     """
 
-    class GroupNames(Enum):
-        FREE = "free"
-        PRO = "pro"
-        ENTERPRISE = "enterprise"
-
-    name = models.CharField(max_length=30)
+    role = models.ManyToManyField(Role, blank=True)
 
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = _("Team")
+        verbose_name_plural = _("Teams")
 
 class OpenIdLoginPrevention(models.Model):
     """
@@ -37,7 +33,7 @@ class OpenIdLoginPrevention(models.Model):
     """
 
     oidc_client = models.OneToOneField(Client, on_delete=models.CASCADE)
-    groups = models.ManyToManyField(Group, blank=True)
+    teams = models.ManyToManyField(Team, blank=True)
 
     class Meta:
         verbose_name = "OpenID Login Prevention"

@@ -21,9 +21,9 @@ class GeoServerUsersView(views.APIView):
 
         user_list = []
         for user in UserModel.objects.all():
-            if user.get_group():
+            if user.get_team():
                 user_list.append(
-                    {"username": user.username, "groups": [user.get_group()],}
+                    {"username": user.username, "groups": user.get_team(),}
                 )
 
         return Response({"users": user_list})

@@ -3,14 +3,14 @@ import logging
 from rest_framework import viewsets, views, permissions
 from rest_framework.response import Response
 
-from apps.privilege_manager.models import Group
+from apps.privilege_manager.models import Team
 from apps.privilege_manager.serializers import GroupSerializer
 
 logger = logging.getLogger(__name__)
 
 
 class GroupViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Group.objects.all()
+    queryset = Team.objects.all()
     serializer_class = GroupSerializer
 
 
@@ -22,7 +22,7 @@ class GeoServerRolesView(views.APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, format=None):
-        groups_pbjects = Group.objects.all()
+        groups_pbjects = Team.objects.all()
         group_names = [group.name for group in groups_pbjects]
         group_names_wms = [group.name + "_wms" for group in groups_pbjects]
 

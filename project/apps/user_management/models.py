@@ -20,6 +20,7 @@ from django.db.models import Q
 from apps.user_management.utils import random_string
 from apps.user_management.model_managers import UserManager
 from apps.user_management.tasks import send_user_notification_email
+from apps.privilege_manager.models import Team, Role
 
 
 logger = logging.getLogger(__name__)
@@ -88,11 +89,19 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
     legacy_user_id = models.IntegerField(null=True, blank=False)
-    subscription = models.BooleanField(blank=True, null=True)
-
-    company_name = models.CharField(
-        max_length=250, blank=True, null=True, help_text=_("Associated company name")
+    
+    team = models.ManyToManyField(
+        Team,
+        verbose_name=_("teams"),
+        blank=True,
+        help_text=_(
+            "The teams this user belongs to. A user will get all permissions "
+            "granted to each of their teams."
+        ),
+        related_name="team_set"
     )
+
+    role = models.ManyToManyField(Role, blank=True)
 
     objects = UserManager()
 
@@ -128,26 +137,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_absolute_url(self):
         return reverse("user_account_edit", kwargs={"id": self.pk})
 
-    def get_group(self):
-        """
-        Will return the user group bases on the subscription that the user has.
-        Is weighted, this means that will be returned the highest group related to the user
-        Hierarchy: ENTERPRISE > PRO > FREE
-        """
-        from apps.billing.models import Subscription
-
-        groups_hierarchy = (("enterprise", 2), ("pro", 1), ("free", 0))
-        subcriptions = Subscription.objects.filter(
-            Q(individualsubscription__user=self)
-            | Q(companysubscription__company__users=self)
-        )
-        active_subs = [sub.groups for sub in subcriptions.all() if sub.is_active]
-        if len(active_subs) > 0:
-            groups_name = [s.name.lower() for s in active_subs]
-            weighted_list = [g for g in groups_hierarchy if g[0] in groups_name]
-            weighted_list.sort(key=lambda tuple_group: tuple_group[1], reverse=True)
-            return weighted_list[0][0]
-        return None
+    def get_role(self):
+        return (self.role.all() | Role.objects.filter(team__name__in=self.get_team())).distinct()
+    
+    def get_team(self):
+        return [team.name for team in self.team.all()]
 
     def __str__(self):
         return self.email

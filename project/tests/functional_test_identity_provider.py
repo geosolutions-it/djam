@@ -7,16 +7,13 @@ from django.shortcuts import reverse
 from oidc_provider import models as oidc_models
 
 from apps.identity_provider import models
-from apps.privilege_manager.models import Group
-from apps.billing.models import Company
-from apps.administration.models import IndividualSubscription
+from apps.privilege_manager.models import Team
 
 from tests.factories.identity_provider_factory import (
     OIDCConfidentialClientFactory,
     ApiKeyFactory,
 )
-from tests.factories.user_management_factory import UserFactory
-from apps.billing.utils import subscription_manager
+from tests.factories.user_management_factory import TeamFactory, UserFactory
 
 
 class IdentityProviderBaseTestCase(TestCase):
@@ -311,6 +308,9 @@ class TestAuthKey(IdentityProviderBaseTestCase):
     def test_validate_valid_session_key(self):
         web_client = Client()
         user = UserFactory()
+        team = TeamFactory()
+        user.team.add(team)
+        user.save()
 
         # OIDC login
         session_token = self.openid_login(web_client, user)
@@ -338,7 +338,7 @@ class TestAuthKey(IdentityProviderBaseTestCase):
             "/authkey/introspect: returned username is not equal user's email",
         )
         self.assertEqual(
-            ["free"],
+            [team.name],
             authkey_response.json().get("groups"),
             "/authkey/introspect: 'free' not in user's groups",
         )
@@ -373,55 +373,12 @@ class TestAuthKey(IdentityProviderBaseTestCase):
             "/authkey/introspect with invalid session_token: groups is not None",
         )
 
-    def test_validate_valid_session_key_user_with_multiple_groups(self):
-        web_client = Client()
-        user = UserFactory()
-
-        # assign user to multiple groups
-        pro = Group.objects.get(name="pro")
-        ent = Group.objects.get(name="enterprise")
-
-        IndividualSubscription.objects.filter(user=user).update(groups=pro)
-        _company, _ = Company.objects.get_or_create(company_name="Foo")
-        _company.users.add(user)
-
-        subscription_manager.create_company_subscription(groups=ent, company=_company)
-        # OIDC login
-        session_token = self.openid_login(web_client, user)
-        # Introspect AuthKey
-        authkey_response = self.authkey_introspect(web_client, session_token)
-
-        self.assertEqual(
-            authkey_response.status_code,
-            200,
-            "/authkey/introspect: response status code is not 200",
-        )
-        self.assertIn(
-            "username",
-            authkey_response.json(),
-            "/authkey/introspect: username not in JSON response",
-        )
-        self.assertIn(
-            "groups",
-            authkey_response.json(),
-            "/authkey/introspect: groups not in JSON response",
-        )
-        self.assertEqual(
-            authkey_response.json().get("username"),
-            user.email,
-            "/authkey/introspect: returned username is not equal user's email",
-        )
-        # Watch out! Geoserver does not understand a list in classic approach, so it will be in ['free,pro,enterprise'] format!!
-        # 20211116 - endpoint will return only the hight value group
-        self.assertIn(
-            "enterprise",
-            authkey_response.json().get("groups")[0],
-            "/authkey/introspect: 'enterprise' not in user's groups",
-        )
-
     def test_validate_valid_api_key(self):
         web_client = Client()
         user = UserFactory()
+        team = TeamFactory()
+        user.team.add(team)
+        user.save()
         api_key = ApiKeyFactory(user=user)
 
         # Introspect API key
@@ -448,7 +405,7 @@ class TestAuthKey(IdentityProviderBaseTestCase):
             "/authkey/introspect API key: returned username is not equal user's email",
         )
         self.assertIn(
-            "free",
+            team.name,
             apikey_response.json().get("groups")[0],
             "/authkey/introspect API key: 'free' not in user's groups",
         )
@@ -456,7 +413,7 @@ class TestAuthKey(IdentityProviderBaseTestCase):
         apikey_response = self.authkey_introspect(web_client, api_key.wms_key)
 
         self.assertEqual(apikey_response.status_code, 200)
-        self.assertIn("free_wms", apikey_response.json().get("groups")[0])
+        self.assertIn(f"{team.name}_wms", apikey_response.json().get("groups")[0])
 
     def test_validate_revoked_api_key(self):
         web_client = Client()
@@ -493,6 +450,9 @@ class TestAuthKey(IdentityProviderBaseTestCase):
     def test_validate_valid_api_key_with_existing_session_key(self):
         web_client = Client()
         user = UserFactory()
+        team = TeamFactory()
+        user.team.add(team)
+        user.save()
         api_key = ApiKeyFactory(user=user)
 
         # OIDC login
@@ -521,7 +481,7 @@ class TestAuthKey(IdentityProviderBaseTestCase):
             "/authkey/introspect API key with existing SessionKey: returned username is not equal user's email",
         )
         self.assertIn(
-            "free",
+            team.name,
             apikey_response.json().get("groups")[0],
             "/authkey/introspect API key with existing SessionKey: 'free' not in user's groups",
         )
@@ -529,6 +489,9 @@ class TestAuthKey(IdentityProviderBaseTestCase):
     def test_validate_valid_session_key_with_existing_api_key(self):
         web_client = Client()
         user = UserFactory()
+        team = TeamFactory()
+        user.team.add(team)
+        user.save()
         api_key = ApiKeyFactory(user=user)
 
         # OIDC login
@@ -557,7 +520,7 @@ class TestAuthKey(IdentityProviderBaseTestCase):
             "/authkey/introspect Session key with existing API Key: returned username is not equal user's email",
         )
         self.assertEqual(
-            ["free"],
+            [team.name],
             authkey_response.json().get("groups"),
             "/authkey/introspect Session key with existing API Key: 'free' not in user's groups",
         )
@@ -565,6 +528,9 @@ class TestAuthKey(IdentityProviderBaseTestCase):
     def test_validate_invalid_session_key_with_existing_api_key(self):
         web_client = Client()
         user = UserFactory()
+        team = TeamFactory()
+        user.team.add(team)
+        user.save()
         api_key = ApiKeyFactory(user=user)
 
         # Introspect AuthKey
@@ -644,6 +610,8 @@ class TestUserCredentialsValidation(TestCase):
 
         user = UserFactory(username="foo@bar.com")
         user.set_password("some_password")
+        team = TeamFactory()
+        user.team.add(team)
         user.save()
 
         base64_username = base64.b64encode(b"foo@bar.com")

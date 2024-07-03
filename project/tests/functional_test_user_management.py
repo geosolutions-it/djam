@@ -1,16 +1,12 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from django.core import exceptions
 from django.shortcuts import reverse
 from django.test import TestCase, Client
 from rest_framework import status
 from rest_framework.test import APITestCase
-from apps.billing.models import Company
-from apps.administration.models import IndividualSubscription
 
-from tests.factories.user_management_factory import UserFactory, GroupFactory
+from tests.factories.user_management_factory import UserFactory, TeamFactory
 from apps.user_management.forms import UMAuthenticationForm
-from apps.billing.utils import subscription_manager
 
 
 class TestUserManagement(TestCase):
@@ -143,14 +139,19 @@ class TestUserManagement(TestCase):
 
 
 class TestGetUserData(APITestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        get_user_model().objects.all().delete()
+        return super().setUpClass()
+
     def setUp(self):
         self.admin = UserFactory(username="admin", is_staff=True, is_superuser=True)
         self.user = UserFactory(username="test_user")
         self.u1 = UserFactory(username="u1", last_login="2020-05-21T07:59:26.324Z")
         self.u2 = UserFactory(username="u2", last_login="2020-05-11T07:59:26.342Z")
-        self.pro_group = GroupFactory(name="pro")
-        self.ent_group = GroupFactory(name="enterprise")
-        self.free_group = GroupFactory(name="free")
+        self.pro_group = TeamFactory(name="pro")
+        self.ent_group = TeamFactory(name="enterprise")
+        self.free_group = TeamFactory(name="free")
         # self.free_group.users.add(*[self.user, self.u1, self.u2, self.admin])
         # self.pro_group.users.add(self.admin)
         # self.ent_group.users.add(self.u1)
@@ -170,37 +171,10 @@ class TestGetUserData(APITestCase):
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         self.assertEquals(response.json().get("count", 0), users_count)
 
-    def test_user_allowed_filter_groups(self):
-        IndividualSubscription.objects.filter(user=self.u1).update(
-            groups=self.pro_group
-        )
-        users_count = 1
-        self.client.force_authenticate(self.admin)
-        response = self.client.get(reverse("fetch_users-list") + "?groups=pro")
-        self.assertEquals(response.status_code, status.HTTP_200_OK)
-        self.assertEquals(response.json().get("count", 0), users_count)
-
     def test_user_allowed_filter_wrong_groups(self):
         users_count = 0
         self.client.force_authenticate(self.admin)
-        response = self.client.get(reverse("fetch_users-list") + "?groups=test")
-        self.assertEquals(response.status_code, status.HTTP_200_OK)
-        self.assertEquals(response.json().get("count", 0), users_count)
-
-    def test_user_allowed_filter_mult_groups(self):
-        company, _ = Company.objects.get_or_create(company_name="Foo")
-        company.users.add(self.admin)
-        subscription_manager.create_company_subscription(
-            groups=self.ent_group, company=company
-        )
-        IndividualSubscription.objects.filter(user=self.u1).update(
-            groups=self.pro_group
-        )
-        users_count = 2
-        self.client.force_authenticate(self.admin)
-        response = self.client.get(
-            reverse("fetch_users-list") + "?groups=enterprise,pro"
-        )
+        response = self.client.get(reverse("fetch_users-list") + "?teams=test")
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         self.assertEquals(response.json().get("count", 0), users_count)
 

@@ -1,5 +1,5 @@
 from django.db.models import ObjectDoesNotExist
-from apps.privilege_manager.models import Group, OpenIdLoginPrevention
+from apps.privilege_manager.models import Team, OpenIdLoginPrevention
 
 
 def has_login_permission(user, oidc_client_id):
@@ -21,10 +21,10 @@ def has_login_permission(user, oidc_client_id):
         # if the Client has no preventions registered, allow login
         return True, None
 
-    all_permission_groups = Group.objects.all()
+    all_permission_groups = Team.objects.all()
 
-    groups_allowed = all_permission_groups.difference(preventions.groups.all())
-    user_group = user.get_group()
+    groups_allowed = all_permission_groups.difference(preventions.teams.all())
+    user_group = user.get_team()
 
     has_permission = False
     if user_group in groups_allowed.values_list("name", flat=True):

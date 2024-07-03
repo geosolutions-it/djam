@@ -7,18 +7,18 @@ from django.contrib import admin
 
 from apps.identity_provider.models import ApiKey
 from apps.privilege_manager.admin import GroupAdmin
-from apps.privilege_manager.models import Group
-from tests import UserFactory, ApiKeyFactory, GroupFactory, get_user_model
+from apps.privilege_manager.models import Team
+from tests import UserFactory, ApiKeyFactory, TeamFactory, get_user_model
 
 
 class TestAdminGroup(TestCase):
     @skip("GroupAdmin doesn't have _generate_api_key_for_enterprise_user method")
     def test_api_key_creation_invoked(self):
-        g_a = GroupAdmin(Group, admin.site)
+        g_a = GroupAdmin(Team, admin.site)
         fake_method = MagicMock()
         fake_object = MagicMock()
 
-        attrs = {"name": Group.GroupNames.ENTERPRISE.value}
+        attrs = {"name": Team.GroupNames.ENTERPRISE.value}
         fake_object.configure_mock(**attrs)
         with patch.object(
             GroupAdmin, "_generate_api_key_for_enterprise_user", fake_method
@@ -28,7 +28,7 @@ class TestAdminGroup(TestCase):
 
     @skip("GroupAdmin doesn't have _generate_api_key_for_enterprise_user method")
     def test_api_key_not_invoked(self):
-        g_a = GroupAdmin(Group, admin.site)
+        g_a = GroupAdmin(Team, admin.site)
         fake_method = MagicMock()
         fake_object = MagicMock()
 
@@ -43,7 +43,7 @@ class TestAdminGroup(TestCase):
     @patch("django.contrib.admin.ModelAdmin.save_model")
     def test_users_not_passed(self, save_mock):
         group_setup = self._prepare_initial_setup()
-        g_a = GroupAdmin(Group, admin.site)
+        g_a = GroupAdmin(Team, admin.site)
         g = group_setup.get("g")
         # no users in changed data
         fake_form = MagicMock()
@@ -59,7 +59,7 @@ class TestAdminGroup(TestCase):
     @patch("django.contrib.admin.ModelAdmin.save_model")
     def test_nothing_to_change_assignment(self, create_mock):
         group_setup = self._prepare_initial_setup()
-        g_a = GroupAdmin(Group, admin.site)
+        g_a = GroupAdmin(Team, admin.site)
         # no users in changed data
         fake_form = MagicMock()
         g = group_setup.get("g")
@@ -76,7 +76,7 @@ class TestAdminGroup(TestCase):
     def test_add_new_user(self):
         initial_ak_count = 3
         group_setup = self._prepare_initial_setup()
-        g_a = GroupAdmin(Group, admin.site)
+        g_a = GroupAdmin(Team, admin.site)
         # no users in changed data
         fake_form = MagicMock()
         g = group_setup.get("g")
@@ -93,7 +93,7 @@ class TestAdminGroup(TestCase):
     @skip("Model Group doesn't have anymore the users connection")
     def test_remove_user(self):
         group_setup = self._prepare_initial_setup()
-        g_a = GroupAdmin(Group, admin.site)
+        g_a = GroupAdmin(Team, admin.site)
         # no users in changed data
         fake_form = MagicMock()
         g = group_setup.get("g")
@@ -116,7 +116,7 @@ class TestAdminGroup(TestCase):
         a2 = ApiKeyFactory(user=u2)
         a3 = ApiKeyFactory(user=u3)
 
-        g = GroupFactory(name="enterprise")
+        g = TeamFactory(name="enterprise")
         return {
             "group": g,
             "users": [{"u": u1, "ak": a1}, {"u": u2, "ak": a2}, {"u": u3, "ak": a3}],

@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("privilege_manager", "0002_auto_20200121_0811"),
+        ("privilege_manager", "0001_initial"),
     ]
 
     operations = [

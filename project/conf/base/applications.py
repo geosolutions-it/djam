@@ -14,12 +14,13 @@ INSTALLED_APPS = [
     "rest_framework",
     "django_dramatiq",
     "apps.identity_provider.apps.IdentityProviderConfig",
-    "apps.administration.apps.AdminConfig",
     "apps.user_management.apps.UserManagementConfig",
     "apps.privilege_manager.apps.PrivilegeManagerConfig",
-    "apps.billing.apps.SubscriptionConfig",
     "apps.global_configuration.apps.GlobalConfigurationConfig",
+    "apps.authorizations.apps.AuthorizationsConfig",
+    "apps.proxy.apps.ProxyConfig",
     "django_recaptcha",
+    "revproxy",
     # Djam health-checks - should always be last in the INSTALLED_APPS
     "checks.ProjectChecksConfig",
 ]
