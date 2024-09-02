@@ -8,7 +8,7 @@ from apps.user_management.models import User
 from rest_framework.permissions import IsAuthenticated
 
 
-class ApiKeyManager(views.APIView):
+class ApiKeyView(views.APIView):
     queryset = ApiKey.objects.none()
     permission_classes = [IsAuthenticated]
 

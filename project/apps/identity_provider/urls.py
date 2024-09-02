@@ -1,4 +1,4 @@
-from apps.identity_provider.views.token_generator import ApiKeyManager
+from apps.identity_provider.views.token_generator import ApiKeyView
 from django.urls import path, re_path, include
 from django.views.decorators.csrf import csrf_exempt
 
@@ -40,5 +40,5 @@ urlpatterns = [
         GeoserverCredentialsIntrospection.as_view(),
         name="user_credentials_introspection",
     ),
-    path("api/token/", ApiKeyManager.as_view(), name="api_key_manager",),
+    path("api/token/", ApiKeyView.as_view(), name="api_key_view",),
 ]
