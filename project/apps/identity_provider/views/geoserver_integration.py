@@ -125,21 +125,13 @@ class GeoserverAuthKeyAndApiKeyIntrospection(GeoserverIntrospection, views.APIVi
         return Response({"username": user.username, "groups": user_groups_names,})
 
     def introspect_api_key(self, api_key_uuid):
-        api_key = ApiKey.objects.filter(
-            Q(key=api_key_uuid) | Q(wms_key=api_key_uuid)
-        ).first()
+        api_key = ApiKey.objects.filter(key=api_key_uuid).first()
 
         if api_key.revoked:
             raise ValidationError(f"API key {api_key.key} is revoked.")
 
         user = api_key.user
         user_groups_names = user.get_team()
-
-        if str(api_key.wms_key) == api_key_uuid:
-            # add "_wms" suffix to the group names
-            user_groups_names = [
-                f"{group_name}_wms" for group_name in user_groups_names
-            ]
 
         return Response({"username": user.username, "groups": user_groups_names,})
 

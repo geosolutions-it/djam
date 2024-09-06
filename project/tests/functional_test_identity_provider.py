@@ -409,11 +409,6 @@ class TestAuthKey(IdentityProviderBaseTestCase):
             apikey_response.json().get("groups")[0],
             "/authkey/introspect API key: 'free' not in user's groups",
         )
-        # Test if key is wms_key
-        apikey_response = self.authkey_introspect(web_client, api_key.wms_key)
-
-        self.assertEqual(apikey_response.status_code, 200)
-        self.assertIn(f"{team.name}_wms", apikey_response.json().get("groups")[0])
 
     def test_validate_revoked_api_key(self):
         web_client = Client()
