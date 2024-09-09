@@ -1,4 +1,5 @@
 import ast, os
+import datetime
 
 # include nickname and email in id_token
 OIDC_IDTOKEN_INCLUDE_CLAIMS = True
@@ -19,3 +20,6 @@ REQUIRE_SECURE_HTTP_FOR_GEOSERVER_INTROSPECTION = True
 APIKEY_MANAGER_AUTHORIZED_GROUPS = ast.literal_eval(
     os.getenv("APIKEY_MANAGER_AUTHORIZED_GROUPS", "['enterprise', 'pro']")
 )
+
+# Default expiration delta for the expiry filed of ApiKey model
+APIKEY_EXPIRE = datetime.timedelta(days=30)
