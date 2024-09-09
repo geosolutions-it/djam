@@ -24,9 +24,8 @@ class GeoServerRolesView(views.APIView):
     def get(self, request, format=None):
         groups_pbjects = Team.objects.all()
         group_names = [group.name for group in groups_pbjects]
-        group_names_wms = [group.name + "_wms" for group in groups_pbjects]
 
-        return Response({"groups": group_names + group_names_wms})
+        return Response({"groups": group_names})
 
 
 class GeoServerAdminRoleView(views.APIView):
