@@ -21,29 +21,6 @@ class ApiKeyView(views.APIView):
             )
             data = {
                 "token": token.key,
-                "wms_token": token.wms_key,
-                "created": created,
-                "last_modified": token.last_modified,
-            }
-            status = 200
-        else:
-            data = {}
-            status = 403
-        return JsonResponse(data, status=status)
-
-    def put(self, request):
-        user = request.user
-        if self._user_is_authorized(user):
-            user = self._select_user(request, user)
-            token = ApiKey.objects.filter(user=user)
-            if token:
-                token.delete()
-            token, created = ApiKey.objects.get_or_create(
-                user=user, last_modified=datetime.utcnow()
-            )
-            data = {
-                "token": token.key,
-                "wms_token": token.wms_key,
                 "created": created,
                 "last_modified": token.last_modified,
             }
@@ -66,28 +43,6 @@ class ApiKeyView(views.APIView):
         else:
             status = 403
         return JsonResponse(data={}, status=status)
-
-    def patch(self, request):
-        user = request.user
-        message = "Api has been revoked"
-        wms_token = ""
-        if self._user_is_authorized(user):
-            user = self._select_user(request, user)
-            token = ApiKey.objects.filter(user=user).first()
-            if token:
-                new_value = not token.revoked
-                token.update(revoked=new_value)
-                if not new_value:
-                    message = token.key
-                    wms_token = (token.wms_key,)
-                status = 200
-            else:
-                status = 500
-        else:
-            status = 403
-        return JsonResponse(
-            data={"token": message, "wms_token": wms_token}, status=status
-        )
 
     def _user_is_authorized(self, user):
         group = user.get_team()

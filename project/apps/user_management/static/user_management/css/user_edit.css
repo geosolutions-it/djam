@@ -32,12 +32,12 @@
   margin-top: 5vh;
 }
 
-.user-edit-form-box #copy-token,  #copy-token_wms {
+.user-edit-form-box #copy-token {
   margin-left:10px; 
   cursor: pointer
 }
 
-.user-edit-form-box #copy-token-result, #copy-token-result_wms {
+.user-edit-form-box #copy-token-result {
   transition: opacity 0.1s ease-out;
   opacity: 0;
   margin-left:10px; 
@@ -46,7 +46,7 @@
   font-weight: 400;
 }
 
-.user-edit-form-box #copy-token-result.shown, #copy-token-result_wms.shown {
+.user-edit-form-box #copy-token-result.shown {
   opacity: 1;
   display: inline;
 }
