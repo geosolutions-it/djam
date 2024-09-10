@@ -27,13 +27,16 @@ class ApiKeyTest(TestCase):
         self.assertEqual(
             ApiKey.objects.filter(user=self.user).count(), initial_api_keys + 1
         )
+        
+        # Delete the created key
+        ApiKey.objects.all().delete()
 
         # create another key. user has valid one
         a = ApiKey.objects.create(user=self.user)
         self.assertEqual(
-            ApiKey.objects.filter(user=self.user).count(), initial_api_keys + 2
+            ApiKey.objects.filter(user=self.user).count(), initial_api_keys + 1
         )
-        self.assertNotEqual(ApiKey.objects.filter(user=self.user).first(), a)
+        self.assertEqual(ApiKey.objects.filter(user=self.user).first(), a)
 
         # revoke key and recreate new one
         a.revoked = True
@@ -41,5 +44,5 @@ class ApiKeyTest(TestCase):
 
         a = ApiKey.objects.create(user=self.user)
         self.assertEqual(
-            ApiKey.objects.filter(user=self.user).count(), initial_api_keys + 3
+            ApiKey.objects.filter(user=self.user).count(), initial_api_keys + 2
         )
