@@ -9,7 +9,7 @@ from django.utils import timezone
 logger = logging.getLogger(__name__)
 
 def default_expiration_date():
-            return (timezone.now() + APIKEY_EXPIRE)
+    return (timezone.now() + APIKEY_EXPIRE)
 
 class Session(AbstractBaseSession):
     uuid = models.UUIDField(db_index=True, default=uuid4)
@@ -50,4 +50,4 @@ class ApiKey(models.Model):
     # Set an expiration date for the API key
     expiry = models.DateTimeField(blank=False, null=False, default=default_expiration_date)
 
-    scope = models.CharField(max_length=50, blank=False, null=False, choices=scopeChoices, default='resource')
+    scope = models.CharField(max_length=50, blank=False, null=False, choices=scopeChoices)
