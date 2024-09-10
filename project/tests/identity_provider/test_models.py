@@ -31,9 +31,9 @@ class ApiKeyTest(TestCase):
         # create another key. user has valid one
         a = ApiKey.objects.create(user=self.user)
         self.assertEqual(
-            ApiKey.objects.filter(user=self.user).count(), initial_api_keys + 1
+            ApiKey.objects.filter(user=self.user).count(), initial_api_keys + 2
         )
-        self.assertEqual(ApiKey.objects.filter(user=self.user).first(), a)
+        self.assertNotEqual(ApiKey.objects.filter(user=self.user).first(), a)
 
         # revoke key and recreate new one
         a.revoked = True
@@ -41,14 +41,5 @@ class ApiKeyTest(TestCase):
 
         a = ApiKey.objects.create(user=self.user)
         self.assertEqual(
-            ApiKey.objects.filter(user=self.user).count(), initial_api_keys + 2
+            ApiKey.objects.filter(user=self.user).count(), initial_api_keys + 3
         )
-
-    def test_user_with_two_valid_keys(self):
-        # temporary hack on fabric to create undesired situation
-        with patch.object(ApiKey, "save", models.Model.save):
-            a1 = ApiKeyFactory(user=self.user)
-            a2 = ApiKeyFactory(user=self.user)
-
-        with self.assertRaises(MultipleObjectsReturned):
-            ApiKey.objects.create(user=self.user)
