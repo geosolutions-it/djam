@@ -7,7 +7,6 @@ from rest_framework.renderers import JSONRenderer
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from django.db.models import Q
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
@@ -17,6 +16,7 @@ from oidc_provider.lib.endpoints.introspection import TokenIntrospectionEndpoint
 from apps.identity_provider.models import Session, ApiKey
 from apps.privilege_manager.models import Team
 from apps.user_management.models import User
+from apps.identity_provider.permissions import ResourceKeyVerification
 
 
 logger = logging.getLogger(__name__)
@@ -78,7 +78,7 @@ class GeoserverAuthKeyAndApiKeyIntrospection(GeoserverIntrospection, views.APIVi
     so it's validation should be restricted to only known entities.
     """
 
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.AllowAny, ResourceKeyVerification]
 
     def get(self, request, format=None):
 
@@ -125,11 +125,8 @@ class GeoserverAuthKeyAndApiKeyIntrospection(GeoserverIntrospection, views.APIVi
         return Response({"username": user.username, "groups": user_groups_names,})
 
     def introspect_api_key(self, api_key_uuid):
+        
         api_key = ApiKey.objects.filter(key=api_key_uuid).first()
-
-        if api_key.revoked:
-            raise ValidationError(f"API key {api_key.key} is revoked.")
-
         user = api_key.user
         user_groups_names = user.get_team()
 
