@@ -1,16 +1,21 @@
 from rest_framework import permissions
+from django.core.exceptions import ValidationError
 from apps.identity_provider.models import ApiKey
 from datetime import datetime, timezone
 
 class ResourceKeyVerification(permissions.BasePermission):
     """
-    Check validation of the Resource key validation
+    Verification checks of the resource key
     """
     message = "Invalid resource key"
 
     def has_permission(self, request, view):
+        
         authkey = request.GET.get("authkey")
-        api_key = ApiKey.objects.filter(key=authkey).first()
+        try:
+            api_key = ApiKey.objects.filter(key=authkey).first()
+        except ValidationError:
+            return False
         
         if api_key.revoked:
             return False
@@ -22,7 +27,6 @@ class ResourceKeyVerification(permissions.BasePermission):
         # Check if the token has been expired
         elif api_key.expiry<=datetime.now(timezone.utc):
             return False
-        
         else:
             return True
     
