@@ -16,7 +16,8 @@ from oidc_provider.lib.endpoints.introspection import TokenIntrospectionEndpoint
 from apps.identity_provider.models import Session, ApiKey
 from apps.privilege_manager.models import Team
 from apps.user_management.models import User
-from datetime import datetime, timezone
+from apps.identity_provider.permissions import ResourceKeyVerification
+# from datetime import datetime, timezone
 
 
 logger = logging.getLogger(__name__)
@@ -78,7 +79,7 @@ class GeoserverAuthKeyAndApiKeyIntrospection(GeoserverIntrospection, views.APIVi
     so it's validation should be restricted to only known entities.
     """
 
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.AllowAny, ResourceKeyVerification]
 
     def get(self, request, format=None):
 
@@ -125,19 +126,8 @@ class GeoserverAuthKeyAndApiKeyIntrospection(GeoserverIntrospection, views.APIVi
         return Response({"username": user.username, "groups": user_groups_names,})
 
     def introspect_api_key(self, api_key_uuid):
-        api_key = ApiKey.objects.filter(key=api_key_uuid).first()
-
-        if api_key.revoked:
-            raise ValidationError(f"API key {api_key.key} is revoked.")
         
-        # Check if the token has not a resource scope
-        if api_key.scope != 'resource':
-            raise ValidationError(f"Permissions error: No access to the GeoServer's resources")
-
-        # Check if the token has been expired
-        if api_key.expiry<=datetime.now(timezone.utc):
-            raise ValidationError(f"Permissions error: Your token has been expired. Please renew it !")
-
+        api_key = ApiKey.objects.filter(key=api_key_uuid).first()
         user = api_key.user
         user_groups_names = user.get_team()
 
