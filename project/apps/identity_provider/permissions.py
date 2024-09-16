@@ -1,7 +1,8 @@
 from rest_framework import permissions
 from django.core.exceptions import ValidationError
 from apps.identity_provider.models import ApiKey
-from datetime import datetime, timezone
+from datetime import datetime
+from django.utils import timezone
 
 class ResourceKeyVerification(permissions.BasePermission):
     """
@@ -25,7 +26,7 @@ class ResourceKeyVerification(permissions.BasePermission):
             return False
 
         # Check if the token has been expired
-        elif api_key.expiry<=datetime.now(timezone.utc):
+        elif api_key.expiry<=timezone.now():
             return False
         else:
             return True
@@ -47,10 +48,8 @@ class APIKeyManagementResourceKeyVerification(permissions.BasePermission):
             api_key = ApiKey.objects.filter(key=resource_key).first()
             if api_key.scope != 'resource':
                 return False
-        except ValidationError:
+        except (ApiKey.DoesNotExist, ValidationError):
             return False
-        except ApiKey.DoesNotExist:
-                return False
         
         if request.user.is_superuser:
             # check if the account_id exists and if the user of the resource key and the requested account_id are the same
@@ -63,9 +62,7 @@ class APIKeyManagementResourceKeyVerification(permissions.BasePermission):
             # Check if the current user has this API key with a resource scope
             try:
                 user_resource_key = ApiKey.objects.filter(user=request.user).filter(scope='resource').get(key=resource_key)
-            except ValidationError:
-                return False
-            except ApiKey.DoesNotExist:
+            except (ApiKey.DoesNotExist, ValidationError):
                 return False
         
             # Check if received resource key owns on this user
