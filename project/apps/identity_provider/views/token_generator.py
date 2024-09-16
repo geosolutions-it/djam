@@ -6,10 +6,12 @@ from rest_framework import views
 from datetime import datetime
 from apps.user_management.models import User
 from rest_framework.permissions import IsAuthenticated
+from apps.identity_provider.authentication import DjamTokenAuthentication
 
 
 class ApiKeyView(views.APIView):
     queryset = ApiKey.objects.none()
+    authentication_classes = [DjamTokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
