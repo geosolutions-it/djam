@@ -23,3 +23,6 @@ APIKEY_MANAGER_AUTHORIZED_GROUPS = ast.literal_eval(
 
 # Default expiration delta for the expiry filed of ApiKey model
 APIKEY_EXPIRE = datetime.timedelta(ast.literal_eval(os.getenv("APIKEY_EXPIRE_DAYS", "30")))
+
+# Short expiration delta for a short expiration date of an old key (/rotate endpoint)
+SHORT_APIKEY_EXPIRE = datetime.timedelta(ast.literal_eval(os.getenv("SHORT_APIKEY_EXPIRE_DAYS", "3")))

@@ -1,6 +1,6 @@
 from rest_framework import permissions
 from django.core.exceptions import ValidationError
-from apps.identity_provider.models import ApiKey
+from apps.identity_provider.models import ApiKey, default_expiration_date
 from datetime import datetime
 from django.utils import timezone
 
@@ -46,15 +46,26 @@ class APIKeyManagementResourceKeyVerification(permissions.BasePermission):
         # Check if the resource key exists
         try:
             api_key = ApiKey.objects.filter(key=resource_key).first()
-            if api_key.scope != 'resource':
-                return False
         except (ApiKey.DoesNotExist, ValidationError):
+            return False
+        
+        if api_key is None:
+            return False
+        
+        if api_key.scope != 'resource':
             return False
         
         if request.user.is_superuser:
             # check if the account_id exists and if the user of the resource key and the requested account_id are the same
             if other_user != None and other_user != api_key.user_id:
                 return False
+            # Check if superuser tries to perform an action for him with a resource key of another user
+            elif other_user is None:
+                try:
+                    superuser_resource_key = ApiKey.objects.filter(user=request.user).filter(scope='resource').get(key=resource_key)
+                except (ApiKey.DoesNotExist, ValidationError):
+                    return False
+                return True
             else:
                 return True
         
@@ -70,4 +81,30 @@ class APIKeyManagementResourceKeyVerification(permissions.BasePermission):
                 return True
             else:
                 return False
+            
+class ExpirationDateValidation(permissions.BasePermission):
+    """
+    Verification checks of the expiration date
+    """
+    message = "Invalid format or expiration date."
+
+    def has_permission(self, request, view):
+
+        expiry = request.data.get('expiry', None)
+
+        if expiry is None:
+            return True
+
+        try:
+            # Set the retrieved string to a datetime object with timezone
+            expiry_obj = datetime.strptime(expiry, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+        except ValueError:
+            return False
+        
+        if expiry_obj > default_expiration_date():
+            return False
+        if expiry_obj < timezone.now():
+            return False
+        else:
+            return True
     
