@@ -9,13 +9,30 @@ from rest_framework.decorators import action
 from datetime import datetime
 from django.utils import timezone
 from apps.identity_provider.settings import SHORT_APIKEY_EXPIRE
-
+from rest_framework import serializers
+from drf_spectacular.utils import extend_schema, inline_serializer
 
 class ApiKeyView(ViewSet):
     queryset = ApiKey.objects.none()
     authentication_classes = [DjamTokenAuthentication]
-    permission_classes = [IsAuthenticated, APIKeyManagementResourceKeyVerification, ExpirationDateValidation]
+    permission_classes = [IsAuthenticated, ExpirationDateValidation, APIKeyManagementResourceKeyVerification]
 
+    # Remove the resource key permissions from /create_key and /key_list endpoints
+    def get_permissions(self):
+        if self.action in ('create_key', 'key_list'):
+            self.permission_classes = [IsAuthenticated, ExpirationDateValidation]
+        return super(self.__class__, self).get_permissions()
+
+    # Spectacular - Swagger: Data content for key_list endpoint
+    @extend_schema(
+             request=inline_serializer(
+                name="KeyListSchemaSerializer",
+                fields={
+                    "account_id": serializers.IntegerField(),
+                 },
+             ),
+         )
+    
     # ApiKeyView actions
     @action(detail=False, methods=['post'])
     def key_list(self, request):
@@ -26,7 +43,7 @@ class ApiKeyView(ViewSet):
             data = self._key_list(user)
             status=200
             return JsonResponse(data, status=status)
-        elif request.user.is_superuser is False:
+        elif request.user.is_superuser == False:
             data = self._key_list(user)
             status=200
             return JsonResponse(data, status=status)
@@ -35,6 +52,19 @@ class ApiKeyView(ViewSet):
             status=403
             return JsonResponse(data, status=status)
     
+    # Spectacular - Swagger: Data content for create_key endpoint
+    @extend_schema(
+             request=inline_serializer(
+                name="CreateKeySchemaSerializer",
+                fields={
+                    "resource_key": serializers.CharField(required=True),
+                    "revoked": serializers.CharField(default="False"),
+                    "expiry": serializers.DateTimeField(default=default_expiration_date()),
+                    "account_id": serializers.IntegerField(default=0),
+                 },
+             ),
+         )
+
     @action(detail=False, methods=['post'])
     def create_key(self, request):
         
@@ -44,7 +74,7 @@ class ApiKeyView(ViewSet):
             data = self._create_key(request, user)
             status=200
             return JsonResponse(data, status=status)
-        elif user.is_superuser is False:
+        elif user.is_superuser == False:
             data = self._create_key(request, user)
             status=200
             return JsonResponse(data, status=status)
@@ -53,6 +83,17 @@ class ApiKeyView(ViewSet):
             status=403
             return JsonResponse(data, status=status)
         
+    # Spectacular - Swagger: Data content for status endpoint
+    @extend_schema(
+             request=inline_serializer(
+                name="StatusSchemaSerializer",
+                fields={
+                    "resource_key": serializers.CharField(required=True),
+                    "account_id": serializers.IntegerField(default=0),
+                 },
+             ),
+         )
+    
     @action(detail=False, methods=['post'])
     def status(self, request):
         
@@ -64,15 +105,27 @@ class ApiKeyView(ViewSet):
             data = self._key_status(resource_key, user)
             status=200
             return JsonResponse(data, status=status)
-        elif user.is_superuser is False:
+        elif user.is_superuser == False:
             data = self._key_status(resource_key, user)
             status=200
             return JsonResponse(data, status=status)
         else:
             data = {}
             status=403
-            return JsonResponse(data, status=status)
-        
+            return JsonResponse(data, status=status)     
+    
+    # Spectacular - Swagger: Data content for revoke endpoint
+    @extend_schema(
+             request=inline_serializer(
+                name="RevokeSchemaSerializer",
+                fields={
+                    "resource_key": serializers.CharField(required=True),
+                    "revoked": serializers.CharField(default="False"),
+                    "account_id": serializers.IntegerField(default=0),
+                 },
+             ),
+         )
+    
     @action(detail=False, methods=['post'])
     def revoke(self, request):
         
@@ -85,7 +138,7 @@ class ApiKeyView(ViewSet):
             data = self._key_revoke(resource_key, revoked, user)
             status=200
             return JsonResponse(data, status=status)
-        elif user.is_superuser is False:
+        elif user.is_superuser == False:
             data = self._key_revoke(resource_key, revoked, user)
             status=200
             return JsonResponse(data, status=status)
@@ -94,6 +147,18 @@ class ApiKeyView(ViewSet):
             status=403
             return JsonResponse(data, status=status)
         
+    # Spectacular - Swagger: Data content for renew endpoint
+    @extend_schema(
+             request=inline_serializer(
+                name="RenewSchemaSerializer",
+                fields={
+                    "resource_key": serializers.CharField(required=True),
+                    "expiry": serializers.DateTimeField(default=default_expiration_date()),
+                    "account_id": serializers.IntegerField(default=0),
+                 },
+             ),
+         )
+    
     @action(detail=False, methods=['post'])
     def renew(self, request):
         
@@ -106,7 +171,7 @@ class ApiKeyView(ViewSet):
             data = self._key_renew(resource_key, expiry, user)
             status=200
             return JsonResponse(data, status=status)
-        elif user.is_superuser is False:
+        elif user.is_superuser == False:
             data = self._key_renew(resource_key, expiry, user)
             status=200
             return JsonResponse(data, status=status)
@@ -114,6 +179,18 @@ class ApiKeyView(ViewSet):
             data = {}
             status=403
             return JsonResponse(data, status=status)
+    
+    # Spectacular - Swagger: Data content for rotate endpoint
+    @extend_schema(
+             request=inline_serializer(
+                name="RotateSchemaSerializer",
+                fields={
+                    "resource_key": serializers.CharField(required=True),
+                    "short_expiry": serializers.BooleanField(default=False),
+                    "account_id": serializers.IntegerField(default=0),
+                 },
+             ),
+         )
     
     @action(detail=False, methods=['post'])
     def rotate(self, request):
@@ -128,7 +205,7 @@ class ApiKeyView(ViewSet):
             data = self._key_rotate(resource_key, short_expiry, user)
             status=200
             return JsonResponse(data, status=status)
-        elif user.is_superuser is False:
+        elif user.is_superuser == False:
             data = self._key_rotate(resource_key, short_expiry, user)
             status=200
             return JsonResponse(data, status=status)
@@ -272,7 +349,7 @@ class ApiKeyView(ViewSet):
         # Set the revoked value of this key to True
         resource_key_obj.revoked = True
         
-        if short_expiry in ["Yes", "yes", "y", "Y"]:
+        if short_expiry=="True":
             extension = 3
             resource_key_obj.expiry = timezone.now() + SHORT_APIKEY_EXPIRE
             resource_key_obj.save()    

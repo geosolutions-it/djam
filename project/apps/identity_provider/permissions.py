@@ -57,10 +57,11 @@ class APIKeyManagementResourceKeyVerification(permissions.BasePermission):
         
         if request.user.is_superuser:
             # check if the account_id exists and if the user of the resource key and the requested account_id are the same
-            if other_user != None and other_user != api_key.user_id:
+            # If the account_id is not defined it takes the value 0
+            if other_user != '0' and other_user != api_key.user_id:
                 return False
             # Check if superuser tries to perform an action for him with a resource key of another user
-            elif other_user is None:
+            elif other_user == '0':
                 try:
                     superuser_resource_key = ApiKey.objects.filter(user=request.user).filter(scope='resource').get(key=resource_key)
                 except (ApiKey.DoesNotExist, ValidationError):
