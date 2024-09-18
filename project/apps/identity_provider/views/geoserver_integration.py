@@ -17,6 +17,8 @@ from apps.identity_provider.models import Session, ApiKey
 from apps.privilege_manager.models import Team
 from apps.user_management.models import User
 from apps.identity_provider.permissions import ResourceKeyVerification
+from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import OpenApiParameter
 
 
 logger = logging.getLogger(__name__)
@@ -79,6 +81,13 @@ class GeoserverAuthKeyAndApiKeyIntrospection(GeoserverIntrospection, views.APIVi
     """
 
     permission_classes = [permissions.AllowAny, ResourceKeyVerification]
+
+    # Spectacular - Swagger: Data content for renew endpoint
+    @extend_schema(
+            parameters=[
+                OpenApiParameter("authkey"),
+            ]
+    )
 
     def get(self, request, format=None):
 

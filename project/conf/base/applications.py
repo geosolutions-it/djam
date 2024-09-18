@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     "apps.proxy.apps.ProxyConfig",
     "django_recaptcha",
     "revproxy",
+    'drf_spectacular',
     # Djam health-checks - should always be last in the INSTALLED_APPS
     "checks.ProjectChecksConfig",
 ]
