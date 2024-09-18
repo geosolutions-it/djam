@@ -61,10 +61,9 @@ class ApiKeyView(ViewSet):
              request=inline_serializer(
                 name="CreateKeySchemaSerializer",
                 fields={
-                    "resource_key": serializers.CharField(required=True),
                     "revoked": serializers.CharField(default="False"),
                     "expiry": serializers.DateTimeField(default=default_expiration_date()),
-                    "account_id": serializers.IntegerField(default=0),
+                    "account_id": serializers.IntegerField(),
                  },
              ),
          )
@@ -273,11 +272,10 @@ class ApiKeyView(ViewSet):
         record = ApiKey.objects.create(user=user, scope=scope, revoked=revoked, expiry=expiry)
         
         data = {
+            "username": str(user),
             "token": record.key,
             "id": record.id,
-            # "wms_token": token.wms_key,
             "created": "success",
-            #"last_modified": token.last_modified,
         }    
         return(data)
     
