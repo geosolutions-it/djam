@@ -28,7 +28,10 @@ class ExpiredKeyFilter(admin.SimpleListFilter):
                 expiry__gte=timezone.now()
             )
         return queryset
-        
+
+@admin.action(description="Revoke selected keys")
+def revoke_keys(modeladmin, request, queryset):
+    queryset.update(revoked=True)
 
 @admin.register(ApiKey)
 class ApiKeyAdmin(admin.ModelAdmin):
@@ -36,3 +39,4 @@ class ApiKeyAdmin(admin.ModelAdmin):
     ordering = ("user",)
     search_fields = ("key", "user__email")
     list_filter = ["revoked", "scope", ExpiredKeyFilter]
+    actions = [revoke_keys]
