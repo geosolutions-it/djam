@@ -1,18 +1,12 @@
-FROM python:3.10.4-alpine
+FROM python:3.10.15-slim
 ENV PYTHONUNBUFFERED 1
 
 RUN mkdir /djam
 COPY ./ /djam/
+RUN apt-get update -y
+RUN apt-get install gcc libpq-dev postgresql-15 postgresql-client-15 curl -y
 
-RUN apk add --no-cache --virtual build-deps \
-    postgresql-dev gcc musl-dev g++ linux-headers pcre pcre-dev curl \
-    && pip install -r /djam/requirements.txt \
-    && pip install uwsgi \
-    && apk del build-deps
-
-RUN apk add --no-cache postgresql
-RUN apk add --no-cache pcre
-RUN pip3 install -r djam/requirements.txt
+RUN pip3 install -r djam/requirements.txt && pip install uwsgi
 WORKDIR /djam/project
 
 RUN  chmod +x ./docker-entrypoint.sh
