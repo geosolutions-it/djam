@@ -18,6 +18,9 @@ class ResourceKeyVerification(permissions.BasePermission):
         except ValidationError:
             return False
         
+        if api_key is None:
+            return False
+        
         if api_key.revoked:
             return False
         

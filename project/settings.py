@@ -14,5 +14,8 @@ ACCOUNT_LOGOUT_REDIRECT_URL = os.getenv("LOGOUT_REDIRECT_URL", SITEURL)
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'DJAM REST API',
+    'DESCRIPTION': 'OpenID Identity Provider and custom Privilege Management System',
     'SERVE_INCLUDE_SCHEMA': False,
+    'PREPROCESSING_HOOKS': ["apps.identity_provider.spectacular_path_managment.custom_preprocessing_hook"],
+
 }

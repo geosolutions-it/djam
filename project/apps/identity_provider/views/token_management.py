@@ -36,6 +36,10 @@ class ApiKeyView(ViewSet):
     # ApiKeyView actions
     @action(detail=False, methods=['post'])
     def key_list(self, request):
+        ''' 
+        The user is able to export her/his keys with
+        resource scope.
+        '''
         
         user = request.user
         if user.is_superuser:
@@ -67,7 +71,11 @@ class ApiKeyView(ViewSet):
 
     @action(detail=False, methods=['post'])
     def create_key(self, request):
-        
+        ''' 
+        The user is able to create a key with
+        resource scope.
+        '''
+
         user = request.user
         if user.is_superuser:
             user = self._select_user(request, user)
@@ -96,6 +104,10 @@ class ApiKeyView(ViewSet):
     
     @action(detail=False, methods=['post'])
     def status(self, request):
+        ''' 
+        The user is able to export the status of
+        a resource key.
+        '''
         
         user = request.user
         resource_key = request.data.get('resource_key', None)
@@ -128,6 +140,9 @@ class ApiKeyView(ViewSet):
     
     @action(detail=False, methods=['post'])
     def revoke(self, request):
+        '''
+        The user is able to revoke her/his resource key
+        '''
         
         user = request.user
         resource_key = request.data.get('resource_key', None)
@@ -161,7 +176,11 @@ class ApiKeyView(ViewSet):
     
     @action(detail=False, methods=['post'])
     def renew(self, request):
-        
+        ''' 
+        The user is able to renew the expiration date
+        of a resource key.
+        '''
+
         user = request.user
         resource_key = request.data.get('resource_key', None)
         expiry = request.data.get('expiry', None)
@@ -194,7 +213,13 @@ class ApiKeyView(ViewSet):
     
     @action(detail=False, methods=['post'])
     def rotate(self, request):
-        
+        ''' 
+        The user is able to revoke an old resource key
+        and create a new one. Optionaly she/he can extend
+        the expiration date of her/his old resource key
+        for three days by setting the "short_expiry" to True.
+        '''
+
         user = request.user
         resource_key = request.data.get('resource_key', None)
         # A new short expiration date for the old key
@@ -258,11 +283,6 @@ class ApiKeyView(ViewSet):
     
     def _key_status(self, resource_key, user):
         
-        '''This method outputs the requested resource key status.
-           All the checks for the key verification and
-           the user permissions are applied in the permission class: 
-           APIKeyManagementResourceKeyVerification'''
-        
         resource_key_obj = ApiKey.objects.filter(user=user).filter(scope='resource').get(key=resource_key)
             
         data = {
@@ -273,11 +293,6 @@ class ApiKeyView(ViewSet):
         return(data)
     
     def _key_revoke(self, resource_key, revoked, user):
-        
-        '''The method set the revoke value to the defined
-           resource key. All the checks for the key verification and
-           the user permissions are applied in the permission class: 
-           APIKeyManagementResourceKeyVerification'''
         
         resource_key_obj = ApiKey.objects.filter(user=user).filter(scope='resource').get(key=resource_key)
         
@@ -299,11 +314,6 @@ class ApiKeyView(ViewSet):
             return(data)
         
     def _key_renew(self, resource_key, expiry, user):
-        
-        '''The method extend the expiration date of a resource key.
-           All the checks for the key verification and
-           the user permissions are applied in the permission class: 
-           APIKeyManagementResourceKeyVerification'''
         
         resource_key_obj = ApiKey.objects.filter(user=user).filter(scope='resource').get(key=resource_key)
         
@@ -335,13 +345,6 @@ class ApiKeyView(ViewSet):
             return(data)
         
     def _key_rotate(self, resource_key, short_expiry, user):
-        
-        '''The method set the revoked value of th resource key to false,
-           creates a new one and extend the expiration date of a old key
-           to some hours or days.
-           All the checks for the key verification and
-           the user permissions are applied in the permission class: 
-           APIKeyManagementResourceKeyVerification'''
         
         resource_key_obj = ApiKey.objects.filter(user=user).filter(scope='resource').get(key=resource_key)
         extension = 0
