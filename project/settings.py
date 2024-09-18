@@ -18,3 +18,4 @@ SPECTACULAR_SETTINGS = {
     'SERVE_INCLUDE_SCHEMA': False,
     'PREPROCESSING_HOOKS': ["apps.identity_provider.spectacular_path_managment.custom_preprocessing_hook"],
 }
+SILENCED_SYSTEM_CHECKS = ['django_recaptcha.recaptcha_test_key_error']

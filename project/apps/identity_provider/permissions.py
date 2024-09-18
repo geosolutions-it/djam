@@ -1,6 +1,7 @@
 from rest_framework import permissions
 from django.core.exceptions import ValidationError
 from apps.identity_provider.models import ApiKey, default_expiration_date
+from apps.identity_provider.settings import MAX_APIKEY_EXPIRE
 from datetime import datetime
 from django.utils import timezone
 
@@ -105,7 +106,7 @@ class ExpirationDateValidation(permissions.BasePermission):
         except ValueError:
             return False
         
-        if expiry_obj > default_expiration_date():
+        if expiry_obj > timezone.now() + MAX_APIKEY_EXPIRE:
             return False
         if expiry_obj < timezone.now():
             return False

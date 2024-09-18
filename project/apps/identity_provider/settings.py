@@ -26,3 +26,6 @@ APIKEY_EXPIRE = datetime.timedelta(ast.literal_eval(os.getenv("APIKEY_EXPIRE_DAY
 
 # Short expiration delta for a short expiration date of an old key (/rotate endpoint)
 SHORT_APIKEY_EXPIRE = datetime.timedelta(ast.literal_eval(os.getenv("SHORT_APIKEY_EXPIRE_DAYS", "3")))
+
+# Max expiration delta for the expiration date of a resource key
+MAX_APIKEY_EXPIRE = datetime.timedelta(ast.literal_eval(os.getenv("MAX_APIKEY_EXPIRE_DAYS", "180")))

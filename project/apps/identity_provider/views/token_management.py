@@ -285,6 +285,8 @@ class ApiKeyView(ViewSet):
             
         data = {
             "username" : str(user),
+            "key": resource_key_obj.key,
+            "id": resource_key_obj.id,
             "revoked": resource_key_obj.revoked,
             "expiration date":  resource_key_obj.expiry
         }   
