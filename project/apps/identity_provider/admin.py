@@ -32,7 +32,7 @@ class ExpiredKeyFilter(admin.SimpleListFilter):
 
 @admin.register(ApiKey)
 class ApiKeyAdmin(admin.ModelAdmin):
-    list_display = ("user", "key", "scope", "revoked", "expiry")
+    list_display = ("key", "user", "scope", "revoked", "expiry")
     ordering = ("user",)
-    search_fields = ("user",)
+    search_fields = ("key", "user__email")
     list_filter = ["revoked", "scope", ExpiredKeyFilter]
