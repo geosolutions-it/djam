@@ -25,12 +25,14 @@ class ApiKeyView(ViewSet):
 
     # Spectacular - Swagger: Data content for key_list endpoint
     @extend_schema(
-             request=inline_serializer(
+             request={
+                 "application/json": inline_serializer(
                 name="KeyListSchemaSerializer",
                 fields={
-                    "account_id": serializers.IntegerField(),
+                    "account_id": serializers.IntegerField(default="null"),
                  },
              ),
+            }
          )
     
     # ApiKeyView actions
@@ -58,14 +60,16 @@ class ApiKeyView(ViewSet):
     
     # Spectacular - Swagger: Data content for create_key endpoint
     @extend_schema(
-             request=inline_serializer(
+             request={
+                 "application/json": inline_serializer(
                 name="CreateKeySchemaSerializer",
                 fields={
                     "revoked": serializers.CharField(default="False"),
                     "expiry": serializers.DateTimeField(default=default_expiration_date()),
-                    "account_id": serializers.IntegerField(),
+                    "account_id": serializers.IntegerField(default="null"),
                  },
              ),
+            }
          )
 
     @action(detail=False, methods=['post'])
@@ -92,13 +96,15 @@ class ApiKeyView(ViewSet):
         
     # Spectacular - Swagger: Data content for status endpoint
     @extend_schema(
-             request=inline_serializer(
+             request={
+                 "application/json": inline_serializer(
                 name="StatusSchemaSerializer",
                 fields={
                     "resource_key": serializers.CharField(required=True),
-                    "account_id": serializers.IntegerField(default=0),
+                    "account_id": serializers.IntegerField(default="null"),
                  },
              ),
+            }
          )
     
     @action(detail=False, methods=['post'])
@@ -127,14 +133,16 @@ class ApiKeyView(ViewSet):
     
     # Spectacular - Swagger: Data content for revoke endpoint
     @extend_schema(
-             request=inline_serializer(
+             request={
+                 "application/json": inline_serializer(
                 name="RevokeSchemaSerializer",
                 fields={
                     "resource_key": serializers.CharField(required=True),
                     "revoked": serializers.CharField(default="False"),
-                    "account_id": serializers.IntegerField(default=0),
+                    "account_id": serializers.IntegerField(default="null"),
                  },
              ),
+            }
          )
     
     @action(detail=False, methods=['post'])
@@ -163,14 +171,17 @@ class ApiKeyView(ViewSet):
         
     # Spectacular - Swagger: Data content for renew endpoint
     @extend_schema(
-             request=inline_serializer(
+             request= {
+                "application/json":inline_serializer(
                 name="RenewSchemaSerializer",
                 fields={
                     "resource_key": serializers.CharField(required=True),
                     "expiry": serializers.DateTimeField(default=default_expiration_date()),
-                    "account_id": serializers.IntegerField(default=0),
+                    "account_id": serializers.IntegerField(default="null"),
                  },
              ),
+            }
+
          )
     
     @action(detail=False, methods=['post'])
@@ -200,14 +211,16 @@ class ApiKeyView(ViewSet):
     
     # Spectacular - Swagger: Data content for rotate endpoint
     @extend_schema(
-             request=inline_serializer(
+             request={
+                 "application/json": inline_serializer(
                 name="RotateSchemaSerializer",
                 fields={
                     "resource_key": serializers.CharField(required=True),
-                    "short_expiry": serializers.BooleanField(default=False),
-                    "account_id": serializers.IntegerField(default=0),
+                    "short_expiry": serializers.CharField(default="False"),
+                    "account_id": serializers.IntegerField(default="null"),
                  },
              ),
+            }
          )
     
     @action(detail=False, methods=['post'])
