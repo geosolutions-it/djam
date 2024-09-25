@@ -3,7 +3,7 @@ site_name: DJAM
 repo_url: https://github.com/geosolutions-it/djam
 repo_name: djam
 
-site_description: Access Management, implementing OpenID Identity Provider and custom Privilege Management System
+site_description: Identity provider and Access manager for Django
 
 site_author: GeoSolutions
 
@@ -21,3 +21,4 @@ theme:
     scheme: preference
   icon:
     repo: fontawesome/brands/github
+    logo: material/lock
