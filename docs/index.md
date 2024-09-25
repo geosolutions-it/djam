@@ -108,6 +108,15 @@ and in OPENID CONNECT PROVIDER add row to Clients table.
 You can also check User registration form at `http://localhost:8000/register`. REMEMBER: to register the User
 you first need update `djam/project/conf/local/email.py` configuration file with SMTP server credentials.   
 
+## API Documentation - Swagger
+
+To create the corresponding schema.yml for the API documentation (Swagger) run the following command:
+
+```bash
+python manage.py spectacular --color --file schema.yml
+```
+Afterwards, Swagger front-end should exist in the following URL: `http://localhost:8000/openid/api/schema/swagger-ui/`
+
 ## Side notes
 
 * To properly read data from Token Info endpoint the client has to have `token_introspection` and their ID present in the available scopes (/admin -> Clients model -> Scopes) 

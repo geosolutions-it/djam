@@ -63,6 +63,8 @@ Each endpoint (in a dropdown menu) includes a short description while users are 
 
 ![swagger renew](images/swagger_renew.png)
 
+The swagger front-end is available to the following URL: `http://<DJAM_domain>/openid/api/schema/swagger-ui/`
+
 ### A note for the administrators / superusers
 
 Although users are able to manage only their own resource keys, administrators / superusers are able to manage all the resource keys through this REST API. Thus, superusers are able to define the user / account for a specific operation that they have to perform by using a parameter called `account_id`. For instance, if a superuser wants to output the status of a resource key which is owned by a user with `ID=4`, superuser can run:
