@@ -1,6 +1,8 @@
-from apps.identity_provider.views.token_generator import ApiKeyView
+from apps.identity_provider.views.token_management import ApiKeyView
 from django.urls import path, re_path, include
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework import routers
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 from .views.oidc_customization import (
     StatelessAuthorizeView,
@@ -12,6 +14,9 @@ from .views.geoserver_integration import (
     GeoserverAuthKeyAndApiKeyIntrospection,
     GeoserverCredentialsIntrospection,
 )
+
+router = routers.DefaultRouter()
+router.register(r'', ApiKeyView)
 
 urlpatterns = [
     # override authorize endpoint to store CODE within Session data
@@ -40,5 +45,10 @@ urlpatterns = [
         GeoserverCredentialsIntrospection.as_view(),
         name="user_credentials_introspection",
     ),
-    path("api/token/", ApiKeyView.as_view(), name="api_key_view",),
+    # Swagger frontend
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+
+    # API key management URLs
+    path('api/token/', include(router.urls)),
 ]
