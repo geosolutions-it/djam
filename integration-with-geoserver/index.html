@@ -1,0 +1,774 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Identity provider and Access manager for Django">
+      
+      
+        <meta name="author" content="GeoSolutions">
+      
+      
+      
+        <link rel="prev" href="../api-keys/">
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.36">
+    
+    
+      
+        <title>Integration with GeoServer - DJAM</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.06209087.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="preference" data-md-color-primary="green" data-md-color-accent="purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#geoserver-integration" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="DJAM" class="md-header__button md-logo" aria-label="DJAM" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 17a2 2 0 0 0 2-2 2 2 0 0 0-2-2 2 2 0 0 0-2 2 2 2 0 0 0 2 2m6-9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2h1V6a5 5 0 0 1 5-5 5 5 0 0 1 5 5v2zm-6-5a3 3 0 0 0-3 3v2h6V6a3 3 0 0 0-3-3"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            DJAM
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Integration with GeoServer
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/geosolutions-it/djam" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    djam
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="DJAM" class="md-nav__button md-logo" aria-label="DJAM" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 17a2 2 0 0 0 2-2 2 2 0 0 0-2-2 2 2 0 0 0-2 2 2 2 0 0 0 2 2m6-9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2h1V6a5 5 0 0 1 5-5 5 5 0 0 1 5 5v2zm-6-5a3 3 0 0 0-3 3v2h6V6a3 3 0 0 0-3-3"/></svg>
+
+    </a>
+    DJAM
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/geosolutions-it/djam" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    djam
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-keys/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    API Keys
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Integration with GeoServer
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Integration with GeoServer
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#djam-teams-and-geoserver-roles" class="md-nav__link">
+    <span class="md-ellipsis">
+      DJAM teams and Geoserver roles
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#geoserver-authkey-module" class="md-nav__link">
+    <span class="md-ellipsis">
+      GeoServer authkey module
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protecting-resources-through-the-authentication-key-module" class="md-nav__link">
+    <span class="md-ellipsis">
+      Protecting Resources through the Authentication Key module
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Protecting Resources through the Authentication Key module">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configure-the-role-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configure the Role Service
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configure-the-user-groups-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configure the User Groups Service
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configure-the-authentication-key-provider" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configure the Authentication Key Provider
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adding-the-new-authentication-filter-to-the-filter-chains" class="md-nav__link">
+    <span class="md-ellipsis">
+      Adding the new authentication filter to the “Filter Chains”
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protecting-workspaces-and-layers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Protecting Workspaces and Layers
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Protecting Workspaces and Layers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#verify-the-list-of-roles-djam-teams-are-retrieved-from-geoserver" class="md-nav__link">
+    <span class="md-ellipsis">
+      Verify the list of roles (DJAM Teams) are retrieved from Geoserver
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-and-manage-the-security-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create and manage the security rules
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#access-to-the-wms-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      Access to the WMS service
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#basic-auth-credentials-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basic Auth credentials validation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rest-api" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    REST API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#djam-teams-and-geoserver-roles" class="md-nav__link">
+    <span class="md-ellipsis">
+      DJAM teams and Geoserver roles
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#geoserver-authkey-module" class="md-nav__link">
+    <span class="md-ellipsis">
+      GeoServer authkey module
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protecting-resources-through-the-authentication-key-module" class="md-nav__link">
+    <span class="md-ellipsis">
+      Protecting Resources through the Authentication Key module
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Protecting Resources through the Authentication Key module">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configure-the-role-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configure the Role Service
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configure-the-user-groups-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configure the User Groups Service
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configure-the-authentication-key-provider" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configure the Authentication Key Provider
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adding-the-new-authentication-filter-to-the-filter-chains" class="md-nav__link">
+    <span class="md-ellipsis">
+      Adding the new authentication filter to the “Filter Chains”
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protecting-workspaces-and-layers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Protecting Workspaces and Layers
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Protecting Workspaces and Layers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#verify-the-list-of-roles-djam-teams-are-retrieved-from-geoserver" class="md-nav__link">
+    <span class="md-ellipsis">
+      Verify the list of roles (DJAM Teams) are retrieved from Geoserver
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-and-manage-the-security-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create and manage the security rules
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#access-to-the-wms-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      Access to the WMS service
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#basic-auth-credentials-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basic Auth credentials validation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="geoserver-integration">Geoserver integration</h1>
+<p>In this section the configuration of GeoServer in order to be used with DJAM is presented. When GeoServer is used with DJAM, the authentication flow is described as below:</p>
+<ul>
+<li>A new Api Key with a specific user (and scope: Resource) is created through the DJAM admin site (as presented in the <a href="/api-keys">Api keys section</a>) </li>
+<li>A request containing the API Key is executed by the user. Example: <code>http://localhost:8080/geoserver/topp/wms?service=WMS&amp;version=1.3.0&amp;request=GetCapabilities&amp;authkey=ef18d7e7-963b-470f-9230-c7f9de166888</code></li>
+<li>Geoserver extracts the key from the request and asks DJAM to validate it</li>
+<li>If the key is valid (it’s not expired or revoked) DJAM will respond with the user associated to the key and, optionally, the list of groups (also known as DJAM Teams) the user is member of</li>
+<li>Geoserver will lookup its internal access rules to allow or deny the request</li>
+</ul>
+<h2 id="djam-teams-and-geoserver-roles">DJAM teams and Geoserver roles</h2>
+<p>Administrators can create DJAM teams (user groups) in DJAM and users to them through the DJAM admin site. When GeoServer is configured to use DJAM, these teams will be automatically mapped to Geoserver roles while the mapping from DJAM teams to Geoserver roles allows creating Geoserver security rules to restrict access to resources based on the Geoserver role and therefore the DJAM team. In other words, administrators are able to manage the access to specific resources of GeoServer by assigning these resources to a GeoServer role (by creating a rule through the GeoServer UI) which is assiged with a specific DJAM team. Thus, all the users who are included in this DJAM team will be able to have access to these resources.</p>
+<h2 id="geoserver-authkey-module">GeoServer authkey module</h2>
+<p>For the GeoServer configuration in order to use DJAM, a vanilla GeoServer instance can be utilized while the <code>authkey</code> module of GeoServer is required. This module allows for a very simple authentication protocol designed for OGC clients. For these clients the module allows a minimal form of authentication by appending a unique key in the URL that is used as the sole authentication token. For more information please see the following <a href="https://docs.geoserver.org/main/en/user/extensions/authkey/index.html">link</a>. </p>
+<p>For the <code>authkey</code> module installation, follow the steps below:</p>
+<ul>
+<li>Download the <code>geoserver-2.23.2-authkey-plugin.zip</code> extension from the <a href="https://sourceforge.net/projects/geoserver/files/GeoServer/2.23.2/extensions/">GeoServer extensions archive</a> </li>
+<li>Unzip the content into the WEB-INF/lib folder of the GeoServer web application.</li>
+<li>Restart GeoServer</li>
+<li>From the GUI as administrator, go to “Security”, “Authentication” Clicking on “Add New Authentication Filter”. The <code>authkey</code> module should be available</li>
+</ul>
+<p><img alt="authkey module" src="../images/authkey.png" /></p>
+<h2 id="protecting-resources-through-the-authentication-key-module">Protecting Resources through the Authentication Key module</h2>
+<h5 id="configure-the-role-service">Configure the Role Service</h5>
+<p>This is the service that is used by Geoserver to retrieve the list of roles (DJAM Teams). The list is updated each time the service is queried by the other Geoserver modules and services (Authentication filter, Data security, etc.) for the list of roles.</p>
+<ul>
+<li>From the GUI as administrator, go to “Security”, “Users, Groups, and Roles”</li>
+<li>Click “Add new” under Role Services</li>
+<li>Fill the fields according to the following image, with the USers JSON Path populated with: <code>$.users[?(@.username=='${username}')].groups</code></li>
+</ul>
+<p><img alt="role service" src="../images/role_service.png" /></p>
+<h5 id="configure-the-user-groups-service">Configure the User Groups Service</h5>
+<p>This service will be used by the Authentication Key Provider to map authenticated users and groups. </p>
+<ul>
+<li>From the GUI as administrator, go to “Security”, “Users, Groups, and Roles”</li>
+<li>Click “Add new” under User Group Services </li>
+<li>Fill the fields according to the following image, with the Web Search Response Roles Search Regualr expression populated with: <code>^.*?"groups"\s*:\s*\["([^"]+)"\].*$</code></li>
+<li>Select the Role service created before</li>
+</ul>
+<p><img alt="user group" src="../images/user_group.png" /></p>
+<h5 id="configure-the-authentication-key-provider">Configure the Authentication Key Provider</h5>
+<ul>
+<li>From the GUI as administrator, go to “Security”, “Authentication”</li>
+<li>Clicking on “Add New Authentication Filter”, we should be able to see the module available</li>
+<li>Select <code>AuthKey</code></li>
+<li>Provide a <code>Name</code> for the provider</li>
+<li>Change the name of the URL parameter to be used to identify the keys; the default one for DJAM is “authkey”, meaning that the requests will be in the form: <code>http://....?...&amp;authkey=&lt;the_user_key&gt;</code></li>
+<li>Select “Web Service” as authentication user mapper. This will configure Geoserver to use DJAM as the external authentication service. Fill in the values reported in the picture below.</li>
+<li>Select “djam_groupservice” (created before) as “User/Group Service”</li>
+</ul>
+<p><img alt="auth key provider" src="../images/auth_key_provider.png" /></p>
+<h5 id="adding-the-new-authentication-filter-to-the-filter-chains">Adding the new authentication filter to the “Filter Chains”</h5>
+<p>The next step is to add the new authentication filter to the “Filter Chains”. "Filter Chains" exist in the same page as Authentication filters: “Security”, “Authentication”. Thus, from the panel of "Filter Chains" select <code>web</code>, <code>rest</code>, <code>gwc</code> and <code>default</code> accordingly, and move the new authentication filter on the right panel while the <code>basic</code> filter on the left panel as the following images: </p>
+<p><img alt="filter chains" src="../images/filter_chains.png" />
+Web
+<img alt="web" src="../images/web.png" />
+REST
+<img alt="rest" src="../images/rest.png" />
+GWC
+<img alt="gwc" src="../images/gwc.png" />
+Default
+<img alt="default" src="../images/default.png" /></p>
+<p><strong>Note</strong>: It is important to always “Save” all the changes. Click on all the “Save” buttons when finished updating the filters until back to the GeoServer home page. Double check that the configuration has been correctly saved.</p>
+<h2 id="protecting-workspaces-and-layers">Protecting Workspaces and Layers</h2>
+<h5 id="verify-the-list-of-roles-djam-teams-are-retrieved-from-geoserver">Verify the list of roles (DJAM Teams) are retrieved from Geoserver</h5>
+<ul>
+<li>From the GUI as administrator, go to “Security”, “Users, Groups, and Roles”</li>
+<li>Switch to the “Roles” tab</li>
+<li>Click “djam_roleservice” to expand the list of available roles</li>
+<li>The list of DJAM Teams should appear, where the team name is prefixed with “ROLE_”</li>
+</ul>
+<h5 id="create-and-manage-the-security-rules">Create and manage the security rules</h5>
+<p>Last step is to protect the workspaces and layers for the specific roles by creating new rules. The logic on how those rules works is the following one:</p>
+<ul>
+<li>Apply the more generic rule</li>
+<li>Unless a specific one has been found</li>
+</ul>
+<p><img alt="add a rule " src="../images/add_a_rule.png" /></p>
+<p>To create a new rule, select <code>new rule</code>, from the “Security”, “Data” section and then:</p>
+<ul>
+<li>select the workspace and its corresponding store </li>
+<li>move the role that you created above (e.g ROLE_djam1) to the right panel (<code>selected roles</code>).</li>
+<li>save the new rule.</li>
+</ul>
+<p><strong>NOTE</strong>: The ROLES are derived by GeoServer automatically once a Users has added to a Group or assigned to a specific Role.</p>
+<h5 id="access-to-the-wms-service">Access to the WMS service</h5>
+<p>Now the GeoServer is configured and can be tested by trying to access a protected layer with a user beloging to a specific team (for DJAM), or role (for GeoServer) (e.g DJAM_group1).</p>
+<p>You can test by using a WMS GetMap query as the following:</p>
+<p>http://localhost:8080/geoserver/&lt;<strong>workspace</strong>&gt;/wms?service=WMS&amp;version=1.1.0&amp;request=GetMap&amp;layers=&lt;<strong>workspace</strong>&gt;%3A&lt;<strong>store</strong>&gt;&amp;bbox=&lt;<strong>bbox coordinates</strong>&gt;&amp;width=&lt;<strong>width in pixels</strong>&gt;&amp;height=&lt;<strong>height in pixels</strong>&gt;&amp;srs=EPSG%3A3857&amp;styles=&amp;format=application/openlayers&amp;authkey=&lt;<strong>a valid resource key</strong>&gt;</p>
+<p>If the resource key is valid (it is not expired or revoked), the layer should be displayed.</p>
+<h4 id="basic-auth-credentials-validation">Basic Auth credentials validation</h4>
+<p>To be able to use Basic Auth authentication from in Geoserver with credentials vaildation in Djam <a href="https://github.com/geosolutions-it/geoserver/issues/145">this</a> feature of Geoserver is required.</p>
+<p>Another method of authenticating requests in Geoserver is User credentials validation by Djam. To do so you need to make a GET request to a view named
+<code>user_credentials_introspection</code> with parameters <code>u</code> (user's username - by default it's their email) and <code>p</code> (user's password).</p>
+<p>Generally, usage of this authentication method is discouraged. It should only be used in certain, controlled environments. When using this 
+flow in a production environment, make sure <code>REQUIRE_SECURE_HTTP_FOR_GEOSERVER_INTROSPECTION</code> setting is <code>True</code> 
+(djam/project/conf/prod/identity_provider.py).</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.56dfad97.min.js"></script>
+      
+    
+  </body>
+</html>
