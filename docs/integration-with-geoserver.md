@@ -56,6 +56,7 @@ This service will be used by the Authentication Key Provider to map authenticate
 * Provide a `Name` for the provider
 * Change the name of the URL parameter to be used to identify the keys; the default one for DJAM is “authkey”, meaning that the requests will be in the form: `http://....?...&authkey=<the_user_key>`
 * Select “Web Service” as authentication user mapper. This will configure Geoserver to use DJAM as the external authentication service. Fill in the values reported in the picture below.
+* Fill the field “Web Service Response User Search Regular Expression”, with the following:  ^.*?\"username\"\s*:\s*\"([^\"]+)\".*$
 * Select “djam_groupservice” (created before) as “User/Group Service”
 
 ![auth key provider](images/auth_key_provider.png)
