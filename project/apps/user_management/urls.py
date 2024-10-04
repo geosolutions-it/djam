@@ -1,4 +1,4 @@
-from django.urls import path, re_path, include
+from django.urls import path, re_path
 from apps.user_management.views.account_page import (
     AccountPageView,
     AccountEditView,
@@ -18,11 +18,9 @@ from apps.user_management.views.email_confirmation import (
     EmailConfirmationSentView,
     ResendVerificationEmailView,
 )
-from apps.proxy.views import proxy_view
 
 
 urlpatterns = [
-    re_path(r'service/(?P<request_path>.*)', proxy_view, name="proxy_view"),
 
     # ---- django.contrib.auth.urls.views ----
     path(
