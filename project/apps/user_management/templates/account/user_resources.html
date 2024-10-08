@@ -1,13 +1,25 @@
 {{ block.super }}
-{% csrf_token %}
-<div class="card">
-    <div class="card-header">Proxy Services</div>
-    <div class="card-body">
-    </div>      
+    {% csrf_token %}
+<div class="overflow-auto">
+    <div class="card overflow-auto" style="height: 50%;">
+        <div class="card-header">Resources</div>
+        <div class="card-body">
+          <ul class="list-group">
+            {% for resource in resource_list %}
+              <li class="list-group-item">{{ resource | first | title }}: {{ resource | last }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+    </div>
+    <div class="card overflow-auto" style="height:70%;">
+        <div class="card-header">API keys</div>
+        <div class="card-body">
+          <ul class="list-group">
+            {% for apikey in apikey_list %}
+              <li class="list-group-item">{{ apikey }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
 </div>
-
-<div class="card">
-    <div class="card-header">API keys</div>
-    <div class="card-body">
-    </div>      
-</div>
+<br>

@@ -12,6 +12,8 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views.generic import UpdateView, DetailView, RedirectView
 from apps.user_management.forms import UserAccountForm
+from apps.identity_provider.utils import apikey_list
+from apps.proxy.utils import resource_list
 
 logger = logging.getLogger(__name__)
 
@@ -56,7 +58,7 @@ class AccountPageView(UserGtObjectMixin, LoginRequiredMixin, DetailView):
     pk_url_kwarg = "id"
 
 
-class AccountEditView(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
+class AccountDashboard(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
     model = get_user_model()
     form_class = UserAccountForm
     template_name = "account/user_edit.html"
@@ -70,6 +72,9 @@ class AccountEditView(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
         context["fix_error"] = self.request.GET.get("fix_error")
         context["api_key"] = ApiKey.objects.filter(user=context["object"]).first()
         context["success"] = self.request.GET.get("success")
+        # Pass the resource API keys and the resources of the user
+        context["apikey_list"] = apikey_list(self.request.user)
+        context["resource_list"] = resource_list(self.request.user)
         return context
 
     def form_valid(self, form):

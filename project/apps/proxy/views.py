@@ -17,6 +17,7 @@ def proxy_view(request, request_path):
     Will prox the request to a service defined in the admin
     only the users/team with right access can see the proxed response
     """
+
     user = request.user
     # check if an basic auth or djam token is provided we can authorize it
     auth_header = request.META.get("HTTP_AUTHORIZATION", None)
@@ -41,8 +42,8 @@ def proxy_view(request, request_path):
 
     rule_filters = {"resource__slug": request_path, "active": True}
     if not user.is_superuser:
+        # checking the access rule for the user
         rule_filters["role__in"] = user.get_role()
-    # checking the access rule for the user
 
     rules = AccessRule.objects.filter(**rule_filters)
 
