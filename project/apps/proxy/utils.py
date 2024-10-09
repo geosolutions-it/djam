@@ -41,10 +41,9 @@ def resource_list(user):
     user_roles = Role.objects.filter(user=user)
     
     # Get the IDs of the user's resources from the AccessRule table
-    user_resources_ids = AccessRule.objects.filter(role__in=user_roles).values('resource')
+    user_resources_ids = AccessRule.objects.filter(role__in=user_roles).filter(active=True).values('resource')
 
     # Get the available resources of the user from the Resources table
-    user_resources = Resource.objects.filter(id__in=user_resources_ids).values_list('slug', 'url')
-
+    user_resources = Resource.objects.filter(id__in=user_resources_ids).values_list('slug', flat=True)
 
     return user_resources

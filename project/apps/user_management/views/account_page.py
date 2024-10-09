@@ -72,6 +72,8 @@ class AccountDashboard(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
         context["fix_error"] = self.request.GET.get("fix_error")
         context["api_key"] = ApiKey.objects.filter(user=context["object"]).first()
         context["success"] = self.request.GET.get("success")
+        context["scheme"] = self.request.scheme
+        context["domain"] = self.request.get_host()
         # Pass the resource API keys and the resources of the user
         context["apikey_list"] = apikey_list(self.request.user)
         context["resource_list"] = resource_list(self.request.user)
