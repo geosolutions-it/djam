@@ -138,7 +138,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_absolute_url(self):
         return reverse("user_account_edit", kwargs={"id": self.pk})
 
-    def get_role(self):
+    def get_roles(self):
         return (self.role.all() | Role.objects.filter(team__name__in=self.get_team())).distinct()
     
     def get_team(self):

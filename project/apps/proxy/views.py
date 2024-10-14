@@ -43,7 +43,7 @@ def proxy_view(request, request_path):
     rule_filters = {"resource__slug": request_path, "active": True}
     if not user.is_superuser:
         # checking the access rule for the user
-        rule_filters["role__in"] = user.get_role()
+        rule_filters["role__in"] = user.get_roles()
 
     rules = AccessRule.objects.filter(**rule_filters)
 
