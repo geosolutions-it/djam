@@ -32,7 +32,7 @@ def basic_auth_authenticate_user(auth_header: str):
 def perform_authenticate(username, password):
     return authenticate(username=username, password=password)
 
-def resource_list(user):
+def get_allowed_resources(user):
     """
     Function which exports the resources (Proxy services) of a user
     """
