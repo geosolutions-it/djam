@@ -28,8 +28,7 @@
 }
 
 .user-edit-form-box p {
-  font-size: 1.2em;
-  margin-top: 5vh;
+  margin: 0 auto;
 }
 
 .user-edit-form-box #copy-token {
@@ -62,6 +61,7 @@
 .user-edit-form-box .card {
   margin-top: 20px;
   text-align: left;
+  min-height: 200px;
 }
 
 .user-edit-form-box .card-header {

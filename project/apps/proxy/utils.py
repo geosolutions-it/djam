@@ -37,13 +37,24 @@ def resource_list(user):
     Function which exports the resources (Proxy services) of a user
     """
     
+    if user.is_superuser:
+        return Resource.objects.all()
+    
+    roles_set = set()
+    
     # Get the roles of the user
     user_roles = Role.objects.filter(user=user)
+    for role in user_roles:
+        roles_set.add(role)
+    
+    #Get user teams
+    teams = user.team.all()
+    #Get teams roles
+    teams_roles = Role.objects.filter(team__in=teams).all()
+    for role in teams_roles:
+        roles_set.add(role)
     
     # Get the IDs of the user's resources from the AccessRule table
-    user_resources_ids = AccessRule.objects.filter(role__in=user_roles).filter(active=True).values('resource')
-
-    # Get the available resources of the user from the Resources table
-    user_resources = Resource.objects.filter(id__in=user_resources_ids).values_list('slug', flat=True)
+    user_resources = Resource.objects.filter(accessrule__in=AccessRule.objects.filter(role__in=roles_set)).all()
 
     return user_resources

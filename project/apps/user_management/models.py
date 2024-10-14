@@ -20,7 +20,8 @@ from django.db.models import Q
 from apps.user_management.utils import random_string
 from apps.user_management.model_managers import UserManager
 from apps.user_management.tasks import send_user_notification_email
-from apps.privilege_manager.models import Team, Role
+from apps.authorizations.models import Role
+from apps.privilege_manager.models import Team
 
 
 logger = logging.getLogger(__name__)
