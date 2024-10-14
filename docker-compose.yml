@@ -36,13 +36,15 @@ services:
       - .env_docker
     ports:
       - "5432:5432"
+    volumes:
+      - dbdata:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: postgres
     healthcheck:
       test: "pg_isready -d postgres -U postgres"
               
 volumes:
-    db:
+    dbdata:
       name: djam_db
     rabbitmq_djam:
       name: djam_rabbitmq
