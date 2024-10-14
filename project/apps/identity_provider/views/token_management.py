@@ -5,7 +5,7 @@ from apps.identity_provider.authentication import DjamTokenAuthentication
 from apps.identity_provider.permissions import APIKeyManagementResourceKeyVerification, ExpirationDateValidation
 from rest_framework.viewsets import ViewSet
 from rest_framework.decorators import action
-from apps.identity_provider.utils import select_user, apikey_list, create_apikey, key_status, key_revoke, key_renew, key_rotate
+from apps.identity_provider.utils import select_user, get_apikeys, create_apikey, key_status, key_revoke, key_renew, key_rotate
 
 from rest_framework import serializers
 from drf_spectacular.utils import extend_schema, inline_serializer
@@ -45,13 +45,13 @@ class ApiKeyView(ViewSet):
         if user.is_superuser:
             user = select_user(request, user)
             data = {
-                   "tokens of {}".format(user): apikey_list(user),
+                   "tokens of {}".format(user): get_apikeys(user),
                    }
             status=200
             return JsonResponse(data, status=status)
         elif request.user.is_superuser == False:
             data = {
-                   "tokens of {}".format(user): apikey_list(user),
+                   "tokens of {}".format(user): get_apikeys(user),
                    }
             status=200
             return JsonResponse(data, status=status)

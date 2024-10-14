@@ -14,17 +14,13 @@ def select_user(request, user):
     return user
 
 # Endpoints functionality
-def apikey_list(user):
+def get_apikeys(user):
     # A user cannot create a management key
         
     # Find keys of a user with the scope resource
-    user_tokens = ApiKey.objects.filter(user=user).filter(scope='resource')
+    apikeys = ApiKey.objects.filter(user=user).filter(scope='resource')
 
-    # Create a list with the resource keys of this user
-    token_list = [i.key for i in user_tokens]
-        
-    data = token_list 
-    return(data)
+    return apikeys
     
 def create_apikey(request, user):
     # A user cannot create a management key

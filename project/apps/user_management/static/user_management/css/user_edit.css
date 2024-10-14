@@ -99,6 +99,14 @@
   margin-left: 5px;
 }
 
+.apikey-item__key {
+  display: block;
+}
+
+.apikey-item__expires {
+  font-size: 0.6rem;
+}
+
 .form-group label {
   /* font-weight: bold;
   text-align: left;

@@ -12,7 +12,7 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views.generic import UpdateView, DetailView, RedirectView
 from apps.user_management.forms import UserAccountForm
-from apps.identity_provider.utils import apikey_list
+from apps.identity_provider.utils import get_apikeys
 from apps.proxy.utils import get_allowed_resources
 
 logger = logging.getLogger(__name__)
@@ -75,7 +75,7 @@ class AccountDashboard(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
         context["scheme"] = self.request.scheme
         context["domain"] = self.request.get_host()
         # Pass the resource API keys and the resources of the user
-        context["apikey_list"] = apikey_list(self.request.user)
+        context["apikey_list"] = get_apikeys(self.request.user)
         context["resource_list"] = get_allowed_resources(self.request.user)
         return context
 

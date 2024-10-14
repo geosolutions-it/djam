@@ -2,13 +2,13 @@
     {% csrf_token %}
 <div class="overflow-auto">
     <div class="card overflow-auto">
-        <div class="card-header">Resources</div>
+        <div class="card-header">Upstream services</div>
         <div class="card-body">
           <ul class="list-group">
             {% for resource in resource_list %}
-              <li class="list-group-item"><a href="{{ scheme }}://{{ domain }}/service/{{ resource }}">{{ resource.slug }}</a> - {{ resource.type }}</li>
+              <li class="list-group-item"><a href="{{ scheme }}://{{ domain }}/service/{{ resource }}">{{ resource.slug }}</a></li>
               {% empty %}
-                <p>There aren't available proxy services.</p>
+                <p>There aren't available upstream services.</p>
             {% endfor %}
           </ul>
         </div>
@@ -18,7 +18,7 @@
         <div class="card-body">
           <ul class="list-group">
             {% for apikey in apikey_list %}
-              <li class="list-group-item">{{ apikey }}</li>
+              <li class="list-group-item"><span class="apikey-item__key">{{ apikey.key }}</span><span class="apikey-item__expires">expires {{apikey.expiry}}</span></li>
               {% empty %}
                 <p>There aren't API Key configured.</p>
             {% endfor %}
