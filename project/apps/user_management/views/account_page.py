@@ -52,16 +52,10 @@ class UMLoginView(LoginView):
         )
 
 
-class AccountPageView(UserGtObjectMixin, LoginRequiredMixin, DetailView):
-    model = get_user_model()
-    template_name = "account/user.html"
-    pk_url_kwarg = "id"
-
-
 class AccountDashboard(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
     model = get_user_model()
     form_class = UserAccountForm
-    template_name = "account/user_edit.html"
+    template_name = "account/user_dashboard.html"
     pk_url_kwarg = "id"
 
     def get_success_url(self):
@@ -74,9 +68,17 @@ class AccountDashboard(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
         context["success"] = self.request.GET.get("success")
         context["scheme"] = self.request.scheme
         context["domain"] = self.request.get_host()
+        if settings.SHOW_API_KEYS_IN_DASHBOARD:
+            context["apikey_list"] = get_apikeys(self.request.user)
+        context["show_apikey_list"] = settings.SHOW_API_KEYS_IN_DASHBOARD
         # Pass the resource API keys and the resources of the user
-        context["apikey_list"] = get_apikeys(self.request.user)
-        context["resource_list"] = get_allowed_resources(self.request.user)
+        
+        if settings.SHOW_UPSTREAM_SERVICES_IN_DASHBOARD:
+            context["resource_list"] = get_allowed_resources(self.request.user)
+        context["show_resource_list"] = settings.SHOW_UPSTREAM_SERVICES_IN_DASHBOARD
+        
+        context["show_resources"] = any([settings.SHOW_API_KEYS_IN_DASHBOARD, settings.SHOW_UPSTREAM_SERVICES_IN_DASHBOARD])
+        
         return context
 
     def form_valid(self, form):

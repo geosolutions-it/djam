@@ -1,6 +1,7 @@
 {{ block.super }}
     {% csrf_token %}
 <div class="overflow-auto">
+    {% if show_resource_list %}
     <div class="card overflow-auto">
         <div class="card-header">Upstream services</div>
         <div class="card-body card-body__250">
@@ -13,6 +14,8 @@
           </ul>
         </div>
     </div>
+    {% endif %}
+    {% if show_apikey_list %}
     <div class="card overflow-auto">
         <div class="card-header">API keys</div>
         <div class="card-body card-body__250">
@@ -25,5 +28,6 @@
           </ul>
         </div>
       </div>
+      {% endif %}
 </div>
 <br>

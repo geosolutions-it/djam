@@ -50,19 +50,23 @@
                         <img class="custom-link-img" src="{% static "images/account_and_marketing.png" %}"/>
                         Account info</button>
                 </li>
+                {% if show_resources %}
                 <li class="nav-item" role="presentation" style="max-width:45%">
                     <button class="nav-link" id="resources-tab" data-bs-toggle="tab" data-bs-target="#resources" type="button" role="tab" aria-controls="resources" aria-selected="true">
                         <img class="custom-link-img" src="{% static "images/type_and_api.png" %}"/>
                         Resources</button>
                 </li>
+                {% endif %}
             </ul>
             <div class="tab-content" id="editProfileTabContent">
                 <div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
-                    {% include "account/account_and_marketing.html" %}
+                    {% include "account/user_info.html" %}
                  </div>
+                 {% if show_resources %}
                  <div class="tab-pane fade" id="resources" role="tabpanel" aria-labelledby="resources-tab">
                    {% include "account/user_resources.html" %}
                 </div>
+                {% endif %}
             </div>
             <div class="col-12">
             </div>
