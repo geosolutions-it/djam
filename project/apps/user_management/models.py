@@ -20,7 +20,8 @@ from django.db.models import Q
 from apps.user_management.utils import random_string
 from apps.user_management.model_managers import UserManager
 from apps.user_management.tasks import send_user_notification_email
-from apps.privilege_manager.models import Team, Role
+from apps.authorizations.models import Role
+from apps.privilege_manager.models import Team
 
 
 logger = logging.getLogger(__name__)
@@ -137,7 +138,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_absolute_url(self):
         return reverse("user_account_edit", kwargs={"id": self.pk})
 
-    def get_role(self):
+    def get_roles(self):
         return (self.role.all() | Role.objects.filter(team__name__in=self.get_team())).distinct()
     
     def get_team(self):
