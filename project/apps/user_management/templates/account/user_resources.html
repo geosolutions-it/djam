@@ -3,7 +3,7 @@
 <div class="overflow-auto">
     <div class="card overflow-auto">
         <div class="card-header">Upstream services</div>
-        <div class="card-body">
+        <div class="card-body card-body__250">
           <ul class="list-group">
             {% for resource in resource_list %}
               <li class="list-group-item"><a href="{{ scheme }}://{{ domain }}/service/{{ resource }}">{{ resource.slug }}</a></li>
@@ -15,7 +15,7 @@
     </div>
     <div class="card overflow-auto">
         <div class="card-header">API keys</div>
-        <div class="card-body">
+        <div class="card-body card-body__250">
           <ul class="list-group">
             {% for apikey in apikey_list %}
               <li class="list-group-item"><span class="apikey-item__key">{{ apikey.key }}</span><span class="apikey-item__expires">expires {{apikey.expiry}}</span></li>

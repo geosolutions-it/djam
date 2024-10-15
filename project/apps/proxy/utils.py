@@ -43,6 +43,6 @@ def get_allowed_resources(user):
     roles = user.get_roles()
     
     # Get the IDs of the user's resources from the AccessRule table
-    user_resources = Resource.objects.filter(accessrule__in=AccessRule.objects.filter(role__in=roles)).all()
+    user_resources = Resource.objects.filter(accessrule__in=AccessRule.objects.filter(role__in=roles, active=True)).all()
 
     return user_resources
