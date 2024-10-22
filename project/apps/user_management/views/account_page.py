@@ -10,6 +10,7 @@ from django.http import Http404
 from django.shortcuts import render, resolve_url
 from django.urls import reverse
 from django.utils.translation import gettext as _
+from django.utils import timezone
 from django.views.generic import UpdateView, DetailView, RedirectView
 from apps.user_management.forms import UserAccountForm
 from apps.identity_provider.utils import get_apikeys
@@ -69,7 +70,8 @@ class AccountDashboard(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
         context["scheme"] = self.request.scheme
         context["domain"] = self.request.get_host()
         if settings.SHOW_API_KEYS_IN_DASHBOARD:
-            context["apikey_list"] = get_apikeys(self.request.user)
+            # Show active resource keys
+            context["apikey_list"] = get_apikeys(self.request.user).filter(expiry__gte=timezone.now(), revoked=False)
         context["show_apikey_list"] = settings.SHOW_API_KEYS_IN_DASHBOARD
         # Pass the resource API keys and the resources of the user
         
