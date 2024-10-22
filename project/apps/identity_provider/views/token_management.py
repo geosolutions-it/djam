@@ -42,16 +42,17 @@ class ApiKeyView(ViewSet):
         '''
         
         user = request.user
+        key_list = [i.key for i in get_apikeys(user)]
         if user.is_superuser:
             user = select_user(request, user)
             data = {
-                   "tokens of {}".format(user): get_apikeys(user),
+                   "tokens of {}".format(user): key_list,
                    }
             status=200
             return JsonResponse(data, status=status)
         elif request.user.is_superuser == False:
             data = {
-                   "tokens of {}".format(user): get_apikeys(user),
+                   "tokens of {}".format(user): key_list,
                    }
             status=200
             return JsonResponse(data, status=status)
