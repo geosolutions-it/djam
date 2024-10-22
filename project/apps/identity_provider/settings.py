@@ -30,4 +30,4 @@ SHORT_APIKEY_EXPIRE = datetime.timedelta(ast.literal_eval(os.getenv("SHORT_APIKE
 # Max expiration delta for the expiration date of a resource key
 MAX_APIKEY_EXPIRE = datetime.timedelta(ast.literal_eval(os.getenv("MAX_APIKEY_EXPIRE_DAYS", "180")))
 
-SHOW_API_KEYS_IN_DASHBOARD = ast.literal_eval(os.getenv("SHOW_API_KEYS_IN_DASHBOARD", "True"))
+SHOW_API_KEYS_IN_DASHBOARD = ast.literal_eval(os.getenv("SHOW_API_KEYS_IN_DASHBOARD", "False"))
