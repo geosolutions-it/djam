@@ -51,11 +51,11 @@ class ApiKeyView(ViewSet):
                     "tokens of {}".format(user): key_list,
                     }
             status=200
-            return JsonResponse(data, status=status)
         else:
             data = {}
             status=403
-            return JsonResponse(data, status=status)
+        
+        return JsonResponse(data, status=status)
     
     # Spectacular - Swagger: Data content for create_key endpoint
     @extend_schema(
