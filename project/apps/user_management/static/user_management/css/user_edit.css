@@ -103,8 +103,18 @@
   margin-left: 5px;
 }
 
-.apikey-item__key {
-  display: block;
+.resource-group > li  {
+  border: 0px;
+}
+
+.resource-group li:not(:last-child)  {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.resource-group-item__icon {
+  color: rgba(0,0,0,0.5);
+  margin-right: 10px;
+  font-size: 0.8rem;
 }
 
 .apikey-item__expires {
