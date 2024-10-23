@@ -1,7 +1,6 @@
 from django.urls import path, re_path
 from apps.user_management.views.account_page import (
-    AccountPageView,
-    AccountEditView,
+    AccountDashboard,
     UMLoginView,
 )
 from django.contrib.auth import views as auth_views
@@ -72,17 +71,14 @@ urlpatterns = [
     path(r"user/register/", SignupView.as_view(), name="register"),
     re_path(
         r"user/account/edit/(?P<id>\w+)/",
-        AccountEditView.as_view(),
+        AccountDashboard.as_view(),
         name="user_account_edit",
     ),
-    # First release views using AccountEditView as simpler until more profile features added then use the below commented out views
-    path(r"user/account/", AccountEditView.as_view(), name="user_account"),
+    # First release views using AccountDashboard as simpler until more profile features added then use the below commented out views
+    path(r"user/account/", AccountDashboard.as_view(), name="user_account"),
     re_path(
-        r"user/account/(?P<id>\w+)/", AccountEditView.as_view(), name="user_account"
+        r"user/account/(?P<id>\w+)/", AccountDashboard.as_view(), name="user_account"
     ),
-    # Commented out until other profile features are introduced. No point having these views until then.
-    # path(r'user/account/', AccountPageView.as_view(), name="user_account"),
-    # re_path(r'user/account/(?P<id>\w+)/', AccountPageView.as_view(), name='user_account'),
     path(
         r"user/activation_msg_sent/",
         EmailConfirmationSentView.as_view(),

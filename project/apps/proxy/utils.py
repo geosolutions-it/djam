@@ -1,6 +1,7 @@
 import base64
 import re
 from django.contrib.auth import authenticate
+from apps.authorizations.models import AccessRule, Role, Resource
 
 
 def get_token_from_auth_header(auth_header):
@@ -30,3 +31,18 @@ def basic_auth_authenticate_user(auth_header: str):
 
 def perform_authenticate(username, password):
     return authenticate(username=username, password=password)
+
+def get_allowed_resources(user):
+    """
+    Function which exports the resources (Proxy services) of a user
+    """
+    
+    if user.is_superuser:
+        return Resource.objects.all()
+    
+    roles = user.get_roles()
+    
+    # Get the IDs of the user's resources from the AccessRule table
+    user_resources = Resource.objects.filter(accessrule__in=AccessRule.objects.filter(role__in=roles, active=True)).all()
+
+    return user_resources

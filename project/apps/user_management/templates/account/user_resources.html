@@ -1,0 +1,33 @@
+{{ block.super }}
+    {% csrf_token %}
+<div class="overflow-auto">
+    {% if show_resource_list %}
+    <div class="card overflow-auto">
+        <div class="card-header">Upstream services</div>
+        <div class="card-body card-body__250">
+          <ul class="resource-group list-group">
+            {% for resource in resource_list %}
+              <li class="resource-group-item list-group-item"><span class="fa fa-link resource-group-item__icon"></span><a href="{{ scheme }}://{{ domain }}/service/{{ resource }}">{{ resource.slug }}</a></li>
+              {% empty %}
+                <p>There aren't available upstream services.</p>
+            {% endfor %}
+          </ul>
+        </div>
+    </div>
+    {% endif %}
+    {% if show_apikey_list %}
+    <div class="card overflow-auto">
+        <div class="card-header">API keys</div>
+        <div class="card-body card-body__250">
+          <ul class="resource-group list-group">
+            {% for apikey in apikey_list %}
+              <li class="resource-group-item list-group-item"><div><span class="fa fa-key resource-group-item__icon"></span><span class="apikey-item__key">{{ apikey.key }}</span><div><span class="apikey-item__expires" style="margin-left: 22px">expires {{apikey.expiry}}</span></li>
+              {% empty %}
+                <p>There aren't API Key configured.</p>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      {% endif %}
+</div>
+<br>

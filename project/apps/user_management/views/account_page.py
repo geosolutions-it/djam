@@ -10,8 +10,11 @@ from django.http import Http404
 from django.shortcuts import render, resolve_url
 from django.urls import reverse
 from django.utils.translation import gettext as _
+from django.utils import timezone
 from django.views.generic import UpdateView, DetailView, RedirectView
 from apps.user_management.forms import UserAccountForm
+from apps.identity_provider.utils import get_apikeys
+from apps.proxy.utils import get_allowed_resources
 
 logger = logging.getLogger(__name__)
 
@@ -50,16 +53,10 @@ class UMLoginView(LoginView):
         )
 
 
-class AccountPageView(UserGtObjectMixin, LoginRequiredMixin, DetailView):
-    model = get_user_model()
-    template_name = "account/user.html"
-    pk_url_kwarg = "id"
-
-
-class AccountEditView(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
+class AccountDashboard(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
     model = get_user_model()
     form_class = UserAccountForm
-    template_name = "account/user_edit.html"
+    template_name = "account/user_dashboard.html"
     pk_url_kwarg = "id"
 
     def get_success_url(self):
@@ -70,6 +67,20 @@ class AccountEditView(UserGtObjectMixin, LoginRequiredMixin, UpdateView):
         context["fix_error"] = self.request.GET.get("fix_error")
         context["api_key"] = ApiKey.objects.filter(user=context["object"]).first()
         context["success"] = self.request.GET.get("success")
+        context["scheme"] = self.request.scheme
+        context["domain"] = self.request.get_host()
+        if settings.SHOW_API_KEYS_IN_DASHBOARD:
+            # Show active resource keys
+            context["apikey_list"] = get_apikeys(self.request.user).filter(expiry__gte=timezone.now(), revoked=False)
+        context["show_apikey_list"] = settings.SHOW_API_KEYS_IN_DASHBOARD
+        # Pass the resource API keys and the resources of the user
+        
+        if settings.SHOW_UPSTREAM_SERVICES_IN_DASHBOARD:
+            context["resource_list"] = get_allowed_resources(self.request.user)
+        context["show_resource_list"] = settings.SHOW_UPSTREAM_SERVICES_IN_DASHBOARD
+        
+        context["show_resources"] = any([settings.SHOW_API_KEYS_IN_DASHBOARD, settings.SHOW_UPSTREAM_SERVICES_IN_DASHBOARD])
+        
         return context
 
     def form_valid(self, form):

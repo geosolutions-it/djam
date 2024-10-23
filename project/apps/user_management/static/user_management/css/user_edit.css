@@ -28,8 +28,7 @@
 }
 
 .user-edit-form-box p {
-  font-size: 1.2em;
-  margin-top: 5vh;
+  margin: 0 auto;
 }
 
 .user-edit-form-box #copy-token {
@@ -62,6 +61,11 @@
 .user-edit-form-box .card {
   margin-top: 20px;
   text-align: left;
+}
+
+.user-edit-form-box .card .card-body__250 {
+  min-height: 250px;
+  max-height: 250px;
 }
 
 .user-edit-form-box .card-header {
@@ -97,6 +101,24 @@
 
 .user-edit-form-box .btn-sm .btn-label {
   margin-left: 5px;
+}
+
+.resource-group > li  {
+  border: 0px;
+}
+
+.resource-group li:not(:last-child)  {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.resource-group-item__icon {
+  color: rgba(0,0,0,0.5);
+  margin-right: 10px;
+  font-size: 0.8rem;
+}
+
+.apikey-item__expires {
+  font-size: 0.6rem;
 }
 
 .form-group label {
