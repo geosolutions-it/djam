@@ -12,8 +12,8 @@ nav:
   - Users and Teams: "users-teams.md"
   - API Keys: 'api-keys.md'
   - Integration with GeoServer: 'integration-with-geoserver.md'
-  - REST API: 'rest-api'
   - Proxy Services: 'proxy'
+  - REST API: 'rest-api'
 
 theme:
   name: material
