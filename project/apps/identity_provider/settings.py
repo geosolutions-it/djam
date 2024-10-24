@@ -22,12 +22,12 @@ APIKEY_MANAGER_AUTHORIZED_GROUPS = ast.literal_eval(
 )
 
 # Default expiration delta for the expiry filed of ApiKey model
-APIKEY_EXPIRE = datetime.timedelta(ast.literal_eval(os.getenv("APIKEY_EXPIRE_DAYS", "30")))
+APIKEY_EXPIRE = datetime.timedelta(ast.literal_eval(os.getenv("DJAM_APIKEY_EXPIRE_DAYS", "30")))
 
 # Short expiration delta for a short expiration date of an old key (/rotate endpoint)
-SHORT_APIKEY_EXPIRE = datetime.timedelta(ast.literal_eval(os.getenv("SHORT_APIKEY_EXPIRE_DAYS", "3")))
+SHORT_APIKEY_EXPIRE = datetime.timedelta(ast.literal_eval(os.getenv("DJAM_SHORT_APIKEY_EXPIRE_DAYS", "3")))
 
 # Max expiration delta for the expiration date of a resource key
-MAX_APIKEY_EXPIRE = datetime.timedelta(ast.literal_eval(os.getenv("MAX_APIKEY_EXPIRE_DAYS", "180")))
+MAX_APIKEY_EXPIRE = datetime.timedelta(ast.literal_eval(os.getenv("DJAM_MAX_APIKEY_EXPIRE_DAYS", "180")))
 
-SHOW_API_KEYS_IN_DASHBOARD = ast.literal_eval(os.getenv("SHOW_API_KEYS_IN_DASHBOARD", "False"))
+SHOW_API_KEYS_IN_DASHBOARD = ast.literal_eval(os.getenv("DJAM_SHOW_API_KEYS_IN_DASHBOARD", "False"))
