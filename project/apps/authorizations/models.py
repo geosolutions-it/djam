@@ -15,7 +15,8 @@ class Resource(models.Model):
     URL_REQUIRED_SERVICE = [ResourceTypeEnum.UPSTREAM_SERVICE]
 
     slug = models.SlugField(verbose_name="Slug", unique=True)
-    url = models.CharField(verbose_name="upstream url to be proxed to", null=True)
+    url = models.CharField(verbose_name="URL for the upstream service", null=True)
+    description = models.CharField(verbose_name="Description of the upstream service", null=True, blank=True)
     type = models.CharField(
         max_length=100,
         choices=ResourceTypeEnum.choices,

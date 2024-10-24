@@ -7,7 +7,7 @@
         <div class="card-body card-body__250">
           <ul class="resource-group list-group">
             {% for resource in resource_list %}
-              <li class="resource-group-item list-group-item"><span class="fa fa-link resource-group-item__icon"></span><a href="{{ scheme }}://{{ domain }}/service/{{ resource }}">{{ resource.slug }}</a></li>
+              <li class="resource-group-item list-group-item"><span class="fa fa-link resource-group-item__icon"></span><a href="{{ scheme }}://{{ domain }}/service/{{ resource }}">{{ resource.slug }}</a><span>{% if resource.description %} - {{resource.description}} {% endif %}</span></li>
               {% empty %}
                 <p>There aren't available upstream services.</p>
             {% endfor %}
