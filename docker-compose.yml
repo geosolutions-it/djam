@@ -14,7 +14,7 @@ services:
     container_name: djam
     build:
       context: ./
-    image: djam:20240918
+    image: djam:latest
     restart: always
     env_file:
       - .env_docker
