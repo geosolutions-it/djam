@@ -79,19 +79,16 @@ class ApiKeyView(ViewSet):
         '''
 
         user = request.user
-        if user.is_superuser:
-            user = select_user(request, user)
+        if user:
+            if user.is_superuser:
+                user = select_user(request, user)
             data = create_apikey(request, user)
             status=200
-            return JsonResponse(data, status=status)
-        elif user.is_superuser == False:
-            data = create_apikey(request, user)
-            status=200
-            return JsonResponse(data, status=status)
         else:
             data = {}
             status=403
-            return JsonResponse(data, status=status)
+        
+        return JsonResponse(data, status=status)
         
     # Spectacular - Swagger: Data content for status endpoint
     @extend_schema(
@@ -116,19 +113,15 @@ class ApiKeyView(ViewSet):
         user = request.user
         resource_key = request.data.get('resource_key', None)
         
-        if user.is_superuser:
-            user = select_user(request, user)
+        if user:
+            if user.is_superuser:
+                user = select_user(request, user)
             data = key_status(resource_key, user)
             status=200
-            return JsonResponse(data, status=status)
-        elif user.is_superuser == False:
-            data = key_status(resource_key, user)
-            status=200
-            return JsonResponse(data, status=status)
         else:
             data = {}
             status=403
-            return JsonResponse(data, status=status)     
+        return JsonResponse(data, status=status)     
     
     # Spectacular - Swagger: Data content for revoke endpoint
     @extend_schema(
@@ -154,19 +147,15 @@ class ApiKeyView(ViewSet):
         resource_key = request.data.get('resource_key', None)
         revoked = request.data.get('revoked', None)
         
-        if user.is_superuser:
-            user = select_user(request, user)
+        if user:
+            if user.is_superuser:
+                user = select_user(request, user)
             data = key_revoke(resource_key, revoked, user)
             status=200
-            return JsonResponse(data, status=status)
-        elif user.is_superuser == False:
-            data = key_revoke(resource_key, revoked, user)
-            status=200
-            return JsonResponse(data, status=status)
         else:
             data = {}
             status=403
-            return JsonResponse(data, status=status)
+        return JsonResponse(data, status=status)
         
     # Spectacular - Swagger: Data content for renew endpoint
     @extend_schema(
@@ -194,19 +183,15 @@ class ApiKeyView(ViewSet):
         resource_key = request.data.get('resource_key', None)
         expiry = request.data.get('expiry', None)
         
-        if user.is_superuser:
-            user = select_user(request, user)
+        if user:
+            if user.is_superuser:
+                user = select_user(request, user)
             data = key_renew(resource_key, expiry, user)
             status=200
-            return JsonResponse(data, status=status)
-        elif user.is_superuser == False:
-            data = key_renew(resource_key, expiry, user)
-            status=200
-            return JsonResponse(data, status=status)
         else:
             data = {}
             status=403
-            return JsonResponse(data, status=status)
+        return JsonResponse(data, status=status)
     
     # Spectacular - Swagger: Data content for rotate endpoint
     @extend_schema(
@@ -236,16 +221,12 @@ class ApiKeyView(ViewSet):
         # A new short expiration date for the old key
         short_expiry = request.data.get('short_expiry', None)
         
-        if user.is_superuser:
-            user = select_user(request, user)
+        if user:
+            if user.is_superuser:
+                user = select_user(request, user)
             data = key_rotate(resource_key, short_expiry, user)
             status=200
-            return JsonResponse(data, status=status)
-        elif user.is_superuser == False:
-            data = key_rotate(resource_key, short_expiry, user)
-            status=200
-            return JsonResponse(data, status=status)
         else:
             data = {}
             status=403
-            return JsonResponse(data, status=status)
+        return JsonResponse(data, status=status)
