@@ -9,9 +9,11 @@ site_author: GeoSolutions
 
 nav:
   - Home: 'index.md'
+  - Users and Teams: "users-teams.md"
   - API Keys: 'api-keys.md'
   - Integration with GeoServer: 'integration-with-geoserver.md'
   - REST API: 'rest-api'
+  - Proxy Services: 'proxy'
 
 theme:
   name: material

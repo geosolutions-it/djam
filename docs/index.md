@@ -46,6 +46,7 @@ DJAM_EMAIL_HOST_USER=...
 DJAM_EMAIL_HOST_PASSWORD=...
 APIKEY_EXPIRE_DAYS=... (The expiration timedelta of the keys in days. The default value is 30)
 ```
+
 Afterwards, from the root folder of the DJAM repository, run the following command to prepare the environment:
 
 ```bash
@@ -107,6 +108,28 @@ and in OPENID CONNECT PROVIDER add row to Clients table.
 
 You can also check User registration form at `http://localhost:8000/register`. REMEMBER: to register the User
 you first need update `djam/project/conf/local/email.py` configuration file with SMTP server credentials.   
+
+### Configuration
+DJAM can be configured with the following environmental variables:
+
+- `SITEURL`: URL of the DJAM service (default=localhost)
+- `DJAM_PROJECT_ENVIRONMENT`: "prod" | "dev"
+- `DJAM_SECRET_KEY`: secret key used by crypto functionalities in DJAM (see [Django SECRET KEY](https://docs.djangoproject.com/en/4.2/ref/settings/#secret-key) for additional information)
+- `DJAM_APIKEY_EXPIRE_DAYS`: The expiration timedelta of the [API Keys](api-keys.md) in days. The default value is 30
+- `DJAM_SHOW_API_KEYS_IN_DASHBOARD`: Show users [API Keys](api-keys.md) inside the User Resources section
+- `DJAM_SHOW_UPSTREAM_SERVICES_IN_DASHBOARD`: Show list of [authenticated proxy services](proxy.md) available to the user inside the User Resources section
+- `DJAM_REQUIRE_SECURE_HTTP_FOR_GEOSERVER_INTROSPECTION`: Allow [authentication requests](integration-with-geoserver.md) from non-secure (no SSL) Geoserver hosts (defaul "True")
+- `DJAM_EMAIL_HOST`: SMTP host for the email verification and activation of new accounts. This is used only if self-registration is enabled (disabled by default)
+- `DJAM_EMAIL_PORT`: SMTP port
+- `DJAM_EMAIL_HOST_USER`: SMTP username
+- `DJAM_EMAIL_HOST_PASSWORD`: SMTP password
+- `DJAM_DB_HOST`: hostname of the PostgreSQL DB Server
+- `DJAM_DB_PORT`: port of the PostgreSQL DB Server  (default=5432)
+- `DJAM_DB_NAME`: PostgreSQL DB name for DJAM
+- `DJAM_DB_USER`: DJAM PostgreSQL DB username
+- `DJAM_DB_PASSWORD`: DJAM PostgreSQL DB password
+- `DJAM_RABBITMQ_HOST`: hostname of the RabbitMQ Service  (default=localhost)
+- `DJAM_RABBITMQ_PORT`: port of the RabbitMQ Service  (default=5672)
 
 ## API Documentation - Swagger
 

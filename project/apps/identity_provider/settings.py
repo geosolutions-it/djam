@@ -15,11 +15,7 @@ OIDC_EXTRA_SCOPE_CLAIMS = (
     "apps.identity_provider.oidc_provider_settings.CustomScopeClaims"
 )
 
-REQUIRE_SECURE_HTTP_FOR_GEOSERVER_INTROSPECTION = True
-
-APIKEY_MANAGER_AUTHORIZED_GROUPS = ast.literal_eval(
-    os.getenv("APIKEY_MANAGER_AUTHORIZED_GROUPS", "['enterprise', 'pro']")
-)
+REQUIRE_SECURE_HTTP_FOR_GEOSERVER_INTROSPECTION = ast.literal_eval(os.getenv("DJAM_REQUIRE_SECURE_HTTP_FOR_GEOSERVER_INTROSPECTION", "True"))
 
 # Default expiration delta for the expiry filed of ApiKey model
 APIKEY_EXPIRE = datetime.timedelta(ast.literal_eval(os.getenv("DJAM_APIKEY_EXPIRE_DAYS", "30")))
