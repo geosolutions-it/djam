@@ -9,7 +9,6 @@ echo "running django"
 cd /djam/project
 
 if [ "$DJAM_PROJECT_ENVIRONMENT" = "dev" ]; then
-    python -W ignore manage.py loaddata example_admin # admin@admin.com / djamadmin
     python manage.py runserver 0.0.0.0:8000
 else
   DJANGO_SETTINGS_MODULE=settings gunicorn wsgi --bind=0.0.0.0:8000
