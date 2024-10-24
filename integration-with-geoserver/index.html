@@ -245,6 +245,26 @@
   
   
     <li class="md-nav__item">
+      <a href="../users-teams/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Users and Teams
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../api-keys/" class="md-nav__link">
         
   
@@ -450,6 +470,26 @@
   
   <span class="md-ellipsis">
     REST API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../proxy" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Proxy Services
   </span>
   
 
@@ -669,6 +709,7 @@
 <li>Provide a <code>Name</code> for the provider</li>
 <li>Change the name of the URL parameter to be used to identify the keys; the default one for DJAM is “authkey”, meaning that the requests will be in the form: <code>http://....?...&amp;authkey=&lt;the_user_key&gt;</code></li>
 <li>Select “Web Service” as authentication user mapper. This will configure Geoserver to use DJAM as the external authentication service. Fill in the values reported in the picture below.</li>
+<li>Fill the field “Web Service Response User Search Regular Expression”, with the following:  ^.<em>?\"username\"\s</em>:\s<em>\"([^\"]+)\".</em>$</li>
 <li>Select “djam_groupservice” (created before) as “User/Group Service”</li>
 </ul>
 <p><img alt="auth key provider" src="../images/auth_key_provider.png" /></p>

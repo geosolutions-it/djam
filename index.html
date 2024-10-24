@@ -14,7 +14,7 @@
       
       
       
-        <link rel="next" href="api-keys/">
+        <link rel="next" href="users-teams/">
       
       
       <link rel="icon" href="assets/images/favicon.png">
@@ -298,6 +298,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuration
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -411,6 +420,26 @@
   
   
     <li class="md-nav__item">
+      <a href="users-teams/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Users and Teams
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="api-keys/" class="md-nav__link">
         
   
@@ -456,6 +485,26 @@
   
   <span class="md-ellipsis">
     REST API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="proxy" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Proxy Services
   </span>
   
 
@@ -513,6 +562,15 @@
   <a href="#installation" class="md-nav__link">
     <span class="md-ellipsis">
       Installation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuration
     </span>
   </a>
   
@@ -702,6 +760,28 @@ cd project
 and in OPENID CONNECT PROVIDER add row to Clients table.</p>
 <p>You can also check User registration form at <code>http://localhost:8000/register</code>. REMEMBER: to register the User
 you first need update <code>djam/project/conf/local/email.py</code> configuration file with SMTP server credentials.   </p>
+<h3 id="configuration">Configuration</h3>
+<p>DJAM can be configured with the following environmental variables:</p>
+<ul>
+<li><code>SITEURL</code>: URL of the DJAM service (default=localhost)</li>
+<li><code>DJAM_PROJECT_ENVIRONMENT</code>: "prod" | "dev"</li>
+<li><code>DJAM_SECRET_KEY</code>: secret key used by crypto functionalities in DJAM (see <a href="https://docs.djangoproject.com/en/4.2/ref/settings/#secret-key">Django SECRET KEY</a> for additional information)</li>
+<li><code>DJAM_APIKEY_EXPIRE_DAYS</code>: The expiration timedelta of the <a href="api-keys/">API Keys</a> in days. The default value is 30</li>
+<li><code>DJAM_SHOW_API_KEYS_IN_DASHBOARD</code>: Show users <a href="api-keys/">API Keys</a> inside the User Resources section</li>
+<li><code>DJAM_SHOW_UPSTREAM_SERVICES_IN_DASHBOARD</code>: Show list of <a href="proxy/">authenticated proxy services</a> available to the user inside the User Resources section</li>
+<li><code>DJAM_REQUIRE_SECURE_HTTP_FOR_GEOSERVER_INTROSPECTION</code>: Allow <a href="integration-with-geoserver/">authentication requests</a> from non-secure (no SSL) Geoserver hosts (defaul "True")</li>
+<li><code>DJAM_EMAIL_HOST</code>: SMTP host for the email verification and activation of new accounts. This is used only if self-registration is enabled (disabled by default)</li>
+<li><code>DJAM_EMAIL_PORT</code>: SMTP port</li>
+<li><code>DJAM_EMAIL_HOST_USER</code>: SMTP username</li>
+<li><code>DJAM_EMAIL_HOST_PASSWORD</code>: SMTP password</li>
+<li><code>DJAM_DB_HOST</code>: hostname of the PostgreSQL DB Server</li>
+<li><code>DJAM_DB_PORT</code>: port of the PostgreSQL DB Server  (default=5432)</li>
+<li><code>DJAM_DB_NAME</code>: PostgreSQL DB name for DJAM</li>
+<li><code>DJAM_DB_USER</code>: DJAM PostgreSQL DB username</li>
+<li><code>DJAM_DB_PASSWORD</code>: DJAM PostgreSQL DB password</li>
+<li><code>DJAM_RABBITMQ_HOST</code>: hostname of the RabbitMQ Service  (default=localhost)</li>
+<li><code>DJAM_RABBITMQ_PORT</code>: port of the RabbitMQ Service  (default=5672)</li>
+</ul>
 <h2 id="api-documentation-swagger">API Documentation - Swagger</h2>
 <p>To create the corresponding schema.yml for the API documentation (Swagger) run the following command:</p>
 <pre><code class="language-bash">python manage.py spectacular --color --file schema.yml
