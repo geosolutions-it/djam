@@ -35,6 +35,8 @@ To create the environment configuratino for DJAM create an .env file in the root
 DJAM_PROJECT_ENVIRONMENT=local
 DJAM_RABBITMQ_HOST=...  (default=localhost)
 DJAM_RABBITMQ_PORT=...  (default=5672)
+DJAM_RABBITMQ_USER=...  (default=guest)
+DJAM_RABBITMQ_PASSWORD=... (default=guest)
 DJAM_DB_HOST=<DB host e.g 127.0.0.1>
 DJAM_DB_PORT=...  (default=5432)
 DJAM_DB_NAME=<djam db>

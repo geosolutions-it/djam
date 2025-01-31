@@ -3,7 +3,7 @@ import os
 DRAMATIQ_BROKER = {
     "BROKER": "dramatiq.brokers.rabbitmq.RabbitmqBroker",
     "OPTIONS": {
-        "url": f"amqp://{os.getenv('DJAM_RABBITMQ_HOST', 'localhost')}:{os.getenv('DJAM_RABBITMQ_PORT', '5672')}",
+        "url": f"amqp://{os.getenv('DJAM_RABBITMQ_USER', 'guest')}:{os.getenv('DJAM_RABBITMQ_PASSWORD', 'guest')}@{os.getenv('DJAM_RABBITMQ_HOST', 'localhost')}:{os.getenv('DJAM_RABBITMQ_PORT', '5672')}",
     },
     "MIDDLEWARE": [
         "dramatiq.middleware.Prometheus",
