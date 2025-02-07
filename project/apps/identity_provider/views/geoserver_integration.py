@@ -131,7 +131,7 @@ class GeoserverAuthKeyAndApiKeyIntrospection(GeoserverIntrospection, views.APIVi
         user = get_user_model().objects.get(id=user_id)
         user_groups_names = user.get_team()
 
-        return Response({"username": user.username, "groups": user_groups_names,})
+        return Response({"username": user.username, "groups": [",".join(user_groups_names)]})
 
     def introspect_api_key(self, api_key_uuid):
         
@@ -139,7 +139,7 @@ class GeoserverAuthKeyAndApiKeyIntrospection(GeoserverIntrospection, views.APIVi
         user = api_key.user
         user_groups_names = user.get_team()
 
-        return Response({"username": user.username, "groups": user_groups_names,})
+        return Response({"username": user.username, "groups": [",".join(user_groups_names)]})
 
 
 class GeoserverCredentialsIntrospection(GeoserverIntrospection, views.APIView):
