@@ -3,7 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 .vscode/
-override_settings.py
+local_settings.py
 .env_docker
 
 # C extensions

@@ -22,5 +22,5 @@ SILENCED_SYSTEM_CHECKS = ['django_recaptcha.recaptcha_test_key_error']
 project_path = os.path.dirname(os.path.abspath(__file__))
 
 # evaluate if an override settings file is preset, if yest it will be included in the settings
-if os.path.exists(f"{project_path}/override_settings.py"):
-    include(f"{project_path}/override_settings.py")
+if os.path.exists(f"{project_path}/local_settings.py"):
+    include(f"{project_path}/local_settings.py")
